@@ -43,7 +43,6 @@ public class ServiceImpl implements Service {
 		map.put("cn", cn);
 		mapper = sqlSession.getMapper(Mapper.class);
 		ArrayList<Post> list = mapper.selectAll(map);
-		System.out.println(list);
 		return list;
 	}
 	@Override

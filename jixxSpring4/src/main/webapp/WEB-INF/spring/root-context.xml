@@ -41,4 +41,5 @@
 		</property>
 	</bean>
 
+	<bean id="download" class="com.kitri.project.post.DownloadView" />
 </beans>
