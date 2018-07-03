@@ -51,8 +51,9 @@ public class ServiceImpl implements Service {
 	}
 
 	@Override
-	public void delete(int Post_id) {
-		
+	public void delete(int post_id) {
+		mapper = sqlSession.getMapper(Mapper.class);
+		mapper.delete(post_id);
 	}
 	
 }

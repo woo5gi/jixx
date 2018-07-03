@@ -21,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import net.coobird.thumbnailator.Thumbnails;
 import vo.Post;
 
 @Controller
@@ -31,17 +32,17 @@ public class PostController implements ApplicationContextAware {
 
 	@RequestMapping(value = "/post/write.do")
 	public String write(Post post, HttpServletRequest req, @RequestParam(value = "ch_list") String ch_list,
-			@RequestParam(value = "user_list") String user_list,RedirectAttributes redirectAttributes) {
+			@RequestParam(value = "user_list") String user_list, RedirectAttributes redirectAttributes) {
 		HttpSession session = req.getSession(false);
 		redirectAttributes.addAttribute("user_list", user_list);
 		redirectAttributes.addAttribute("ch_list", ch_list);
 		MultipartFile file = post.getFile();
-		System.out.println(file.getOriginalFilename());
 		if (file.getOriginalFilename() != "") {
 			int pos = file.getOriginalFilename().lastIndexOf(".");
 			String ext = file.getOriginalFilename().substring(pos);
 			String name = file.getOriginalFilename().substring(0, pos);
 			String path = "D:\\files\\" + name + UUID.randomUUID().toString() + ext;
+			String thumbnailPath = "D:\\git\\jixxSpring4\\src\\main\\webapp\\resources\\img\\" + name + UUID.randomUUID().toString();
 			File f = new File(path);
 			try {
 				file.transferTo(f);
@@ -51,6 +52,18 @@ public class PostController implements ApplicationContextAware {
 				e.printStackTrace();
 			}
 			post.setFile_original(path);
+			if (ext.equals(".jpg")) {
+				File thumbnail = new File(thumbnailPath);
+				if (f.exists()) {
+					thumbnail.getParentFile().mkdirs();
+					try {
+						Thumbnails.of(f).size(190, 150).outputFormat("png").toFile(thumbnail);
+						post.setFile_thumbnail(thumbnail.getName() + ".png");
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}				
+			}
 		} else {
 			post.setFile_original("x");
 		}
@@ -68,7 +81,11 @@ public class PostController implements ApplicationContextAware {
 		int rep_id = (int) session.getAttribute("rep_id");
 		ArrayList<Post> list = service.show(page, cn);
 		for (int i = 0; i < list.size(); i++) {
-			if (list.get(i).getFile_original() != null && !list.get(i).getFile_original().equals("x")) {
+			if (list.get(i).getPost_status() == 0) {
+				list.get(i).setFile_original("삭제된 파일입니다.");
+				list.get(i).setContent("삭제된 글입니다.");
+				list.get(i).setNickname("삭제된 글입니다.");
+			} else if (list.get(i).getFile_original() != null && !list.get(i).getFile_original().equals("x")) {
 				String str = list.get(i).getFile_original();
 				String name = str.substring(0, str.length() - 40);
 				String realName = name.substring(9);
@@ -80,9 +97,9 @@ public class PostController implements ApplicationContextAware {
 			}
 		}
 		ModelAndView mav = new ModelAndView("/template/main");
-//		String rep_name = service.getRepName(rep_id);
+		// String rep_name = service.getRepName(rep_id);
 		String rep_name = "aa";
-		mav.addObject("rep_name",rep_name);
+		mav.addObject("rep_name", rep_name);
 		mav.addObject("id", id);
 		mav.addObject("rep_id", rep_id);
 		mav.addObject("ch_list", ch_list);
@@ -98,9 +115,15 @@ public class PostController implements ApplicationContextAware {
 
 	@RequestMapping(value = "/post/download.do", method = RequestMethod.GET)
 	public ModelAndView fileDown(@RequestParam("fileName") String fileName) {
-		String fullPath = "D:\\files\\" + fileName ;
+		String fullPath = "D:\\files\\" + fileName;
 		File downloadFile = new File(fullPath);
 		return new ModelAndView("download", "downloadFile", downloadFile);
+	}
+
+	@RequestMapping(value = "/post/delete.do")
+	public String delete(@RequestParam("post_id") int post_id) {
+		service.delete(post_id);
+		return "template/main";
 	}
 
 }
