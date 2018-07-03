@@ -67,19 +67,21 @@ public class PostController implements ApplicationContextAware {
 		int id = (int) session.getAttribute("id");
 		int rep_id = (int) session.getAttribute("rep_id");
 		ArrayList<Post> list = service.show(page, cn);
-		System.out.println(list);
 		for (int i = 0; i < list.size(); i++) {
 			if (list.get(i).getFile_original() != null && !list.get(i).getFile_original().equals("x")) {
-				System.out.println(list.get(i).getFile_original());
 				String str = list.get(i).getFile_original();
-				String name = str.substring(0, str.length() - 36);
-				list.get(i).setFileName(name);
+				String name = str.substring(0, str.length() - 40);
+				String realName = name.substring(9);
+				String uuidName = str.substring(9);
+				int pos = str.lastIndexOf(".");
+				String ext = str.substring(pos);
+				list.get(i).setFileName(realName + ext);
+				list.get(i).setFile_original(uuidName);
 			}
-			System.out.println(list.get(i).getFileName());
 		}
-		System.out.println(list);
 		ModelAndView mav = new ModelAndView("/template/main");
-		String rep_name = service.getRepName(rep_id);
+//		String rep_name = service.getRepName(rep_id);
+		String rep_name = "aa";
 		mav.addObject("rep_name",rep_name);
 		mav.addObject("id", id);
 		mav.addObject("rep_id", rep_id);
@@ -94,9 +96,10 @@ public class PostController implements ApplicationContextAware {
 		this.context = (WebApplicationContext) applicationContext;
 	}
 
-	@RequestMapping(value = "/psot/download.do")
-	public ModelAndView download(@RequestParam("filename") String fileName) {
-		File downloadFile = new File(fileName);
+	@RequestMapping(value = "/post/download.do", method = RequestMethod.GET)
+	public ModelAndView fileDown(@RequestParam("fileName") String fileName) {
+		String fullPath = "D:\\files\\" + fileName ;
+		File downloadFile = new File(fullPath);
 		return new ModelAndView("download", "downloadFile", downloadFile);
 	}
 

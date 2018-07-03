@@ -381,7 +381,7 @@
 										</h3>
 
 										<div class="timeline-body">${post.content}</div>
-										<a href="<%= request.getContextPath() %>/psot/download.do?filename=${ post.file_original}">${ post.fileName}</a>
+										<a href="<%= request.getContextPath() %>/post/download.do?fileName=${ post.file_original}">${ post.fileName}</a>
 									</div></li>
 							</c:forEach>
 							<!-- END timeline item -->
