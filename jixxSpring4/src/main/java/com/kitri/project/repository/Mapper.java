@@ -58,9 +58,12 @@ public interface Mapper {
 	void insertUserMeta2(Map<String, Object> map);
 
 	String selectNickname(Map<String, Object> map);
+	Channel selectChannel(int cn);
 
 	void update(Repository r);
 
 	void delete(int rep_id);
+
+	
 
 }

@@ -11,6 +11,7 @@
 	<c:set var="replist" value="${rep_list}" />
 	<c:set var="user_name" value="${user_name}" />
 	<c:set var="rep_name" value="${rep_name}" />
+	<c:set var="ch" value="${ch}" />
 	<div class="wrapper">
 
 		<!-- Main Header -->
@@ -22,7 +23,8 @@
 
 			<!-- Header Navbar -->
 			<nav class="navbar navbar-static-top" role="navigation">
-				<li class="cname">#채널이름</li>
+				<!-- <div><a href="#">채널</a></div> -->
+				<li class="cname">${ch.ch_name}#</li>
 				<div class="navbar-custom-menu">
 					<ul class="nav navbar-nav">
 						<!-- Messages: style can be found in dropdown.less-->
@@ -287,8 +289,7 @@
 							2</a></li> -->
 					<li class="header"><a href="index.html"> Direct Messages &nbsp; <i
 							class="fa fa-plus-circle"></i>
-					</a>
-					<c:forEach var="aa" items="${user_list}" varStatus="status">
+					</a> <c:forEach var="aa" items="${user_list}" varStatus="status">
 							<li><a
 								href="<%=request.getContextPath()%>/post/list.do?page=1&cn=${status.count}&ch_list=${ch_list}&user_list=${user_list}">
 									<i class="fa fa-asterisk"></i>${aa}

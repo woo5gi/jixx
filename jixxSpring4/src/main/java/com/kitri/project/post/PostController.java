@@ -22,6 +22,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import net.coobird.thumbnailator.Thumbnails;
+import vo.Channel;
 import vo.Post;
 
 @Controller
@@ -97,9 +98,13 @@ public class PostController implements ApplicationContextAware {
 			}
 		}
 		ModelAndView mav = new ModelAndView("/template/main");
-		// String rep_name = service.getRepName(rep_id);
+		Channel ch = service.getChannel(cn);
+		/*
+		 * String rep_name = service.getRepName(rep_id);
+		 * mav.addObject("rep_name",rep_name);
+		 */
 		String rep_name = "aa";
-		mav.addObject("rep_name", rep_name);
+		mav.addObject("ch", ch);
 		mav.addObject("id", id);
 		mav.addObject("rep_id", rep_id);
 		mav.addObject("ch_list", ch_list);

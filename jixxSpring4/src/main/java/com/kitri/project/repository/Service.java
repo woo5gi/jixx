@@ -56,12 +56,15 @@ public interface Service {
 	void setUserMeta2(int id, int rep_id, String nickname);
 
 	String getNickname(int id, int rep_id);
+	Channel getChannel(int cn);
 
 	/* String getRepNameById(int id); */
 
 	void editRep(Repository r);
 
 	void delRep(int rep_id);
+
+	
 
 	
 

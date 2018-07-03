@@ -237,6 +237,13 @@ public class ServiceImpl implements Service {
 		return t;
 	}
 
+	@Override
+	public Channel getChannel(int cn) {
+		repMapper = sqlSession.getMapper(Mapper.class);
+		Channel c = repMapper.selectChannel(cn);
+		return c;
+	}
+
 	
 
 
