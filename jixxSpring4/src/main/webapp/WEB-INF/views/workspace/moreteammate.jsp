@@ -21,6 +21,52 @@
 					});
 </script>
 
+<div class="bg">
+	<div class="centered">
+		<div class="box box-primary">
+			<div class="box-header with-border">
+				<c:set var="r" value="${r}" />
+				<h3 class="box-title">${r.rep_name}저장소로초대</h3>
+			</div>
+
+			<form role="form"
+				action="${pageContext.request.contextPath}/sendinvite.do"
+				id="emailinput" method="post" class="form-horizontal">
+				<div class="box-body">
+					<div class="form-group">
+					
+						<label class="form-text text-muted"> You'Anybody else
+							you'd like to invate?</label> <label class="control-label mb-1">Email
+							address</label> 
+						<input type="hidden" name="rep_name" value="${r.rep_name}">
+						<input type="hidden" name="invitest" value="1">
+						<button type="button" id="addemail" class="btn btn-primary btn-sm">more
+							invitation</button>
+						<button type="button" id="deleteemail"
+							class="btn btn-primary btn-sm">cancel invitation</button>
+						<div id="emailinput" class="col-5">
+							<ul id="input">
+								<li><input type="email" name="address"
+									placeholder="name@example.com" class="form-control"
+									required="required"></li>
+							</ul>
+						</div>
+					</div>
+				</div>
+				<div class="box-footer">
+					<button id="skip" class="btn  btn-primary"
+						onclick="location.href='${pageContext.request.contextPath }/gomain.do'"
+						style="width: 49%">Skip For Now</button>
+					<button type="submit" form="emailinput" class="btn  btn-primary"
+						style="width: 50%">Send Invitations</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+
+
+<%-- 
 <!-- Full Width Column -->
 <div class="content-wrapper" style="min-height: 863px;">
 	<div class="container">
@@ -65,6 +111,6 @@
 			</div>
 		</section>
 	</div>
-</div>
+</div> --%>
 </body>
 </html>

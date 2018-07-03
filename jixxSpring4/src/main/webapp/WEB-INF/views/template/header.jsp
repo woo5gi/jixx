@@ -55,13 +55,25 @@
 <!-- AdminLTE for demo purposes -->
 <script src="<%=request.getContextPath()%>/resources/dist/js/demo.js"></script>
 <style>
-.card-block {
+/* .card-block {
 	background: #ffff;
 	padding: 50px;
 	margin-left: 20%;
 	margin-right: 20%;
 	margin-top: 5%;
+} */
+.centered { 
+  display:table; 
+  margin-left:auto; 
+  margin-right:auto;
+  width: 450px;
+  padding-top: 5%;
 }
+.bg{
+min-height: 100%;
+background-color: #ecf0f5;
+}
+
 </style>
 
 </head>

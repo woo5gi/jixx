@@ -64,7 +64,7 @@ p {
 				data-ride="carousel">
 				<div class="carousel-inner" role="listbox">
 					<div class="carousel-item active"
-						style="background-image: url('resources/images/index1.jpg'); height: 950px;">
+						style="background-image: url('resources/images/index1.jpg');height: 100%; width: 100%;">
 						<div class="carousel-caption d-none d-md-block">
 							<h3>FILE CETACEA</h3>
 							<p>*(파일공유 그룹웨어)</p>
