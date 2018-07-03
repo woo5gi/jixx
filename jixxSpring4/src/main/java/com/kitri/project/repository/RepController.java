@@ -101,6 +101,9 @@ public class RepController {
 		Member m2 = service.getMember(id);
 		String user_name = m2.getName();
 		Repository r = service.selectRepByName(rep_id);
+		int cn = 1;
+		Channel ch = service.getChannel(cn);
+		mav.addObject("ch",ch);
 		mav.addObject("rep_name", r.getRep_name());
 		mav.addObject("user_name", user_name);
 		mav.addObject("email", email);

@@ -21,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import vo.Channel;
 import vo.Post;
 
 @Controller
@@ -79,8 +80,10 @@ public class PostController implements ApplicationContextAware {
 		}
 		System.out.println(list);
 		ModelAndView mav = new ModelAndView("/template/main");
-		String rep_name = service.getRepName(rep_id);
-		mav.addObject("rep_name",rep_name);
+		Channel ch = service.getChannel(cn);
+	/*	String rep_name = service.getRepName(rep_id);
+		mav.addObject("rep_name",rep_name);	*/	
+		mav.addObject("ch",ch);
 		mav.addObject("id", id);
 		mav.addObject("rep_id", rep_id);
 		mav.addObject("ch_list", ch_list);
@@ -99,5 +102,4 @@ public class PostController implements ApplicationContextAware {
 		File downloadFile = new File(fileName);
 		return new ModelAndView("download", "downloadFile", downloadFile);
 	}
-
 }

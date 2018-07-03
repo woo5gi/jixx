@@ -9,6 +9,7 @@ import javax.annotation.Resource;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Component;
 
+import vo.Channel;
 import vo.Post;
 
 @Component("postService")
@@ -45,6 +46,12 @@ public class ServiceImpl implements Service {
 		System.out.println(list);
 		return list;
 	}
+	@Override
+	public Channel getChannel(int cn) {
+		mapper = sqlSession.getMapper(Mapper.class);
+		Channel c = mapper.selectChannel(cn);
+		return c;
+	}
 
 	@Override
 	public Post change(Post post) {
@@ -55,5 +62,7 @@ public class ServiceImpl implements Service {
 	public void delete(int Post_id) {
 		
 	}
+
+	
 	
 }
