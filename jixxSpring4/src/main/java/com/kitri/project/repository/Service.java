@@ -12,17 +12,13 @@ public interface Service {
 
 	void addRep(Repository r);
 
-	Repository getRepId(Repository r);
+	Repository getRepository(Repository r);
 
 	void createCh(Repository r);
 
 	void createCh(String chtitle, int rep_id);
 
-	Repository selectRepByName(Repository r);
-
-	Channel getChId(Repository rep_id);
-
-	Channel getChId(int rep_id);
+	Channel getChId(Repository rep_id);	
 
 	void createUserMeta(int id, int rep_id1, int chid1);
 
@@ -49,20 +45,24 @@ public interface Service {
 
 	ArrayList<String> getUserNameList(ArrayList<Integer> userlist);
 
-	Repository selectRepByName(int rep_id);
-
 	ArrayList<String> getRepNameListById(int id);
 
 	void setUserMeta2(int id, int rep_id, String nickname);
 
 	String getNickname(int id, int rep_id);
-	Channel getChannel(int cn);
+	Channel getChannel(int rep_id);
+	Repository getRepository(int rep_id);
+	ArrayList<String> getNicknameList(int rep_id);
 
 	/* String getRepNameById(int id); */
 
 	void editRep(Repository r);
 
 	void delRep(int rep_id);
+
+
+
+	
 
 	
 

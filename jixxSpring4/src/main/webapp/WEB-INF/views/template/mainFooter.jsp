@@ -24,7 +24,7 @@
                 </div>
               </div>
               <input type="hidden" name="ch_list" value="${ch_list}">
-              <input type="hidden" name="user_list" value="${user_list}">
+              <input type="hidden" name="nicknamelist" value="${nicknamelist}">
               <input type="text" id="input3-group3" name="content" placeholder=".." class="form-control">
               <div class="input-group-btn">
                 <div class="btn-group">

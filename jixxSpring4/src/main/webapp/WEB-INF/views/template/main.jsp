@@ -19,7 +19,7 @@
 
 			<!-- Logo -->
 			<a href="${pageContext.request.contextPath }/index.do" class="logo"><img
-				src="resources/images/logo.png" alt="Logo"> </a>
+				src="/resources/images/logo.png" alt="Logo"> </a>
 
 			<!-- Header Navbar -->
 			<nav class="navbar navbar-static-top" role="navigation">
@@ -289,9 +289,9 @@
 							2</a></li> -->
 					<li class="header"><a href="index.html"> Direct Messages &nbsp; <i
 							class="fa fa-plus-circle"></i>
-					</a> <c:forEach var="aa" items="${user_list}" varStatus="status">
+					</a> <c:forEach var="aa" items="${nicknamelist}" varStatus="status">
 							<li><a
-								href="<%=request.getContextPath()%>/post/list.do?page=1&cn=${status.count}&ch_list=${ch_list}&user_list=${user_list}">
+								href="<%=request.getContextPath()%>/post/list.do?page=1&cn=${status.count}&ch_list=${ch_list}&nicknamelist=${nicknamelist}">
 									<i class="fa fa-asterisk"></i>${aa}
 							</a></li>
 						</c:forEach> <!-- 	<li><a href="#"><i class="fa fa fa-user"></i>사람1</a></li>
@@ -377,11 +377,14 @@
 										<h3 class="timeline-header">
 											<a href="#">${post.nickname}</a>
 											<div class="timelinebtn">
-												<a class="btn btn-danger btn-xs">Delete</a>
+												<a class="btn btn-danger btn-xs" href="<%= request.getContextPath() %>/post/delete.do?post_id=${post.post_id}">Delete</a>
 											</div>
 										</h3>
 
 										<div class="timeline-body">${post.content}</div>
+										<c:if test="${post.file_thumbnail ne 'x'}">
+										<img src="<%= request.getContextPath() %>/resources/img/${post.file_thumbnail}"> <br>
+										</c:if>
 										<a href="<%= request.getContextPath() %>/post/download.do?fileName=${ post.file_original}">${ post.fileName}</a>
 									</div></li>
 							</c:forEach>

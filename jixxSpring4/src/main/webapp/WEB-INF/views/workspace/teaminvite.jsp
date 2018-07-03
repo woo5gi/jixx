@@ -59,7 +59,7 @@
 						<br>
 
 						<button id="skip" class="btn btn-primary btn-sm"
-							onclick="location.href='${pageContext.request.contextPath }/gomain.do'">Skip
+							onclick="location.href='${pageContext.request.contextPath }/gomain.do?rep_id=${r.rep_id}'">Skip
 							For Now</button>
 						<button type="submit" form="emailinput"
 							class="btn btn-primary btn-sm">Send Invitations</button>

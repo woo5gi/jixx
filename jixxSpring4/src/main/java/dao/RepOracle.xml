@@ -10,10 +10,11 @@
 		<result property="rep_url" column="rep_url" />
 	</resultMap>
 	<resultMap type="vo.Channel" id="ChResultMap">
-		<result property="ch_id" column="ch_id" />
-		<result property="ch_name" column="ch_name" />
-		<result property="ch_type" column="ch_type" />
-		<result property="ch_status" column="ch_status" />
+		<result property="ch_id" column="channel_id" />
+		<result property="ch_name" column="channel_name" />
+		<result property="ch_type" column="channel_type" />
+		<result property="ch_status" column="channel_status" />
+		<result property="rep_id" column="rep_id" />
 	</resultMap>
 	<resultMap type="vo.Member" id="MemberResultMap">
 		<result property="id" column="user_id" />
@@ -37,7 +38,7 @@
 		resultMap="RepResultMap">
 		select * from repository where rep_id=#{rep_id}
 	</select>
-	<select id="getRepIdByRepName" parameterType="vo.Repository"
+	<select id="selectRepByRep" parameterType="vo.Repository"
 		resultMap="RepResultMap">
 		select rep_id from repository where rep_url=#{rep_url}
 	</select>
@@ -53,12 +54,7 @@
 	</insert>
 	<select id="getChByRepId" parameterType="vo.Repository"
 		resultMap="ChResultMap">
-		select channel_id ch_id from channel where rep_id=#{rep_id}
-	</select>
-	<select id="getChByRepId2" parameterType="Integer"
-		resultMap="ChResultMap">
-		select max(channel_id) ch_id from channel where
-		rep_id=#{rep_id}
+		select * from channel where rep_id=#{rep_id}
 	</select>
 	<insert id="insertUserMeta" parameterType="map">
 		insert into user_meta
@@ -70,9 +66,9 @@
 			values(#{type.value},#{rep_id},3,#{ch_id},1)
 		</foreach>
 	</insert>
-	<insert id="insertUserMetaCreateChannel1"
-		parameterType="map">
-		insert into user_meta values(#{user_id},#{rep_id},3,#{ch_id},1)
+	<insert id="insertUserMetaCreateChannel1" parameterType="map">
+		insert
+		into user_meta values(#{user_id},#{rep_id},3,#{ch_id},1)
 	</insert>
 
 	<insert id="insertUserMetaInvite" parameterType="map">
@@ -129,15 +125,17 @@
 			#{type.value}
 		</foreach>
 	</select>
-	<select id="selectRepName" parameterType="Integer"
+	<select id="selectRepository" parameterType="Integer"
 		resultMap="RepResultMap">
-		select rep_name from repository where rep_id=#{rep_id}
+		select * from repository where rep_id=#{rep_id}
 	</select>
 	<select id="selectRepList" parameterType="Integer"
 		resultMap="RepResultMap">
-		select r.* from repository r,member m,user_meta um
+		select distinct(r.rep_id), r.rep_name, r.rep_url from
+		repository r,member m,user_meta um
 		where
-		r.rep_id=um.rep_id and um.user_id=m.user_id and m.user_id=#{id}
+		r.rep_id=um.rep_id and
+		um.user_id=m.user_id and m.user_id=#{id}
 	</select>
 	<insert id="insertUserMeta2" parameterType="map">
 		insert into
@@ -147,6 +145,16 @@
 		resultType="String">
 		select nickname from user_meta2 where user_id=#{id} and
 		rep_id=#{rep_id}
+	</select>
+	<select id="selectChannel" parameterType="Integer"
+		resultMap="ChResultMap">
+		select *
+		from channel
+		where channel_id=(select min(channel_id) from channel where
+		rep_id=#{rep_id})
+	</select>
+	<select id="selectNicknameList" parameterType="Integer" resultType="String">
+	select nickname from user_meta2 where rep_id=#{rep_id}
 	</select>
 
 

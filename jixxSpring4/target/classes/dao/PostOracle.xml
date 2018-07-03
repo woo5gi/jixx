@@ -32,4 +32,7 @@
 		where b.a <![CDATA[>=]]> ${startpage}
 		order by post_logdate
 	</select>
+	<update id="delete">
+		update post set post_status=0 where post_id=#{post_id}
+	</update>
 </mapper>
