@@ -377,11 +377,14 @@
 										<h3 class="timeline-header">
 											<a href="#">${post.nickname}</a>
 											<div class="timelinebtn">
-												<a class="btn btn-danger btn-xs">Delete</a>
+												<a class="btn btn-danger btn-xs" href="<%= request.getContextPath() %>/post/delete.do?post_id=${post.post_id}">Delete</a>
 											</div>
 										</h3>
 
 										<div class="timeline-body">${post.content}</div>
+										<c:if test="${post.file_thumbnail ne 'x'}">
+										<img src="<%= request.getContextPath() %>/resources/img/${post.file_thumbnail}"> <br>
+										</c:if>
 										<a href="<%= request.getContextPath() %>/post/download.do?fileName=${ post.file_original}">${ post.fileName}</a>
 									</div></li>
 							</c:forEach>
