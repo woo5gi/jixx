@@ -1,5 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <jsp:include page="../template/header.jsp" flush="false" />
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<script type="text/javascript">
+$(function(){
+	
+});
+</script>
 
 <!-- ADD THE CLASS layout-top-nav TO REMOVE THE SIDEBAR. -->
 <body class="skin-blue layout-top-nav" style="height: auto; min-height: 100%;">
@@ -92,7 +98,7 @@
 								<form action="${pageContext.request.contextPath}/addchannel.do" method="post"
 									class="form-horizontal" id="form">
 									<label class="switch switch-3d switch-warning mr-3"><input type="checkbox"
-										class="switch-input" checked="checked" name="chtype"> <span class="switch-label"></span><span
+										class="switch-input" name="chtype"> <span class="switch-label"></span><span
 										class="switch-handle"></span></label> <label class="text-muted">private</label>
 									<br>
 									<br>
@@ -105,6 +111,9 @@
 											<label class="control-label mb-1">Send invates to:(optional)</label>
 											<br>
 											<input type="text" name="invate" placeholder="Search by name" class="form-control">
+											<c:forEach var="r" items="${usernamelist}">
+											<a class="userinvite" name="userlist">${r}</a>											
+											</c:forEach>
 
 										</div>
 									</div>

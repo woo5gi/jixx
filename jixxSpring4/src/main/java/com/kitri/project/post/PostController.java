@@ -32,9 +32,9 @@ public class PostController implements ApplicationContextAware {
 
 	@RequestMapping(value = "/post/write.do")
 	public String write(Post post, HttpServletRequest req, @RequestParam(value = "ch_list") String ch_list,
-			@RequestParam(value = "user_list") String user_list, RedirectAttributes redirectAttributes) {
+			@RequestParam(value = "nicknamelist") String nicknamelist, RedirectAttributes redirectAttributes) {
 		HttpSession session = req.getSession(false);
-		redirectAttributes.addAttribute("user_list", user_list);
+		redirectAttributes.addAttribute("nicknamelist", nicknamelist);
 		redirectAttributes.addAttribute("ch_list", ch_list);
 		MultipartFile file = post.getFile();
 		System.out.println(file.getOriginalFilename());
@@ -63,7 +63,7 @@ public class PostController implements ApplicationContextAware {
 	@RequestMapping(value = "/post/list.do", method = RequestMethod.GET)
 	public ModelAndView list(HttpServletRequest req, @RequestParam(value = "page") int page,
 			@RequestParam(value = "cn") int cn, @RequestParam(value = "ch_list") String ch_list,
-			@RequestParam(value = "user_list") String user_list) {
+			@RequestParam(value = "nicknamelist") String nicknamelist) {
 		HttpSession session = req.getSession(false);
 		int id = (int) session.getAttribute("id");
 		int rep_id = (int) session.getAttribute("rep_id");
@@ -82,16 +82,12 @@ public class PostController implements ApplicationContextAware {
 		}
 		ModelAndView mav = new ModelAndView("/template/main");
 		Channel ch = service.getChannel(cn);
-		/*
-		 * String rep_name = service.getRepName(rep_id);
-		 * mav.addObject("rep_name",rep_name);
-		 */
-		String rep_name = "aa";
+		
 		mav.addObject("ch", ch);
 		mav.addObject("id", id);
 		mav.addObject("rep_id", rep_id);
 		mav.addObject("ch_list", ch_list);
-		mav.addObject("user_list", user_list);
+		mav.addObject("nicknamelist", nicknamelist);
 		mav.addObject("list", list);
 		return mav;
 	}

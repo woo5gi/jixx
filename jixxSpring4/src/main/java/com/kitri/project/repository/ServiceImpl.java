@@ -37,16 +37,9 @@ public class ServiceImpl implements Service {
 	}
 
 	@Override
-	public Repository selectRepByName(Repository r) {
+	public Repository getRepository(Repository r) {
 		repMapper = sqlSession.getMapper(Mapper.class);
-		Repository r2 = repMapper.getRepositoryByName(r);
-		return r2;
-	}
-
-	@Override
-	public Repository getRepId(Repository r) {
-		repMapper = sqlSession.getMapper(Mapper.class);
-		Repository r2 = repMapper.getRepIdByRepName(r);
+		Repository r2 = repMapper.selectRepByRep(r);
 		return r2;
 	}
 
@@ -71,12 +64,7 @@ public class ServiceImpl implements Service {
 		Channel ch = repMapper.getChByRepId(rep_id);
 		return ch;
 	}
-	@Override
-	public Channel getChId(int rep_id) {
-		repMapper = sqlSession.getMapper(Mapper.class);
-		Channel ch = repMapper.getChByRepId2(rep_id);
-		return ch;
-	}
+	
 
 	@Override
 	public void createUserMeta(int id, int rep_id1, int chid1) {
@@ -203,9 +191,9 @@ public class ServiceImpl implements Service {
 	}
 
 	@Override
-	public Repository selectRepByName(int rep_id) {
+	public Repository getRepository(int rep_id) {
 		repMapper = sqlSession.getMapper(Mapper.class);
-		Repository r = repMapper.selectRepName(rep_id);
+		Repository r = repMapper.selectRepository(rep_id);
 		return r;
 	}
 
@@ -238,24 +226,16 @@ public class ServiceImpl implements Service {
 	}
 
 	@Override
-	public Channel getChannel(int cn) {
+	public Channel getChannel(int rep_id) {
 		repMapper = sqlSession.getMapper(Mapper.class);
-		Channel c = repMapper.selectChannel(cn);
+		Channel c = repMapper.selectChannel(rep_id);
 		return c;
 	}
 
-	
-
-
-	
-
-	
-	
-
-	
-
-	
-
-	
-	
+	@Override
+	public ArrayList<String> getNicknameList(int rep_id) {
+		repMapper = sqlSession.getMapper(Mapper.class);			
+		ArrayList<String> t = repMapper.selectNicknameList(rep_id);
+		return t;
+	}
 }

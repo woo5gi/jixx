@@ -13,17 +13,13 @@ public interface Mapper {
 
 	void insertRep(Repository r);
 
-	Repository getRepIdByRepName(Repository r);
+	Repository selectRepByRep(Repository r);
 
 	void insertCh(Repository r);
 
 	void insertCh2(Map<String, Object> map);
 
-	Repository getRepositoryByName(Repository r);
-
-	Channel getChByRepId(Repository rep_id);
-
-	Channel getChByRepId2(int rep_id);
+	Channel getChByRepId(Repository rep_id);	
 
 	void insertUserMeta(Map<String, Object> map);
 
@@ -51,19 +47,20 @@ public interface Mapper {
 
 	ArrayList<String> selectUserNameList(Map<String, Object> map);
 
-	Repository selectRepName(int rep_id);
+	Repository selectRepository(int rep_id);
 
 	ArrayList<String> selectRepList(int id);
 
 	void insertUserMeta2(Map<String, Object> map);
 
 	String selectNickname(Map<String, Object> map);
-	Channel selectChannel(int cn);
+
+	Channel selectChannel(int rep_id);
 
 	void update(Repository r);
 
 	void delete(int rep_id);
 
-	
+	ArrayList<String> selectNicknameList(int rep_id);
 
 }

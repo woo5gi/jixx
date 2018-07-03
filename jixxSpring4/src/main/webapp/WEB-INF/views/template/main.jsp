@@ -289,9 +289,9 @@
 							2</a></li> -->
 					<li class="header"><a href="index.html"> Direct Messages &nbsp; <i
 							class="fa fa-plus-circle"></i>
-					</a> <c:forEach var="aa" items="${user_list}" varStatus="status">
+					</a> <c:forEach var="aa" items="${nicknamelist}" varStatus="status">
 							<li><a
-								href="<%=request.getContextPath()%>/post/list.do?page=1&cn=${status.count}&ch_list=${ch_list}&user_list=${user_list}">
+								href="<%=request.getContextPath()%>/post/list.do?page=1&cn=${status.count}&ch_list=${ch_list}&nicknamelist=${nicknamelist}">
 									<i class="fa fa-asterisk"></i>${aa}
 							</a></li>
 						</c:forEach> <!-- 	<li><a href="#"><i class="fa fa fa-user"></i>사람1</a></li>
