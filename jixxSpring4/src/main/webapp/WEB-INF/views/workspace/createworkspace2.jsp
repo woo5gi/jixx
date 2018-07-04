@@ -55,7 +55,8 @@
 								 required="required"> <label
 								class="control-label mb-1">.cetacea.com</label> <input
 								type="button" id="urlCheck" value="url 중복체크"
-								class="btn btn-primary btn-sm"> <span id="urlResult"></span>
+								class="btn btn-primary btn-sm" style="margin-left:10px"> <br>
+								<span style="padding:20px;" class="text-light-blue" id="urlResult"></span>
 						</div>
 					</div>
 
