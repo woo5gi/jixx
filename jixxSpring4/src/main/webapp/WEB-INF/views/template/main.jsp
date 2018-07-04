@@ -99,8 +99,7 @@
 														aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">
 														<span class="sr-only">20% Complete</span>
 													</div>
-												</div>
-										</a>
+												</div>										</a>
 										</li>
 										<!-- end task item -->
 									</ul>
@@ -382,7 +381,11 @@
 										<h3 class="timeline-header">
 											<a href="#">${post.nickname}</a>
 											<div class="timelinebtn">
-												<a class="btn btn-danger btn-xs" href="<%= request.getContextPath() %>/post/delete.do?post_id=${post.post_id}">Delete</a>
+											<c:set var="usernickname" value="${sessionScope.nickname}"/>
+											<c:set var="writtennickname" value="${post.nickname}"/>										
+											<c:if test="${usernickname eq writtennickname}">
+												<a class="btn btn-danger btn-xs" href="<%= request.getContextPath() %>/post/delete.do?post_id=${post.post_id}&cn=${ch.ch_id}">Delete</a>
+											</c:if>
 											</div>
 										</h3>
 

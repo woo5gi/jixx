@@ -34,19 +34,19 @@ public class PostController implements ApplicationContextAware {
 	private WebApplicationContext context = null;
 
 	@RequestMapping(value = "/post/write.do")
-	public String write(Post post, HttpServletRequest req,@RequestParam(value="cn") int cn,
-			RedirectAttributes rda) {
-		rda.addAttribute("cn",cn);
+	public String write(Post post, HttpServletRequest req, @RequestParam(value = "cn") int cn, RedirectAttributes rda) {
+		rda.addAttribute("cn", cn);
 		HttpSession session = req.getSession(false);
-		int id=(int)session.getAttribute("id");
-		int rep_id=(int) session.getAttribute("rep_id");
+		int id = (int) session.getAttribute("id");
+		int rep_id = (int) session.getAttribute("rep_id");
 		MultipartFile file = post.getFile();
 		if (file.getOriginalFilename() != "") {
 			int pos = file.getOriginalFilename().lastIndexOf(".");
 			String ext = file.getOriginalFilename().substring(pos);
 			String name = file.getOriginalFilename().substring(0, pos);
 			String path = "D:\\files\\" + name + UUID.randomUUID().toString() + ext;
-			String thumbnailPath = "D:\\git\\jixxSpring4\\src\\main\\webapp\\resources\\img\\" + name + UUID.randomUUID().toString();
+			String thumbnailPath = "D:\\git\\jixxSpring4\\src\\main\\webapp\\resources\\img\\" + name
+					+ UUID.randomUUID().toString();
 			File f = new File(path);
 			try {
 				file.transferTo(f);
@@ -66,14 +66,14 @@ public class PostController implements ApplicationContextAware {
 					} catch (IOException e) {
 						e.printStackTrace();
 					}
-				}				
+				}
 			}
 		} else {
 			post.setFile_original("x");
 		}
-		String nickname= service.getNickname(id,rep_id);
+		String nickname = service.getNickname(id, rep_id);
 		post.setChannel_id(cn);
-		post.setNickname(nickname);	
+		post.setNickname(nickname);
 		post.setUser_id(Integer.parseInt(session.getAttribute("id").toString()));
 		service.write(post);
 		return "redirect:/post/list.do?page=1";
@@ -134,9 +134,10 @@ public class PostController implements ApplicationContextAware {
 	}
 
 	@RequestMapping(value = "/post/delete.do")
-	public String delete(@RequestParam("post_id") int post_id) {
+	public String delete(@RequestParam("post_id") int post_id, @RequestParam(value = "cn") int cn,
+			RedirectAttributes rda) {
 		service.delete(post_id);
-		return "template/main";
+		rda.addAttribute("cn", cn);
+		return "redirect:/post/list.do?page=1";
 	}
-
 }
