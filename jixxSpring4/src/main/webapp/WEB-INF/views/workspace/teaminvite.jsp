@@ -13,12 +13,13 @@
 										function() {
 											$('ul#input')
 													.append(
-															"<li><input type='email' name='address' placeholder='name@example.com' class='form-control' required='required'></li>");
+															"<li class='adddedemail'><input type='email' name='address' placeholder='name@example.com' class='form-control' required='required'><input type='button' class='btn btn-primary deleteinput' name='delete' value='Remove'></li><br>");
+											$('input[type=button]').on('click', function() {
+										        $(this).parent('li.adddedemail').next().remove(); // remove the <br>
+												$(this).parent('li.adddedemail').remove();
+												});
+											});
 										});
-						$("#deleteemail").click(function() {
-							$('ul#input').children("li").remove();
-						});
-					});
 </script>
 
 <div class="content-wrapper" style="min-height: 863px;">
@@ -45,13 +46,11 @@
 								<input type="hidden" name="invitest" value="0">
 								<button type="button" id="addemail"
 									class="btn btn-primary btn-sm">more invitation</button>
-								<button type="button" id="deleteemail"
-									class="btn btn-primary btn-sm">cancel invitation</button>
 								<div id="emailinput" class="col-5">
 									<ul id="input">
 										<li><input type="email" name="address"
 											placeholder="name@example.com" class="form-control"
-											required="required"></li>
+											required="required"></li><br>
 									</ul>
 								</div>
 							</div>

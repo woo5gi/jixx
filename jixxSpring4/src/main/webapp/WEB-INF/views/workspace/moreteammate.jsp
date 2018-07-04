@@ -11,14 +11,11 @@
 					$('ul#input')
 						.append(
 							"<li class='adddedemail'><input type='email' name='address' placeholder='name@example.com' class='form-control' required='required'><input type='button' class='btn btn-primary deleteinput' name='delete' value='Remove'></li><br>");
-				});
-		var deletebtn = $('input[name=delete]');
-		$(deletebtn).on('click', function() {
-			alert("asdf");
+				
+		$('input[type=button]').on('click', function() {
+	        $(this).parent('li.adddedemail').next().remove(); // remove the <br>
 			$(this).parent('li.adddedemail').remove();
-		/* prev().remove (); // remove the textbox
-	        $(this).next().remove (); // remove the <br>
-	        $(this).remove () */
+			});
 		});
 	});
 
