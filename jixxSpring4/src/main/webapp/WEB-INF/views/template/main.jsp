@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
- <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+
 <jsp:include page="mainHeader.jsp" flush="false" />
 <body class="hold-transition skin-blue sidebar-mini">
 	<c:set var="user_id" value="${id}" />
@@ -19,7 +20,7 @@
 
 			<!-- Logo -->
 			<a href="${pageContext.request.contextPath }/index.do" class="logo"><img
-				src="/resources/images/logo.png" alt="Logo"> </a>
+				src="${pageContext.request.contextPath }/resources/images/logo.png" alt="Logo"> </a>
 
 			<!-- Header Navbar -->
 			<nav class="navbar navbar-static-top" role="navigation">
@@ -109,30 +110,46 @@
 						</li>
 						<!-- User Account Menu -->
 						<c:choose>
-							<c:when test="${user_id eq null}">
-								<li>
-									<!-- Menu Toggle Button --> <a class="dropdown-toggle"
-									href="${pageContext.request.contextPath}/member/loginForm.do" aria-expanded="true"
-									style="display: inline;"> SIGN IN </a>
-								</li>
-							</c:when>
-							<c:otherwise>
-								<li class="dropdown user user-menu"><a class="dropdown-toggle" href="${pageContext.request.contextPath}/gomain.do?rep_id=${sessionScope.rep_id}"> ${user_name}님의
-										${rep_name}저장소 </a></li>
-								<c:choose>
-									<c:when test="${replist eq null}">
-										<li class="dropdown user user-menu">
-											<!-- Menu Toggle Button --> <a class="dropdown-toggle" data-toggle="dropdown"
-											aria-expanded="false"> <span class="hidden-xs">Create Workspace</span>
-										</a>
-											<ul class="dropdown-menu">
-												<li class="user-header">
-													<div class="pull-left" style="border: 1px;">
-														<a href="${pageContext.request.contextPath}/crw1.do" class="btn btn-default btn-flat"
-															aria-expanded="false"> <span class="hidden-xs">Create New Workspace</span>
-														</a>
-													</div>
+							<c:when test="${empty replist}">
+								<li class="dropdown user user-menu"><a
+									class="dropdown-toggle" data-toggle="dropdown"
+									aria-expanded="false"> <span class="hidden-xs">Create
+											Workspace</span>
+								</a>
+									<ul class="dropdown-menu">
+										<li class="user-header">
+											<p>
+												<a href="${pageContext.request.contextPath}/crw1.do"> <span
+													class="hidden-xs" style="color: #fff;">Create New
+														Workspace</span>
+												</a>
+											</p>
+										</li>
 
+										<li class="user-body">
+											<div class="row">
+												<div class="col-xs11 text-center">
+													<a href="${pageContext.request.contextPath}/crw1.do">
+														<span class="hidden-xs">Find Workspace</span>
+													</a>
+												</div>
+											</div>
+										</li>
+										<!-- Menu Footer-->
+										<li class="user-footer">
+											<div class="pull-left">
+												<a href="#" class="btn btn-default btn-flat">Profile</a>
+											</div>
+											<div class="pull-right">
+												<a
+													href="${pageContext.request.contextPath}/member/logout.do"
+													class="btn btn-default btn-flat">Sign out</a>
+											</div>
+										</li>
+									</ul></li>
+							</c:when>
+
+<<<<<<< HEAD
 												</li>
 												<!-- Menu Body -->
 												<li class="user-body">
@@ -183,67 +200,66 @@
 												<!-- Menu Footer-->
 												<li class="user-footer">
 													<div class="pull-left">
-														<a href="#" class="btn btn-default btn-flat">Profile</a>
-													</div>
+												<a href="${pageContext.request.contextPath}/profileform.do"
+													class="btn btn-default btn-flat">Profile</a>
+											     </div>
 													<div class="pull-right">
 														<a href="${pageContext.request.contextPath}/member/logout.do"
 															class="btn btn-default btn-flat">Sign out</a>
 													</div>
 												</li>
 											</ul>
-										</li>
-									</c:otherwise>
-								</c:choose>
-							</c:otherwise>
-						</c:choose>
-						<%-- <li class="dropdown user user-menu">
-							<!-- Menu Toggle Button --> <a href="#" class="dropdown-toggle"
-							data-toggle="dropdown"> <!-- The user image in the navbar-->
-								<img src="dist/img/user2-160x160.jpg" class="user-image"
-								alt="User Image"> <!-- hidden-xs hides the username on small devices so only the image appears. -->
-								<span class="hidden-xs">닉네임</span>
-						</a>
-							<ul class="dropdown-menu">
-								<!-- The user image in the menu -->
-								<li class="user-header"><img
-									src="dist/img/user2-160x160.jpg" class="img-circle"
-									alt="User Image">
+=======
+							<c:otherwise>
+								<li class="dropdown user user-menu"><a
+									href="${pageContext.request.contextPath}/gomain.do"
+									class="dropdown-toggle" data-toggle="dropdown"
+									aria-expanded="false"> <span class="hidden-xs">My
+											Workspace</span>
+								</a>
+									<ul class="dropdown-menu">
+										<li class="user-header">
+											<p>WorkSpace List</p> <c:forEach var="aa" items="${rep_list}">
 
-									<p>
-										닉네임 - Web Developer <small>Member since Nov. 2012</small>
-									</p></li>
-								<!-- Menu Body -->
-								<li class="user-body">
-									<div class="row">
-										<div class="col-xs-4 text-center">
-											<a href="#">Followers</a>
-										</div>
-										<div class="col-xs-4 text-center">
-											<a href="#">Sales</a>
-										</div>
-										<div class="col-xs-4 text-center">
-											<a href="#">Friends</a>
-										</div>
-									</div> <!-- /.row -->
-								</li>
-								<!-- Menu Footer-->
-								<li class="user-footer">
-									<div class="pull-left">
-										<a href="#" class="btn btn-default btn-flat">Profile</a>
-									</div>
-									<div class="pull-right">
-										<a href="${pageContext.request.contextPath}/member/logout.do"
-											class="btn btn-default btn-flat">Sign out</a>
-									</div>
-								</li>
-							</ul>
-						</li> --%>
-						<!-- Control Sidebar Toggle Button -->
-						<li><a href="#" data-toggle="control-sidebar"><i class="fa fa-gears"></i></a></li>
+												<li class="user-body"><a
+													href="${pageContext.request.contextPath}/gomain.do?rep_id=${aa.rep_id}"
+													class="hidden-xs text-center">${aa.rep_name}</a></li>
+
+											</c:forEach> <!-- Menu Body -->
+										</li>
+										<li class="user-body" style="overflow-y: scroll;">
+											<div class="row">
+												<div class="col-xs11 text-center">
+													<a href="${pageContext.request.contextPath}/crw1.do"
+														aria-expanded="false"> <span class="hidden-xs">Create
+															new Workspace</span>
+													</a>
+												</div>
+											</div>
+										</li>
+
+										<!-- Menu Footer-->
+										<li class="user-footer">
+											<div class="pull-left">
+												<a href="${pageContext.request.contextPath}/profileform.do"
+													class="btn btn-default btn-flat">Profile</a>
+											</div>
+											<div class="pull-right">
+												<a
+													href="${pageContext.request.contextPath}/member/logout.do"
+													class="btn btn-default btn-flat">Sign out</a>
+											</div>
+>>>>>>> c5702bdca4e3ca8220ff04acafddb119bbde26ac
+										</li>
+									</ul></li>
+							</c:otherwise>
+
+						</c:choose>
 					</ul>
 				</div>
 			</nav>
 		</header>
+		
 		<!-- Left side column. contains the logo and sidebar -->
 		<aside class="main-sidebar">
 
@@ -321,7 +337,7 @@
 						<!-- The time line -->
 						<ul class="timeline">
 							<!-- timeline time label -->
-							<li class="time-label"><span class="bg-red"> 10 Feb. 2014 </span></li>
+							<li class="time-label" id="div"><span class="bg-red"> 10 Feb. 2014 </span></li>
 							<!-- /.timeline-label -->
 							<!-- timeline item -->
 							<li><i class="fa fa-envelope bg-blue"></i>
@@ -361,15 +377,6 @@
 
 							<!-- END timeline item -->
 							<!-- timeline item -->
-							<li><i class="fa fa-user bg-aqua"></i>
-
-								<div class="timeline-item">
-									<span class="time"><i class="fa fa-clock-o"></i> 5 mins ago</span>
-
-									<h3 class="timeline-header no-border">
-										<a href="#">Sarah Young</a> accepted your friend request
-									</h3>
-								</div></li>
 							<!-- END timeline item -->
 							<!-- timeline item -->
 							<c:forEach items="${list}" var="post"  varStatus="status">
@@ -378,8 +385,24 @@
 							<c:if test="${logdate ne logdate2}">
 								<li class="time-label"><span class="bg-red"> ${post.logdate}</span></li>
 							</c:if>
-								<li><i class="fa fa-comments bg-yellow"></i>
+							<c:choose>
+							<c:when test="${post.post_status eq 3}">
+							<li><i class="fa fa-user bg-aqua"></i>
 
+								<div class="timeline-item">
+									<span class="time"><i class="fa fa-clock-o"></i>${post.logdate}</span>
+
+									<h3 class="timeline-header no-border">
+										<a href="#">${post.nickname}님</a> ${rep_name} ${post.content }
+									</h3>
+								</div></li>
+							</c:when>
+							<c:otherwise>
+								<li><i class="fa fa-envelope bg-blue"></i>
+								<c:if test="${post.file_thumbnail ne 'x'}">
+									<i class="fa fa-camera bg-purple"></i>
+								</c:if>
+								
 									<div class="timeline-item">
 										<span class="time"><i class="fa fa-clock-o"></i>${post.logdate}</span>
 
@@ -396,10 +419,12 @@
 
 										<div class="timeline-body">${post.content}</div>
 										<c:if test="${post.file_thumbnail ne 'x'}">
-										<img src="<%= request.getContextPath() %>/resources/img/${post.file_thumbnail}"> <br>
+										<img src="<%= request.getContextPath() %>/resources/img/${post.file_thumbnail}" class="margin"> <br>
 										</c:if>
 										<a href="<%= request.getContextPath() %>/post/download.do?fileName=${ post.file_original}">${ post.fileName}</a>
 									</div></li>
+							</c:otherwise>
+							</c:choose>
 							</c:forEach>
 							<!-- END timeline item -->
 							<!-- timeline time label -->
@@ -450,18 +475,49 @@
 							<li><i class="fa fa-clock-o bg-gray"></i></li>
 						</ul>
 					</div>
-					<!-- /.col -->
 				</div>
-				<!-- /.row -->
-
 			</section>
-			<!-- /.content -->
-
 		</div>
-		<!-- /.content-wrapper -->
 
 		<%@include file="mainFooter.jsp"%>
 	</div>
 
 </body>
+
+ <script type="text/javascript">
+ var page = 2;
+
+ var isLoading = false;
+
+ function loadNewPage() {
+     var temp = $(document).height();
+     page++;
+     $(document).scrollTop($(document).height()-temp);
+     isLoading = false;
+ }
+
+ $(document).scroll(function() {
+   if($(document).scrollTop() < 1 && !isLoading) {
+	   $.ajax({
+           type : "GET",
+           url : "<%=request.getContextPath()%>/post/ajax.do",
+           data : { page: page, cn: "16" },
+           dataType : "json",
+           error : function(){
+               alert('더이상 불러올 데이터가 없습니다.');
+           },
+           success : function(data){
+        	  console.log(data["0"].post_id);
+           }
+            
+       });
+     $("#div").prepend('<div class="big-box"><h1>Page ' + page + '</h1></div>');
+     isLoading = true;
+     setTimeout(loadNewPage, 100);
+   }
+   
+ });
+
+
+</script>
 </html>

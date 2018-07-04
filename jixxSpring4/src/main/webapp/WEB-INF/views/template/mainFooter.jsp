@@ -4,13 +4,14 @@
 	$(function() {
 		$('#submit').click(function() {
 			var content = $('input[name=content]').val();
-			if (content == '') {
-				alert("내용을입력하세요");
-			} else {
+			if (content != '') {
 				$('#form').submit();
+			} else {
+				alert("내용을입력하세요");
+				return false;
 			}
-		})
-	})
+		});
+	});
 </script>
 <!-- Main Footer -->
 <footer class="main-footer">
@@ -41,7 +42,7 @@
 					<input type="text" id="input3-group3" name="content" placeholder=".." class="form-control">
 					<div class="input-group-btn">
 						<div class="btn-group">
-							<button type="button" id="submit" class="btn btn-outline-secondary">Secondary</button>
+							<button type="submit" id="submit" class="btn btn-outline-secondary">Secondary</button>
 						</div>
 					</div>
 				</div>
