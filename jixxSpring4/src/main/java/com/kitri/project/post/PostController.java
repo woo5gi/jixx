@@ -32,11 +32,11 @@ public class PostController implements ApplicationContextAware {
 	private WebApplicationContext context = null;
 
 	@RequestMapping(value = "/post/write.do")
-	public String write(Post post, HttpServletRequest req, @RequestParam(value = "ch_list") String ch_list,
-			@RequestParam(value = "nicknamelist") String nicknamelist, RedirectAttributes redirectAttributes) {
+	public String write(Post post, HttpServletRequest req,@RequestParam(value="cn") int cn,
+			RedirectAttributes rda) {
+		rda.addAttribute("cn",cn);
 		HttpSession session = req.getSession(false);
-		redirectAttributes.addAttribute("nicknamelist", nicknamelist);
-		redirectAttributes.addAttribute("ch_list", ch_list);
+		int id=(int)session.getAttribute("id");
 		MultipartFile file = post.getFile();
 		if (file.getOriginalFilename() != "") {
 			int pos = file.getOriginalFilename().lastIndexOf(".");
@@ -68,18 +68,22 @@ public class PostController implements ApplicationContextAware {
 		} else {
 			post.setFile_original("x");
 		}
+		String nickname= service.getNickname(id);
+		post.setChannel_id(cn);
+		post.setNickname(nickname);	
 		post.setUser_id(Integer.parseInt(session.getAttribute("id").toString()));
 		service.write(post);
-		return "redirect:/post/list.do?page=1&cn=1";
+		return "redirect:/post/list.do?page=1";
 	}
 
 	@RequestMapping(value = "/post/list.do", method = RequestMethod.GET)
 	public ModelAndView list(HttpServletRequest req, @RequestParam(value = "page") int page,
-			@RequestParam(value = "cn") int cn, @RequestParam(value = "ch_list") String ch_list,
-			@RequestParam(value = "nicknamelist") String nicknamelist) {
+			@RequestParam(value = "cn") int cn) {
 		HttpSession session = req.getSession(false);
 		int id = (int) session.getAttribute("id");
 		int rep_id = (int) session.getAttribute("rep_id");
+		ArrayList<String> nicknamelist = service.getNicknameList(rep_id);
+		ArrayList<Channel> chlist = service.getChList(rep_id);
 		ArrayList<Post> list = service.show(page, cn);
 		for (int i = 0; i < list.size(); i++) {
 			if (list.get(i).getPost_status() == 0) {
@@ -98,11 +102,12 @@ public class PostController implements ApplicationContextAware {
 			}
 		}
 		ModelAndView mav = new ModelAndView("/template/main");
-		Channel ch = service.getChannel(cn);		
+		Channel ch = service.getChannel(cn);
+		System.out.println("chid:" + ch.getCh_id());
 		mav.addObject("ch", ch);
 		mav.addObject("id", id);
 		mav.addObject("rep_id", rep_id);
-		mav.addObject("ch_list", ch_list);
+		mav.addObject("ch_list", chlist);
 		mav.addObject("nicknamelist", nicknamelist);
 		mav.addObject("list", list);
 		return mav;

@@ -5,6 +5,7 @@ import java.util.Map;
 
 import vo.Channel;
 import vo.Member;
+import vo.Post;
 import vo.Repository;
 
 public interface Mapper {
@@ -37,9 +38,9 @@ public interface Mapper {
 
 	int selectRepIdByRepNameUserMeta(String rep_name);
 
-	ArrayList<Integer> selectChList(int rep_id);
+	ArrayList<Integer> selectChIdList(int rep_id);
 
-	ArrayList<String> selectChNameList(int rep_id);
+	ArrayList<Channel> selectChList(int rep_id);
 
 	Member selectUserIdByEmail(String email);
 

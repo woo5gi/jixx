@@ -282,8 +282,8 @@
 							Channels &nbsp; &nbsp;<i class="fa fa-plus-circle"></i>
 					</a> <c:forEach var="aa" items="${ch_list}" varStatus="status">
 							<li><a
-								href="<%=request.getContextPath()%>/post/list.do?page=1&cn=${status.count}&ch_list=${ch_list}&nicknamelist=${nicknamelist}">
-									<i class="fa fa-asterisk"></i>${aa}
+								href="<%=request.getContextPath()%>/post/list.do?page=1&cn=${aa.ch_id}">
+									<i class="fa fa-asterisk"></i>${aa.ch_name}
 							</a></li>
 						</c:forEach> <!-- <li><a href="#"><i id="icon2" class="fa fa-lock"></i>Channel
 							2</a></li> -->

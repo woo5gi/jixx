@@ -27,11 +27,6 @@ public interface Service {
 
 	void setNewPass(Member m);
 
-	ArrayList<String> getRepNameListById(int id);
-
-	
-
-	
-	
+	ArrayList<String> getRepNameListById(int id);	
 
 }

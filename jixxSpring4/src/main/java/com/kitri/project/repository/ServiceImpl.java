@@ -145,15 +145,15 @@ public class ServiceImpl implements Service {
 	}
 
 	@Override
-	public ArrayList<Integer> getChList(int rep_id) {
+	public ArrayList<Integer> getChIdList(int rep_id) {
 		repMapper = sqlSession.getMapper(Mapper.class);
-		ArrayList<Integer> list = repMapper.selectChList(rep_id);
+		ArrayList<Integer> list = repMapper.selectChIdList(rep_id);
 		return list;
 	}
 	@Override
-	public ArrayList<String> getChNameList(int rep_id) {
+	public ArrayList<Channel> getChList(int rep_id) {
 		repMapper = sqlSession.getMapper(Mapper.class);
-		ArrayList<String> list = repMapper.selectChNameList(rep_id);
+		ArrayList<Channel> list = repMapper.selectChList(rep_id);
 		return list;
 	}
 	@Override

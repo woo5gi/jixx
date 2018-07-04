@@ -86,7 +86,7 @@ public class RepController {
 		session.setAttribute("nickname", nickname);
 		ModelAndView mav = new ModelAndView("template/main");
 		// 채널리스트
-		ArrayList<String> chlist = service.getChNameList(rep_id);
+		ArrayList<Channel> chlist = service.getChList(rep_id);		
 		// 저장소에참여한사람리스트
 		ArrayList<Integer> userlist = service.getUserList(rep_id);
 		ArrayList<String> usernamelist = service.getUserNameList(userlist);
@@ -143,7 +143,7 @@ public class RepController {
 		out.println("<script>alert('친구초대완료'); </script>");
 		out.flush();
 		// 채널리스트
-		ArrayList<String> chlist = service.getChNameList(rep_id);
+		ArrayList<Channel> chlist = service.getChList(rep_id);
 		// 저장소에참여한사람리스트
 		ArrayList<Integer> userlist = service.getUserList(rep_id);
 		ArrayList<String> usernamelist = service.getUserNameList(userlist);
@@ -209,7 +209,7 @@ public class RepController {
 		session.setAttribute("email", m2.getEmail());
 		System.out.println("email:" + m2.getEmail());
 		int id = (int) session.getAttribute("id");
-		ArrayList<Integer> chlist = service.getChList(rep_id);
+		ArrayList<Integer> chlist = service.getChIdList(rep_id);
 		for (int i = 0; i < chlist.size(); i++) {
 			int ch_id = chlist.get(i);
 			System.out.println(ch_id);
@@ -229,7 +229,7 @@ public class RepController {
 		int rep_id2 = (int) session.getAttribute("rep_id");
 
 		// 채널리스트
-		ArrayList<String> chlist1 = service.getChNameList(rep_id2);
+		ArrayList<Channel> chlist1 = service.getChList(rep_id2);
 		// 저장소에참여한사람리스트
 		ArrayList<Integer> userlist = service.getUserList(rep_id);
 		ArrayList<String> usernamelist = service.getUserNameList(userlist);
@@ -271,11 +271,11 @@ public class RepController {
 		String email = (String) session.getAttribute("email");
 		ArrayList<Integer> userlist = service.getUserList(rep_id);
 		ArrayList<String> usernamelist = service.getUserNameList(userlist);
-		ArrayList<String> chnamelist = service.getChNameList(rep_id);
+		ArrayList<Channel> chnamelist = service.getChList(rep_id);
 		ArrayList<String> repnamelist = service.getRepNameListById(id);
 		Member m2 = service.getMember(email);
 		String user_name = m2.getName();
-		ArrayList<Integer> chlist = service.getChList(rep_id);
+		ArrayList<Integer> chlist = service.getChIdList(rep_id);
 		Repository r2 = service.getRepository(rep_id);
 		service.createCh(chtitle, rep_id);
 		Channel ch = service.getChannel(rep_id);

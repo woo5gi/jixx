@@ -96,13 +96,5 @@ public class ServiceImpl implements Service{
 		ArrayList<String> t = memberMapper.selectRepList(id);
 		return t;
 	}
-
-	
-
-	
-
-
-
-
 }
 

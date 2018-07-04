@@ -28,9 +28,9 @@
 	<insert id="insert" parameterType="vo.Post">
 		Insert into post
 		values
-		((select max(post_id) from post)+1,#{repost_id}, '요를레이호',
+		((select max(post_id) from post)+1,#{repost_id}, #{nickname},
 		#{content},#{user_id},
-		sysdate,null,#{file_thumbnail},#{file_original},1,1)
+		sysdate,null,#{file_thumbnail},#{file_original},1,#{channel_id})
 	</insert>
 	<select id="selectAll" parameterType="map"
 		resultMap="PostResultMap">
@@ -51,8 +51,19 @@
 		resultMap="ChResultMap">
 		select *
 		from channel
-		where channel_id=(select min(channel_id)
-		from channel where
-		rep_id=#{rep_id})
+		where channel_id=#{cn}
+	</select>
+	<select id="selectNicknameList" parameterType="Integer"
+		resultType="String">
+		select nickname from user_meta2 where rep_id=#{rep_id}
+	</select>
+	<select id="selectChList" parameterType="Integer"
+		resultMap="ChResultMap">
+		select * from channel where rep_id=#{rep_id} order by
+		channel_id
+	</select>
+	<select id="selectNickname" parameterType="Integer"
+		resultType="String">
+		select nickname from user_meta2 where user_id=#{id}
 	</select>
 </mapper>

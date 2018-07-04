@@ -35,9 +35,9 @@ public interface Service {
 
 	int getRepIdByRepNameUserMeta(String rep_name);
 
-	ArrayList<Integer> getChList(int rep_id);
+	ArrayList<Integer> getChIdList(int rep_id);
 
-	ArrayList<String> getChNameList(int rep_id);
+	ArrayList<Channel> getChList(int rep_id);
 
 	Member getMember(String email);
 

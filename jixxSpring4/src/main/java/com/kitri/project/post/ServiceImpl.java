@@ -63,6 +63,27 @@ public class ServiceImpl implements Service {
 		mapper.delete(post_id);
 	}
 
+	@Override
+	public ArrayList<String> getNicknameList(int rep_id) {
+		mapper = sqlSession.getMapper(Mapper.class);			
+		ArrayList<String> t = mapper.selectNicknameList(rep_id);
+		return t;
+	}
+
+	@Override
+	public ArrayList<Channel> getChList(int rep_id) {
+		mapper = sqlSession.getMapper(Mapper.class);
+		ArrayList<Channel> list = mapper.selectChList(rep_id);
+		return list;
+	}
+
+	@Override
+	public String getNickname(int id) {
+		mapper = sqlSession.getMapper(Mapper.class);
+		String s = mapper.selectNickname(id);
+		return s;
+	}
+
 	
 	
 }

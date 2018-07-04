@@ -7,9 +7,12 @@ import vo.Channel;
 import vo.Post;
 
 public interface Mapper {
-	public void insert(Post post);
-	public ArrayList<Post> selectAll(Map<String, Integer> map);
-	public Post update(Post post);
-	public void delete(int post_id);
-	public Channel selectChannel(int cn);
+	void insert(Post post);
+	ArrayList<Post> selectAll(Map<String, Integer> map);
+	Post update(Post post);
+	void delete(int post_id);
+	Channel selectChannel(int cn);
+	ArrayList<String> selectNicknameList(int rep_id);
+	ArrayList<Channel> selectChList(int rep_id);
+	String selectNickname(int id);
 }

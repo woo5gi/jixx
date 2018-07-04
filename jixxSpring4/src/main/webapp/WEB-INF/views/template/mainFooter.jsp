@@ -1,13 +1,17 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<c:set var="ch_list" value="${ch_list}"/>
-<c:set var="user_list" value="${user_list}"/>
+<script type="text/javascript">
+$(function(){
+	
+})
+
+</script>
   
     <!-- Main Footer -->
     <footer class="main-footer">
       <!-- To the right -->
-      <form class="form-horizontal" action="<%= request.getContextPath() %>/post/write.do" method="post" enctype="multipart/form-data">
+      <form class="form-horizontal" action="<%= request.getContextPath() %>/post/write.do?cn=${ch.ch_id}&nickname=${nickname}" method="post" enctype="multipart/form-data">
         <div class="row form-group">
           <div class="col col-md-12">
             <div class="input-group">
@@ -23,12 +27,10 @@
                   <br>
                 </div>
               </div>
-              <input type="hidden" name="ch_list" value="${ch_list}">
-              <input type="hidden" name="nicknamelist" value="${nicknamelist}">
               <input type="text" id="input3-group3" name="content" placeholder=".." class="form-control">
               <div class="input-group-btn">
                 <div class="btn-group">
-                  <button type="submit" class="btn btn-outline-secondary">Secondary</button>
+                  <button type="submit" id="submit" class="btn btn-outline-secondary">Secondary</button>
                 </div>
               </div>
             </div>

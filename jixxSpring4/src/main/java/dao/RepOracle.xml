@@ -96,13 +96,13 @@
 		um.rep_id=r.rep_id and
 		r.rep_name=#{rep_name}
 	</select>
-	<select id="selectChList" parameterType="Integer"
+	<select id="selectChIdList" parameterType="Integer"
 		resultType="java.lang.Integer">
-		select channel_id from channel where rep_id=#{rep_id}
+		select channel_id from channel where rep_id=#{rep_id} order by channel_id 
 	</select>
-	<select id="selectChNameList" parameterType="Integer"
-		resultType="java.lang.String">
-		select channel_name from channel where rep_id=#{rep_id}
+	<select id="selectChList" parameterType="Integer"
+		resultMap="ChResultMap">
+		select * from channel where rep_id=#{rep_id} order by channel_id
 	</select>
 	<select id="selectUserIdByEmail" parameterType="String"
 		resultMap="MemberResultMap">
