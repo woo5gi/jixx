@@ -24,6 +24,19 @@
 		<result property="ch_status" column="channel_status" />
 		<result property="rep_id" column="rep_id" />
 	</resultMap>
+	<resultMap type="vo.Member" id="MemberResultMap">
+		<result property="id" column="user_id" />
+		<result property="email" column="user_email" />
+		<result property="pwd" column="user_pass" />
+		<result property="name" column="user_name" />
+		<result property="tempkey" column="user_tempkey" />
+		<result property="auth" column="user_auth" />
+	</resultMap>
+		<resultMap type="vo.Repository" id="RepResultMap">
+		<result property="rep_id" column="rep_id" />
+		<result property="rep_name" column="rep_name" />
+		<result property="rep_url" column="rep_url" />
+	</resultMap>
 
 	<insert id="insert" parameterType="vo.Post">
 		Insert into post
@@ -53,9 +66,9 @@
 		from channel
 		where channel_id=#{cn}
 	</select>
-	<select id="selectNicknameList" parameterType="Integer"
+	<select id="selectNicknameList" parameterType="map"
 		resultType="String">
-		select nickname from user_meta2 where rep_id=#{rep_id}
+		select nickname from user_meta2 where rep_id=#{rep_id} 
 	</select>
 	<select id="selectChList" parameterType="Integer"
 		resultMap="ChResultMap">
@@ -64,6 +77,12 @@
 	</select>
 	<select id="selectNickname" parameterType="Integer"
 		resultType="String">
-		select nickname from user_meta2 where user_id=#{id}
+		select nickname from user_meta2 where user_id=#{id} and rep_id=#{rep_id}
+	</select>
+	<select id="selectMember" parameterType="Integer" resultMap="MemberResultMap">
+	select * from member where user_id=#{id}
+	</select>
+	<select id="selectRepository" parameterType="Integer" resultMap="RepResultMap">
+	select * from repository where rep_id=#{rep_id}
 	</select>
 </mapper>

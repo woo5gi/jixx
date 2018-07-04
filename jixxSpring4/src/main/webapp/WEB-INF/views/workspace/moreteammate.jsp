@@ -1,24 +1,28 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <jsp:include page="../template/header.jsp" flush="false" />
 <!-- ADD THE CLASS layout-top-nav TO REMOVE THE SIDEBAR. -->
 <script src="http://code.jquery.com/jquery-latest.min.js"></script>
 <script>
-	$(document)
-			.ready(
-					function() {
-						$("#addemail")
-								.click(
-										function() {
-											$('ul#input')
-													.append(
-															"<li><input type='email' name='address' placeholder='name@example.com' class='form-control' required='required'></li>");
-										});
-						$("#deleteemail").click(function() {
-							$('ul#input').children("li").remove();
-						});
-					});
+	$(function() {
+		$("#addemail")
+			.click(
+				function() {
+					$('ul#input')
+						.append(
+							"<li class='adddedemail'><input type='email' name='address' placeholder='name@example.com' class='form-control' required='required'><input type='button' class='btn btn-primary deleteinput' name='delete' value='Remove'></li><br>");
+				});
+		var deletebtn = $('input[name=delete]');
+		$(deletebtn).on('click', function() {
+			alert("asdf");
+			$(this).parent('li.adddedemail').remove();
+		/* prev().remove (); // remove the textbox
+	        $(this).next().remove (); // remove the <br>
+	        $(this).remove () */
+		});
+	});
+
+	
 </script>
 
 <div class="bg">
@@ -29,36 +33,30 @@
 				<h3 class="box-title">${r.rep_name}저장소로초대</h3>
 			</div>
 
-			<form role="form"
-				action="${pageContext.request.contextPath}/sendinvite.do"
-				id="emailinput" method="post" class="form-horizontal">
+			<form role="form" action="${pageContext.request.contextPath}/sendinvite.do" id="emailinput"
+				method="post" class="form-horizontal">
 				<div class="box-body">
 					<div class="form-group">
-					
-						<label class="form-text text-muted"> You'Anybody else
-							you'd like to invate?</label> <label class="control-label mb-1">Email
-							address</label> 
-						<input type="hidden" name="rep_name" value="${r.rep_name}">
-						<input type="hidden" name="invitest" value="1">
-						<button type="button" id="addemail" class="btn btn-primary btn-sm">more
-							invitation</button>
-						<button type="button" id="deleteemail"
-							class="btn btn-primary btn-sm">cancel invitation</button>
+
+						<label class="form-text text-muted"> You'Anybody else you'd like to invate?</label> <label
+							class="control-label mb-1">Email address</label> <input type="hidden" name="rep_name"
+							value="${r.rep_name}"> <input type="hidden" name="invitest" value="1">
+						<button type="button" id="addemail" class="btn btn-primary btn-sm">more invitation</button>
 						<div id="emailinput" class="col-5">
 							<ul id="input">
-								<li><input type="email" name="address"
-									placeholder="name@example.com" class="form-control"
-									required="required"></li>
+								<li><input type="email" name="address" placeholder="name@example.com"
+									class="form-control" required="required"></li>
+								<br>
 							</ul>
 						</div>
 					</div>
 				</div>
 				<div class="box-footer">
 					<button id="skip" class="btn  btn-primary"
-						onclick="location.href='${pageContext.request.contextPath }/gomain.do'"
-						style="width: 49%">Skip For Now</button>
-					<button type="submit" form="emailinput" class="btn  btn-primary"
-						style="width: 50%">Send Invitations</button>
+						onclick="location.href='${pageContext.request.contextPath }/gomain.do'" style="width: 49%">Skip
+						For Now</button>
+					<button type="submit" form="emailinput" class="btn  btn-primary" style="width: 50%">Send
+						Invitations</button>
 				</div>
 			</form>
 		</div>

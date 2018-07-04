@@ -23,7 +23,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import net.coobird.thumbnailator.Thumbnails;
 import vo.Channel;
+import vo.Member;
 import vo.Post;
+import vo.Repository;
 
 @Controller
 public class PostController implements ApplicationContextAware {
@@ -37,6 +39,7 @@ public class PostController implements ApplicationContextAware {
 		rda.addAttribute("cn",cn);
 		HttpSession session = req.getSession(false);
 		int id=(int)session.getAttribute("id");
+		int rep_id=(int) session.getAttribute("rep_id");
 		MultipartFile file = post.getFile();
 		if (file.getOriginalFilename() != "") {
 			int pos = file.getOriginalFilename().lastIndexOf(".");
@@ -68,7 +71,7 @@ public class PostController implements ApplicationContextAware {
 		} else {
 			post.setFile_original("x");
 		}
-		String nickname= service.getNickname(id);
+		String nickname= service.getNickname(id,rep_id);
 		post.setChannel_id(cn);
 		post.setNickname(nickname);	
 		post.setUser_id(Integer.parseInt(session.getAttribute("id").toString()));
@@ -101,9 +104,14 @@ public class PostController implements ApplicationContextAware {
 				list.get(i).setFile_original(uuidName);
 			}
 		}
+		Member m2 = service.getMember(id);
+		String user_name = m2.getName();
+		Repository r = service.getRepository(rep_id);
 		ModelAndView mav = new ModelAndView("/template/main");
 		Channel ch = service.getChannel(cn);
 		System.out.println("chid:" + ch.getCh_id());
+		mav.addObject("rep_name", r.getRep_name());
+		mav.addObject("user_name", user_name);
 		mav.addObject("ch", ch);
 		mav.addObject("id", id);
 		mav.addObject("rep_id", rep_id);

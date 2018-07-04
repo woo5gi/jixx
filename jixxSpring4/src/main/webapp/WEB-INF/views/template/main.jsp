@@ -14,7 +14,6 @@
 	<c:set var="rep_name" value="${rep_name}" />
 	<c:set var="ch" value="${ch}" />
 	<div class="wrapper">
-
 		<!-- Main Header -->
 		<header class="main-header">
 
@@ -119,7 +118,7 @@
 								</li>
 							</c:when>
 							<c:otherwise>
-								<li class="dropdown user user-menu"><a class="dropdown-toggle"> ${user_name}님의
+								<li class="dropdown user user-menu"><a class="dropdown-toggle" href="${pageContext.request.contextPath}/gomain.do?rep_id=${sessionScope.rep_id}"> ${user_name}님의
 										${rep_name}저장소 </a></li>
 								<c:choose>
 									<c:when test="${replist eq null}">

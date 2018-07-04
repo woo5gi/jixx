@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.Map;
 
 import vo.Channel;
+import vo.Member;
 import vo.Post;
+import vo.Repository;
 
 public interface Mapper {
 	void insert(Post post);
@@ -14,5 +16,7 @@ public interface Mapper {
 	Channel selectChannel(int cn);
 	ArrayList<String> selectNicknameList(int rep_id);
 	ArrayList<Channel> selectChList(int rep_id);
-	String selectNickname(int id);
+	String selectNickname(Map<String, Object> map);
+	Member selectMember(int id);
+	Repository selectRepository(int rep_id);
 }

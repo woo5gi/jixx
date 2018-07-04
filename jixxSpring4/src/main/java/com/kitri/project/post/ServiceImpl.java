@@ -10,7 +10,9 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Component;
 
 import vo.Channel;
+import vo.Member;
 import vo.Post;
+import vo.Repository;
 
 @Component("postService")
 public class ServiceImpl implements Service {
@@ -78,10 +80,27 @@ public class ServiceImpl implements Service {
 	}
 
 	@Override
-	public String getNickname(int id) {
+	public String getNickname(int id,int rep_id) {
 		mapper = sqlSession.getMapper(Mapper.class);
-		String s = mapper.selectNickname(id);
+		Map<String,Object> map = new HashMap<String,Object>();
+		map.put("id", id);
+		map.put("rep_id", rep_id);
+		String s = mapper.selectNickname(map);
 		return s;
+	}
+
+	@Override
+	public Member getMember(int id) {
+		mapper = sqlSession.getMapper(Mapper.class);
+		Member m = mapper.selectMember(id);
+		return m;
+	}
+
+	@Override
+	public Repository getRepository(int rep_id) {
+		mapper = sqlSession.getMapper(Mapper.class);
+		Repository r = mapper.selectRepository(rep_id);
+		return r;
 	}
 
 	
