@@ -20,7 +20,7 @@
 
 			<!-- Logo -->
 			<a href="${pageContext.request.contextPath }/index.do" class="logo"><img
-				src="/resources/images/logo.png" alt="Logo"> </a>
+				src="${pageContext.request.contextPath }/resources/images/logo.png" alt="Logo"> </a>
 
 			<!-- Header Navbar -->
 			<nav class="navbar navbar-static-top" role="navigation">
@@ -110,136 +110,94 @@
 						</li>
 						<!-- User Account Menu -->
 						<c:choose>
-							<c:when test="${user_id eq null}">
-								<li>
-									<!-- Menu Toggle Button --> <a class="dropdown-toggle"
-									href="${pageContext.request.contextPath}/member/loginForm.do" aria-expanded="true"
-									style="display: inline;"> SIGN IN </a>
-								</li>
+							<c:when test="${empty replist}">
+								<li class="dropdown user user-menu"><a
+									class="dropdown-toggle" data-toggle="dropdown"
+									aria-expanded="false"> <span class="hidden-xs">Create
+											Workspace</span>
+								</a>
+									<ul class="dropdown-menu">
+										<li class="user-header">
+											<p>
+												<a href="${pageContext.request.contextPath}/crw1.do"> <span
+													class="hidden-xs" style="color: #fff;">Create New
+														Workspace</span>
+												</a>
+											</p>
+										</li>
+
+										<li class="user-body">
+											<div class="row">
+												<div class="col-xs11 text-center">
+													<a href="${pageContext.request.contextPath}/crw1.do">
+														<span class="hidden-xs">Find Workspace</span>
+													</a>
+												</div>
+											</div>
+										</li>
+										<!-- Menu Footer-->
+										<li class="user-footer">
+											<div class="pull-left">
+												<a href="#" class="btn btn-default btn-flat">Profile</a>
+											</div>
+											<div class="pull-right">
+												<a
+													href="${pageContext.request.contextPath}/member/logout.do"
+													class="btn btn-default btn-flat">Sign out</a>
+											</div>
+										</li>
+									</ul></li>
 							</c:when>
+
 							<c:otherwise>
-								<li class="dropdown user user-menu"><a class="dropdown-toggle" href="${pageContext.request.contextPath}/gomain.do?rep_id=${sessionScope.rep_id}"> ${user_name}님의
-										${rep_name}저장소 </a></li>
-								<c:choose>
-									<c:when test="${replist eq null}">
-										<li class="dropdown user user-menu">
-											<!-- Menu Toggle Button --> <a class="dropdown-toggle" data-toggle="dropdown"
-											aria-expanded="false"> <span class="hidden-xs">Create Workspace</span>
-										</a>
-											<ul class="dropdown-menu">
-												<li class="user-header">
-													<div class="pull-left" style="border: 1px;">
-														<a href="${pageContext.request.contextPath}/crw1.do" class="btn btn-default btn-flat"
-															aria-expanded="false"> <span class="hidden-xs">Create New Workspace</span>
-														</a>
-													</div>
+								<li class="dropdown user user-menu"><a
+									href="${pageContext.request.contextPath}/gomain.do"
+									class="dropdown-toggle" data-toggle="dropdown"
+									aria-expanded="false"> <span class="hidden-xs">My
+											Workspace</span>
+								</a>
+									<ul class="dropdown-menu">
+										<li class="user-header">
+											<p>WorkSpace List</p> <c:forEach var="aa" items="${rep_list}">
 
-												</li>
-												<!-- Menu Body -->
-												<li class="user-body">
-													<div class="pull-left" style="border: 1px;">
-														<a href="${pageContext.request.contextPath}/crw1.do" class="btn btn-default btn-flat"
-															aria-expanded="false"> <span class="hidden-xs">Find Workspace</span>
-														</a>
-													</div>
-												</li>
-												<!-- Menu Footer-->
-												<li class="user-footer">
-													<div class="pull-left">
-														<a href="#" class="btn btn-default btn-flat">Profile</a>
-													</div>
-													<div class="pull-right">
-														<a href="${pageContext.request.contextPath}/member/logout.do"
-															class="btn btn-default btn-flat">Sign out</a>
-													</div>
-												</li>
-											</ul>
+												<li class="user-body"><a
+													href="${pageContext.request.contextPath}/gomain.do?rep_id=${aa.rep_id}"
+													class="hidden-xs text-center">${aa.rep_name}</a></li>
+
+											</c:forEach> <!-- Menu Body -->
+										</li>
+										<li class="user-body" style="overflow-y: scroll;">
+											<div class="row">
+												<div class="col-xs11 text-center">
+													<a href="${pageContext.request.contextPath}/crw1.do"
+														aria-expanded="false"> <span class="hidden-xs">Create
+															new Workspace</span>
+													</a>
+												</div>
+											</div>
 										</li>
 
-									</c:when>
-									<c:otherwise>
-										<li class="dropdown user user-menu">
-											<!-- Menu Toggle Button --> <a href="${pageContext.request.contextPath}/gomain.do"
-											class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false"> <span
-												class="hidden-xs">My Workspace</span>
-										</a>
-											<ul class="dropdown-menu">
-												<li class="user-header">
-													<p>WorkSpace List</p> <c:forEach var="aa" items="${rep_list}" varStatus="status">
-														<p>
-														<li><a href="${pageContext.request.contextPath}/gomain.do?rep_id=${aa.rep_id}"
-															style="display: inline;">${aa.rep_name}</a></li>
-														</p>
-													</c:forEach> <!-- Menu Body -->
-												<li class="user-body"><div class="pull-left" style="border: 1px;">
-														<a href="${pageContext.request.contextPath}/crw1.do" class="btn btn-default btn-flat"
-															aria-expanded="false"> <span class="hidden-xs">Create new Workspace</span>
-														</a>
-													</div></li>
-												<!-- Menu Footer-->
-												<li class="user-footer">
-													<div class="pull-left">
-														<a href="#" class="btn btn-default btn-flat">Profile</a>
-													</div>
-													<div class="pull-right">
-														<a href="${pageContext.request.contextPath}/member/logout.do"
-															class="btn btn-default btn-flat">Sign out</a>
-													</div>
-												</li>
-											</ul>
+										<!-- Menu Footer-->
+										<li class="user-footer">
+											<div class="pull-left">
+												<a href="${pageContext.request.contextPath}/profileform.do"
+													class="btn btn-default btn-flat">Profile</a>
+											</div>
+											<div class="pull-right">
+												<a
+													href="${pageContext.request.contextPath}/member/logout.do"
+													class="btn btn-default btn-flat">Sign out</a>
+											</div>
 										</li>
-									</c:otherwise>
-								</c:choose>
+									</ul></li>
 							</c:otherwise>
-						</c:choose>
-						<%-- <li class="dropdown user user-menu">
-							<!-- Menu Toggle Button --> <a href="#" class="dropdown-toggle"
-							data-toggle="dropdown"> <!-- The user image in the navbar-->
-								<img src="dist/img/user2-160x160.jpg" class="user-image"
-								alt="User Image"> <!-- hidden-xs hides the username on small devices so only the image appears. -->
-								<span class="hidden-xs">닉네임</span>
-						</a>
-							<ul class="dropdown-menu">
-								<!-- The user image in the menu -->
-								<li class="user-header"><img
-									src="dist/img/user2-160x160.jpg" class="img-circle"
-									alt="User Image">
 
-									<p>
-										닉네임 - Web Developer <small>Member since Nov. 2012</small>
-									</p></li>
-								<!-- Menu Body -->
-								<li class="user-body">
-									<div class="row">
-										<div class="col-xs-4 text-center">
-											<a href="#">Followers</a>
-										</div>
-										<div class="col-xs-4 text-center">
-											<a href="#">Sales</a>
-										</div>
-										<div class="col-xs-4 text-center">
-											<a href="#">Friends</a>
-										</div>
-									</div> <!-- /.row -->
-								</li>
-								<!-- Menu Footer-->
-								<li class="user-footer">
-									<div class="pull-left">
-										<a href="#" class="btn btn-default btn-flat">Profile</a>
-									</div>
-									<div class="pull-right">
-										<a href="${pageContext.request.contextPath}/member/logout.do"
-											class="btn btn-default btn-flat">Sign out</a>
-									</div>
-								</li>
-							</ul>
-						</li> --%>
-						<!-- Control Sidebar Toggle Button -->
-						<li><a href="#" data-toggle="control-sidebar"><i class="fa fa-gears"></i></a></li>
+						</c:choose>
 					</ul>
 				</div>
 			</nav>
 		</header>
+		
 		<!-- Left side column. contains the logo and sidebar -->
 		<aside class="main-sidebar">
 
@@ -455,15 +413,9 @@
 							<li><i class="fa fa-clock-o bg-gray"></i></li>
 						</ul>
 					</div>
-					<!-- /.col -->
 				</div>
-				<!-- /.row -->
-
 			</section>
-			<!-- /.content -->
-
 		</div>
-		<!-- /.content-wrapper -->
 
 		<%@include file="mainFooter.jsp"%>
 	</div>
