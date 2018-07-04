@@ -19,7 +19,7 @@
 
 			<!-- Logo -->
 			<a href="${pageContext.request.contextPath }/index.do" class="logo"><img
-				src="resources/images/logo.png" alt="Logo"> </a>
+				src="/resources/images/logo.png" alt="Logo"> </a>
 
 			<!-- Header Navbar -->
 			<nav class="navbar navbar-static-top" role="navigation">

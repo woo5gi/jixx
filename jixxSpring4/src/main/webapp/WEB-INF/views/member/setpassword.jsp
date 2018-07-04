@@ -34,7 +34,7 @@
 		})
 	})
 </script>
-
+<%-- 
 		<!-- Full Width Column -->
 		<div class="content-wrapper" style="min-height: 863px;">
 			<div class="container">
@@ -65,8 +65,7 @@
 											<input type="password" id="pwdcheck" name="password2"
 												class="form-control" onchange="isSame()">
 										</div>
-										<span
-												id="same"></span>
+										<span id="same"></span>
 									</div>
 								</form>
 								<button type="button" class="btn btn-primary btn-sm" id="setpw">New
@@ -76,9 +75,46 @@
 					</div>
 				</section>
 			</div>
-		</div>
-	</div>
+		</div> --%>
+		
+ <div class="bg">
+  <div class="centered">
+    <div class="box box-primary">
+      <div class="box-header with-border">
+        <h3 class="box-title">Set your New password</h3>
+      </div>
 
+      <form role="form" action="<%=request.getContextPath()%>/setnewpass.do"
+									method="post" class="" id="setpwform">
+        <div class="box-body">
+          <div class="form-group">
+            <label for="exampleInputEmail1">Password</label> 
+            <div class="input-group">
+			<div class="input-group-addon">Password</div>
+			<input type="password" id="pwd" name="pwd"
+				class="form-control" onchange="isSame()">
+			</div>
+          </div>
+          
+          <div class="form-group">
+          <label for="exampleInputEmail1">Password Check</label> 
+			<div class="input-group">
+				<div class="input-group-addon">Password Check</div>
+				<input type="password" id="pwdcheck" name="password2"
+					class="form-control" onchange="isSame()">
+			</div>
+          </div>
+          <span id="same"></span>
+
+		</div>
+        <div class="box-footer">
+          <button type="button" class="btn btn-primary btn-block" id="setpw">
+          New Password Setting Done</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
 
 </body>
 </html>
