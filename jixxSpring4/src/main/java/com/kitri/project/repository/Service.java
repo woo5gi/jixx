@@ -54,11 +54,19 @@ public interface Service {
 	Repository getRepository(int rep_id);
 	ArrayList<String> getNicknameList(int rep_id);
 
+	ArrayList<Integer> getRepIdList(String search);
+
+	ArrayList<String> getUserNameListByRepId(ArrayList<Integer> repidlist);
+
 	/* String getRepNameById(int id); */
 
 	void editRep(Repository r);
 
 	void delRep(int rep_id);
+
+	ArrayList<String> getRepNameListById(String search);
+
+
 
 
 

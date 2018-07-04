@@ -156,8 +156,18 @@
 	<select id="selectNicknameList" parameterType="Integer" resultType="String">
 	select nickname from user_meta2 where rep_id=#{rep_id}
 	</select>
-
-
-
-
+	<select id="selectRepBySearch" parameterType="String" resultType="Integer">
+	select rep_id from repository where rep_url=#{search}
+	</select>
+	<select id="selectrepNameList" parameterType="map" resultType="String">
+	select user_name from member m,user_meta2 um,repository r 
+	where r.rep_id=um.rep_id and um.user_id=m.user_id and um.rep_id in
+	<foreach collection="rep_id" item="type" open="(" close=")"
+			separator=",">
+			#{type.value}
+		</foreach>
+	</select>
+	<select id="selectRepNameBySearch" parameterType="String" resultType="String">
+	select rep_name from repository where rep_url=#{search}
+	</select>
 </mapper>

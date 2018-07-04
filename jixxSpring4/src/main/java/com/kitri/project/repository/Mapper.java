@@ -56,12 +56,20 @@ public interface Mapper {
 
 	String selectNickname(Map<String, Object> map);
 
-	Channel selectChannel(int rep_id);
+	Channel selectChannel(int rep_id);	
+
+	ArrayList<String> selectNicknameList(int rep_id);
+
+	ArrayList<Integer> selectRepBySearch(String search);
+	ArrayList<String> selectRepNameBySearch(String search);
+	ArrayList<String> selectrepNameList(Map<String, Object> map);
 
 	void update(Repository r);
 
 	void delete(int rep_id);
 
-	ArrayList<String> selectNicknameList(int rep_id);
+
+
+
 
 }

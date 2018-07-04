@@ -11,6 +11,7 @@ import vo.Repository;
 public interface Mapper {
 	void insert(Post post);
 	ArrayList<Post> selectAll(Map<String, Integer> map);
+	ArrayList<Post> selectSearchResult(Map<String, Object> map);
 	Post update(Post post);
 	void delete(int post_id);
 	Channel selectChannel(int cn);
@@ -19,4 +20,6 @@ public interface Mapper {
 	String selectNickname(Map<String, Object> map);
 	Member selectMember(int id);
 	Repository selectRepository(int rep_id);
+	int selectFirstChannelId(int rep_id);
+	
 }

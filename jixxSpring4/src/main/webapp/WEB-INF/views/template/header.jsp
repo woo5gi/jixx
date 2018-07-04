@@ -1,5 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <html>
 <head>
@@ -15,8 +14,7 @@
 <link rel="stylesheet"
 	href="<%=request.getContextPath()%>/resources/bower_components/Ionicons/css/ionicons.min.css">
 <!-- Theme style -->
-<link rel="stylesheet"
-	href="<%=request.getContextPath()%>/resources/dist/css/AdminLTE.min.css">
+<link rel="stylesheet" href="<%=request.getContextPath()%>/resources/dist/css/AdminLTE.min.css">
 <!-- AdminLTE Skins. Choose a skin from the css/skins
    folder instead of downloading all of them to reduce the load. -->
 <link rel="stylesheet"
@@ -38,8 +36,7 @@
 	href="<%=request.getContextPath()%>/resources/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css">
 
 <!-- jQuery 3 -->
-<script
-	src="<%=request.getContextPath()%>/resources/bower_components/jquery/dist/jquery.min.js"></script>
+<script src="<%=request.getContextPath()%>/resources/bower_components/jquery/dist/jquery.min.js"></script>
 <!-- Bootstrap 3.3.7 -->
 <script
 	src="<%=request.getContextPath()%>/resources/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
@@ -47,11 +44,9 @@
 <script
 	src="<%=request.getContextPath()%>/resources/bower_components/jquery-slimscroll/jquery.slimscroll.min.js"></script>
 <!-- FastClick -->
-<script
-	src="<%=request.getContextPath()%>/resources/bower_components/fastclick/lib/fastclick.js"></script>
+<script src="<%=request.getContextPath()%>/resources/bower_components/fastclick/lib/fastclick.js"></script>
 <!-- AdminLTE App -->
-<script
-	src="<%=request.getContextPath()%>/resources/dist/js/adminlte.min.js"></script>
+<script src="<%=request.getContextPath()%>/resources/dist/js/adminlte.min.js"></script>
 <!-- AdminLTE for demo purposes -->
 <script src="<%=request.getContextPath()%>/resources/dist/js/demo.js"></script>
 <style>
@@ -62,23 +57,22 @@
 	margin-right: 20%;
 	margin-top: 5%;
 } */
-.centered { 
-  display:table; 
-  margin-left:auto; 
-  margin-right:auto;
-  width: 450px;
-  padding-top: 5%;
-}
-.bg{
-min-height: 100%;
-background-color: #ecf0f5;
+.centered {
+	display: table;
+	margin-left: auto;
+	margin-right: auto;
+	width: 450px;
+	padding-top: 5%;
 }
 
+.bg {
+	min-height: 100%;
+	background-color: #ecf0f5;
+}
 </style>
 
 </head>
-<body class="skin-blue layout-top-nav"
-	style="height: auto; min-height: 100%;">
+<body class="skin-blue layout-top-nav" style="height: auto; min-height: 100%;">
 	<c:set var="user_id" value="${id }" />
 	<c:set var="email" value="${email}" />
 	<c:set var="replist" value="${rep_list}" />
@@ -87,42 +81,41 @@ background-color: #ecf0f5;
 		<nav class="navbar navbar-static-top">
 			<div class="container">
 				<div class="navbar-header">
-						<a href="${pageContext.request.contextPath }/index.do" class="logo"><img src="resources/images/logo.png" alt="Logo"> </a>
+					<a href="${pageContext.request.contextPath }/index.do" class="logo"><img
+						src="resources/images/logo.png" alt="Logo"> </a>
 				</div>
 				<div class="collapse navbar-collapse pull-left" id="navbar-collapse"></div>
 				<div class="navbar-custom-menu">
 					<ul class="nav navbar-nav">
 						<c:choose>
 							<c:when test="${user_id eq null}">
-								<li class="dropdown user user-menu">
-									<a class="dropdown-toggle" href="${pageContext.request.contextPath}/member/loginForm.do"> SIGN IN </a>
-								</li>
+								<li class="dropdown user user-menu"><a class="dropdown-toggle"
+									href="${pageContext.request.contextPath}/member/loginForm.do"> SIGN IN </a></li>
 							</c:when>
-							
+
 							<c:otherwise>
-								<li class="dropdown user user-menu">
-								<a class="dropdown-toggle" > ${user_name}님 환영합니다 </a>
-								</li>
-								
+								<li class="dropdown user user-menu"><a class="dropdown-toggle"> ${user_name}님
+										환영합니다 </a></li>
+
 								<c:choose>
 									<c:when test="${empty replist}">
-										<li class="dropdown user user-menu">
-										<a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false"> 
-										<span class="hidden-xs">Create Workspace</span>
+										<li class="dropdown user user-menu"><a class="dropdown-toggle" data-toggle="dropdown"
+											aria-expanded="false"> <span class="hidden-xs">Create Workspace</span>
 										</a>
 											<ul class="dropdown-menu">
 												<li class="user-header">
-												    <p ><a href="${pageContext.request.contextPath}/crw1.do">
-															<span class="hidden-xs" style="color:#fff;">Create New Workspace</span>
+													<p>
+														<a href="${pageContext.request.contextPath}/crw1.do"> <span class="hidden-xs"
+															style="color: #fff;">Create New Workspace</span>
 														</a>
 													</p>
 												</li>
-												
+
 												<li class="user-body">
-											        <div class="row">
-												        <div class="col-xs11 text-center">
-															<a href="${pageContext.request.contextPath}/crw1.do" >
-																<span class="hidden-xs">Find Workspace</span>
+													<div class="row">
+														<div class="pull-left" style="border: 1px;">
+															<a href="${pageContext.request.contextPath}/findworkspaceform.do" class="btn btn-default btn-flat"
+																aria-expanded="false"> <span class="hidden-xs">Find Workspace</span>
 															</a>
 														</div>
 													</div>
@@ -133,62 +126,64 @@ background-color: #ecf0f5;
 														<a href="#" class="btn btn-default btn-flat">Profile</a>
 													</div>
 													<div class="pull-right">
-														<a
-															href="${pageContext.request.contextPath}/member/logout.do"
+														<a href="${pageContext.request.contextPath}/member/logout.do"
 															class="btn btn-default btn-flat">Sign out</a>
 													</div>
 												</li>
-											</ul>
-										</li>
+											</ul></li>
 									</c:when>
-									
+
 									<c:otherwise>
-										<li class="dropdown user user-menu">
-											<a href="${pageContext.request.contextPath}/gomain.do"
-											class="dropdown-toggle" data-toggle="dropdown"
-											aria-expanded="false"> <span class="hidden-xs">My Workspace</span>
-											</a>
-											<ul class="dropdown-menu">									
+										<li class="dropdown user user-menu"><a
+											href="${pageContext.request.contextPath}/gomain.do" class="dropdown-toggle"
+											data-toggle="dropdown" aria-expanded="false"> <span class="hidden-xs">My
+													Workspace</span>
+										</a>
+											<ul class="dropdown-menu">
 												<li class="user-header">
-													<p>WorkSpace List</p> 
-													<c:forEach var="aa" items="${rep_list}">
-													
-														<li class="user-body"><a href="${pageContext.request.contextPath}/gomain.do?rep_id=${aa.rep_id}"
-															class="hidden-xs text-center" >${aa.rep_name}</a>
-														</li>
-													
+													<p>WorkSpace List</p> <c:forEach var="aa" items="${rep_list}">
+
+														<li class="user-body"><a
+															href="${pageContext.request.contextPath}/gomain.do?rep_id=${aa.rep_id}"
+															class="hidden-xs text-center">${aa.rep_name}</a></li>
+
 													</c:forEach> <!-- Menu Body -->
 												</li>
 												<li class="user-body">
-											        <div class="row">
-												        <div class="col-xs11 text-center">
-															<a href="${pageContext.request.contextPath}/crw1.do" aria-expanded="false">
-																<span class="hidden-xs">Create new Workspace</span>
+												
+													<div class="pull-left" style="border: 1px;">
+														<a href="${pageContext.request.contextPath}/crw1.do" class="btn btn-default btn-flat"
+															aria-expanded="false"> <span class="hidden-xs">Create new Workspace</span>
+														</a>
+													</div>
+													<div class="pull-left" style="border: 1px;">
+															<a href="${pageContext.request.contextPath}/findworkspaceform.do" class="btn btn-default btn-flat"
+																aria-expanded="false"> <span class="hidden-xs">Find Workspace</span>
 															</a>
 														</div>
-													</div>
+														
+													
 												</li>
-												
+
 												<!-- Menu Footer-->
 												<li class="user-footer">
 													<div class="pull-left">
-														<a href="${pageContext.request.contextPath}/profileform.do" class="btn btn-default btn-flat">Profile</a>
+														<a href="${pageContext.request.contextPath}/profileform.do"
+															class="btn btn-default btn-flat">Profile</a>
 													</div>
 													<div class="pull-right">
 														<a href="${pageContext.request.contextPath}/member/logout.do"
 															class="btn btn-default btn-flat">Sign out</a>
 													</div>
 												</li>
-											</ul>
-										</li>
+											</ul></li>
 									</c:otherwise>
-									
+
 								</c:choose>
 							</c:otherwise>
 						</c:choose>
-					</ul>					
+					</ul>
 				</div>
 			</div>
 		</nav>
 	</header>
-

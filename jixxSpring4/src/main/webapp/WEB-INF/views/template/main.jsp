@@ -137,10 +137,10 @@
 												<!-- Menu Body -->
 												<li class="user-body">
 													<div class="pull-left" style="border: 1px;">
-														<a href="${pageContext.request.contextPath}/crw1.do" class="btn btn-default btn-flat"
-															aria-expanded="false"> <span class="hidden-xs">Find Workspace</span>
-														</a>
-													</div>
+															<a href="${pageContext.request.contextPath}/findworkspaceform.do" class="btn btn-default btn-flat"
+																aria-expanded="false"> <span class="hidden-xs">Find Workspace</span>
+															</a>
+														</div>
 												</li>
 												<!-- Menu Footer-->
 												<li class="user-footer">
@@ -174,7 +174,12 @@
 														<a href="${pageContext.request.contextPath}/crw1.do" class="btn btn-default btn-flat"
 															aria-expanded="false"> <span class="hidden-xs">Create new Workspace</span>
 														</a>
-													</div></li>
+													</div>
+													<div class="pull-left" style="border: 1px;">
+															<a href="${pageContext.request.contextPath}/findworkspaceform.do" class="btn btn-default btn-flat"
+																aria-expanded="false"> <span class="hidden-xs">Find Workspace</span>
+															</a>
+														</div></li>
 												<!-- Menu Footer-->
 												<li class="user-footer">
 													<div class="pull-left">
@@ -263,11 +268,11 @@
 				</ul>
 
 				<!-- search form (Optional) -->
-				<form action="#" method="get" class="sidebar-form">
+				<form action="${pageContext.request.contextPath}/searchboard.do?" method="get" class="sidebar-form">
 					<div class="input-group">
-						<input type="text" name="q" class="form-control" placeholder="Search..."> <span
+						<input type="text" name="search" class="form-control" placeholder="Search..."> <span
 							class="input-group-btn">
-							<button type="submit" name="search" id="search-btn" class="btn btn-flat">
+							<button type="submit" id="search-btn" class="btn btn-flat">
 								<i class="fa fa-search"></i>
 							</button>
 						</span>

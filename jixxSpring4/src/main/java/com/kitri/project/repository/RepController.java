@@ -86,7 +86,7 @@ public class RepController {
 		session.setAttribute("nickname", nickname);
 		ModelAndView mav = new ModelAndView("template/main");
 		// 채널리스트
-		ArrayList<Channel> chlist = service.getChList(rep_id);		
+		ArrayList<Channel> chlist = service.getChList(rep_id);
 		// 저장소에참여한사람리스트
 		ArrayList<Integer> userlist = service.getUserList(rep_id);
 		ArrayList<String> usernamelist = service.getUserNameList(userlist);
@@ -300,10 +300,36 @@ public class RepController {
 		return mav;
 	}
 
-	@RequestMapping(value = "joinws.do")
-	public String joinws() {
-		return "workspace/joinworkspace";
+	@RequestMapping(value = "findworkspaceform.do")
+	public String findWorkspace() {
+		return "workspace/findworkspaceform";
 	}
+
+	@RequestMapping(value = "findworkspace.do")
+	public ModelAndView joinws(@RequestParam(value = "search") String search) {
+		ModelAndView mav = new ModelAndView("workspace/findworkspaceresult");
+		ArrayList<Integer> repidlist = null;
+		ArrayList<String> repnamelist = null;
+		ArrayList<String> usernamelist = null;
+		String errorresult = null;
+		try {
+			repidlist = service.getRepIdList(search);
+			repnamelist = service.getRepNameListById(search);
+			usernamelist = service.getUserNameListByRepId(repidlist);
+			errorresult = null;
+		} catch (Exception e) {
+			e.printStackTrace();
+			repidlist=null;
+			repnamelist=null;
+			usernamelist=null;
+			errorresult="검색결과가없습니다";
+		}
+		mav.addObject("errorresult", errorresult);
+		mav.addObject("repnamelist", repnamelist);
+		mav.addObject("usernamelist", usernamelist);
+		mav.addObject("repidlist", repidlist);
+		return mav;
+	}	
 
 	@RequestMapping(value = "teaminvite.do")
 	public String teamInvite() {

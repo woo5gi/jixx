@@ -177,19 +177,6 @@ public class ServiceImpl implements Service {
 		return list;
 	}
 
-
-	@Override
-	public void editRep(Repository r) {
-		repMapper = sqlSession.getMapper(Mapper.class);
-		repMapper.update(r);
-	}
-
-	@Override
-	public void delRep(int rep_id) {
-		repMapper = sqlSession.getMapper(Mapper.class);
-		repMapper.delete(rep_id);
-	}
-
 	@Override
 	public Repository getRepository(int rep_id) {
 		repMapper = sqlSession.getMapper(Mapper.class);
@@ -238,4 +225,47 @@ public class ServiceImpl implements Service {
 		ArrayList<String> t = repMapper.selectNicknameList(rep_id);
 		return t;
 	}
+
+	@Override
+	public ArrayList<Integer> getRepIdList(String search) {
+		repMapper = sqlSession.getMapper(Mapper.class);	
+		ArrayList<Integer> t = repMapper.selectRepBySearch(search);
+		return t;
+	}
+	@Override
+	public ArrayList<String> getRepNameListById(String search) {
+		repMapper = sqlSession.getMapper(Mapper.class);	
+		ArrayList<String> t = repMapper.selectRepNameBySearch(search);
+		return t;
+	}
+
+	@Override
+	public ArrayList<String> getUserNameListByRepId(ArrayList<Integer> repidlist) {
+		repMapper = sqlSession.getMapper(Mapper.class);
+		Map<String,Object> map = new HashMap<String,Object>();
+		map.put("rep_id", repidlist);
+		System.out.println(map);
+		ArrayList<String> list = repMapper.selectrepNameList(map);		
+		return list;
+	}
+	
+	
+	
+
+
+
+	@Override
+	public void editRep(Repository r) {
+		repMapper = sqlSession.getMapper(Mapper.class);
+		repMapper.update(r);
+	}
+
+	@Override
+	public void delRep(int rep_id) {
+		repMapper = sqlSession.getMapper(Mapper.class);
+		repMapper.delete(rep_id);
+	}
+
+	
+
 }

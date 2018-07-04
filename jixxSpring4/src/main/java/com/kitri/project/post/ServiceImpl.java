@@ -48,6 +48,26 @@ public class ServiceImpl implements Service {
 		return list;
 	}
 	@Override
+	public ArrayList<Post> getSearchBoard(int page, int cn,int rep_id,String search) {
+		int endpage = 0;
+		if (page == 1) {
+			page = 1;
+			endpage = 10; 
+		} else {
+			page *= 10;
+			endpage = page + 9; 
+		}
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("startpage", page);
+		map.put("endPage", endpage);
+		map.put("cn", cn);
+		map.put("rep_id", rep_id);
+		map.put("search", search);		
+		mapper = sqlSession.getMapper(Mapper.class);
+		ArrayList<Post> list = mapper.selectSearchResult(map);
+		return list;
+	}
+	@Override
 	public Channel getChannel(int cn) {
 		mapper = sqlSession.getMapper(Mapper.class);
 		Channel c = mapper.selectChannel(cn);
@@ -102,6 +122,15 @@ public class ServiceImpl implements Service {
 		Repository r = mapper.selectRepository(rep_id);
 		return r;
 	}
+
+	@Override
+	public int getFirstChannelId(int rep_id) {
+		mapper = sqlSession.getMapper(Mapper.class);
+		int i = mapper.selectFirstChannelId(rep_id);
+		return i;
+	}
+
+	
 
 	
 	

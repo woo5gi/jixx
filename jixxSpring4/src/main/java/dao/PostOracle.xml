@@ -32,7 +32,7 @@
 		<result property="tempkey" column="user_tempkey" />
 		<result property="auth" column="user_auth" />
 	</resultMap>
-		<resultMap type="vo.Repository" id="RepResultMap">
+	<resultMap type="vo.Repository" id="RepResultMap">
 		<result property="rep_id" column="rep_id" />
 		<result property="rep_name" column="rep_name" />
 		<result property="rep_url" column="rep_url" />
@@ -56,6 +56,16 @@
 		${startpage}
 		order by post_logdate
 	</select>
+	<select id="selectSearchResult" parameterType="map"
+		resultMap="PostResultMap">
+		select * from (select rownum a, a.*
+		from (select p.* from post p,channel c,repository r
+		where p.channel_id=c.channel_id and r.rep_id=c.rep_id and r.rep_id=#{rep_id}
+		and content like '%' || #{search} || '%'
+		order by post_id desc) a
+		where rownum <![CDATA[<=]]> ${endPage})b
+		where b.a <![CDATA[>=]]> ${startpage}
+	</select>
 	<update id="delete">
 		update post set post_status=0 where
 		post_id=#{post_id}
@@ -68,7 +78,7 @@
 	</select>
 	<select id="selectNicknameList" parameterType="map"
 		resultType="String">
-		select nickname from user_meta2 where rep_id=#{rep_id} 
+		select nickname from user_meta2 where rep_id=#{rep_id}
 	</select>
 	<select id="selectChList" parameterType="Integer"
 		resultMap="ChResultMap">
@@ -77,12 +87,18 @@
 	</select>
 	<select id="selectNickname" parameterType="Integer"
 		resultType="String">
-		select nickname from user_meta2 where user_id=#{id} and rep_id=#{rep_id}
+		select nickname from user_meta2 where user_id=#{id} and
+		rep_id=#{rep_id}
 	</select>
-	<select id="selectMember" parameterType="Integer" resultMap="MemberResultMap">
-	select * from member where user_id=#{id}
+	<select id="selectMember" parameterType="Integer"
+		resultMap="MemberResultMap">
+		select * from member where user_id=#{id}
 	</select>
-	<select id="selectRepository" parameterType="Integer" resultMap="RepResultMap">
-	select * from repository where rep_id=#{rep_id}
+	<select id="selectRepository" parameterType="Integer"
+		resultMap="RepResultMap">
+		select * from repository where rep_id=#{rep_id}
+	</select>
+	<select id="selectFirstChannelId" parameterType="Integer" resultType="Integer">
+	select min(channel_id) from channel where rep_id=#{rep_id}
 	</select>
 </mapper>

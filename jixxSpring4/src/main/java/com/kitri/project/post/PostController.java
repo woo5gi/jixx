@@ -2,17 +2,19 @@ package com.kitri.project.post;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.UUID;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -139,5 +141,58 @@ public class PostController implements ApplicationContextAware {
 		service.delete(post_id);
 		rda.addAttribute("cn", cn);
 		return "redirect:/post/list.do?page=1";
+	}
+
+	@RequestMapping(value = "searchboard.do")
+	public ModelAndView searchBoard(HttpServletResponse res, HttpServletRequest req,
+			@RequestParam(value = "search") String search) throws Exception {
+		ModelAndView mav = new ModelAndView("template/main");
+		HttpSession session = req.getSession(false);
+		int id = (int) session.getAttribute("id");
+		int rep_id = (int) session.getAttribute("rep_id");
+		int cn = service.getFirstChannelId(rep_id);
+		int page = 1;
+		ArrayList<String> nicknamelist = service.getNicknameList(rep_id);
+		ArrayList<Channel> chlist = service.getChList(rep_id);
+		res.setContentType("text/html; charset=UTF-8");
+		PrintWriter out = res.getWriter();
+		ArrayList<Post> list = service.getSearchBoard(page, cn, rep_id, search);
+		if (list.isEmpty()) {
+			System.out.println("리스트가널이여");
+			out.println("<script>alert('일치하는 항목이 없습니다'); </script>");
+			out.flush();
+		} else {
+			for (int i = 0; i < list.size(); i++) {
+				if (list.get(i).getPost_status() == 0) {
+					list.get(i).setFile_original("삭제된 파일입니다.");
+					list.get(i).setContent("삭제된 글입니다.");
+					list.get(i).setNickname("삭제된 글입니다.");
+				} else if (list.get(i).getFile_original() != null && !list.get(i).getFile_original().equals("x")) {
+					String str = list.get(i).getFile_original();
+					String name = str.substring(0, str.length() - 40);
+					String realName = name.substring(9);
+					String uuidName = str.substring(9);
+					int pos = str.lastIndexOf(".");
+					String ext = str.substring(pos);
+					list.get(i).setFileName(realName + ext);
+					list.get(i).setFile_original(uuidName);
+				}
+			}
+		}
+		Member m2 = service.getMember(id);
+		String user_name = m2.getName();
+		Repository r = service.getRepository(rep_id);
+		Channel ch = service.getChannel(cn);
+		System.out.println("chid:" + ch.getCh_id());
+		mav.addObject("rep_name", r.getRep_name());
+		mav.addObject("user_name", user_name);
+		mav.addObject("ch", ch);
+		mav.addObject("id", id);
+		mav.addObject("rep_id", rep_id);
+		mav.addObject("ch_list", chlist);
+		mav.addObject("nicknamelist", nicknamelist);
+		mav.addObject("list", list);
+		return mav;
+
 	}
 }
