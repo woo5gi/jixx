@@ -10,7 +10,7 @@
 				function() {
 					$('ul#input')
 						.append(
-							"<li class='adddedemail'><input type='email' name='address' placeholder='name@example.com' class='form-control' required='required'><input type='button' class='btn btn-primary deleteinput' name='delete' value='Remove'></li><br>");
+							"<li class='adddedemail'><input type='email' name='address' placeholder='name@example.com' class='form-control' required='required'><input type='button' class='fa fa-fw fa-minus-square' name='delete'><i class='fa fa-fw fa-minus-square'></i></li><br>");
 				
 		$('input[type=button]').on('click', function() {
 	        $(this).parent('li.adddedemail').next().remove(); // remove the <br>
@@ -22,6 +22,15 @@
 	
 </script>
 
+<style>
+li{
+list-style-type:none;
+}
+.form-control {
+width:250px;
+</style>
+<i class="fa fa-fw fa-minus-square"></i>
+<i class="fa fa-fw fa-plus-square"></i>
 <div class="bg">
 	<div class="centered">
 		<div class="box box-primary">
@@ -38,7 +47,7 @@
 						<label class="form-text text-muted"> You'Anybody else you'd like to invate?</label> <label
 							class="control-label mb-1">Email address</label> <input type="hidden" name="rep_name"
 							value="${r.rep_name}"> <input type="hidden" name="invitest" value="1">
-						<button type="button" id="addemail" class="btn btn-primary btn-sm">more invitation</button>
+						<button type="button" id="addemail" class="btn btn-primary btn-sm"><i class="fa fa-fw fa-plus-square"></i></button>
 						<div id="emailinput" class="col-5">
 							<ul id="input">
 								<li><input type="email" name="address" placeholder="name@example.com"
