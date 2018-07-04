@@ -3,7 +3,10 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <script type="text/javascript">
 $(function(){
-	
+	$('.userlist').click(function(){
+		닉네임버튼누르면
+		input태그 안에 value로 들어가게하고,a태그삭제한다.
+	})
 });
 </script>
 
@@ -34,8 +37,8 @@ $(function(){
 											<label class="control-label mb-1">Send invates to:(optional)</label>
 											<br>
 											<input type="text" name="invate" placeholder="Search by name" class="form-control">
-											<c:forEach var="r" items="${usernamelist}">
-											<a class="userinvite" name="userlist">${r}</a>											
+											<c:forEach var="r" items="${usernamelist}" varStatus="status">
+											<a class="userinvite" class="userlist" id="user${status.count}">${r}</a>											
 											</c:forEach>
 
 										</div>
