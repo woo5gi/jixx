@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+ <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <jsp:include page="mainHeader.jsp" flush="false" />
 <body class="hold-transition skin-blue sidebar-mini">
 	<c:set var="user_id" value="${id}" />
@@ -368,7 +369,12 @@
 								</div></li>
 							<!-- END timeline item -->
 							<!-- timeline item -->
-							<c:forEach items="${list}" var="post">
+							<c:forEach items="${list}" var="post"  varStatus="status">
+							<fmt:formatDate value="${post.logdate}" var="logdate" pattern="yyyy.MM.dd"/>
+							<fmt:formatDate value="${list[status.index-1].logdate}" var="logdate2" pattern="yyyy.MM.dd"/>
+							<c:if test="${logdate ne logdate2}">
+								<li class="time-label"><span class="bg-red"> ${post.logdate}</span></li>
+							</c:if>
 								<li><i class="fa fa-comments bg-yellow"></i>
 
 									<div class="timeline-item">
