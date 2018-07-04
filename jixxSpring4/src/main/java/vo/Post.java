@@ -14,7 +14,7 @@ public class Post {
 	private Date update; //수정시 들어가는 값 
 	private String file_thumbnail; //저장한파일 썸네일파일 명
 	private String file_original; //저장한 파일 오리지널 파일명
-	private int post_status; //게시물 상태 Default = 1 : 1값인 데이터만 조회 , 삭제하기능할 경우 : 0으로 업데이트
+	private int post_status; //게시물 상태 Default = 1 : 1값인 데이터만 조회 , 삭제하기능할 경우 : 0으로 업데이트 /저장소 참여 했을때 3
 	private int channel_id; //저장소의 어디 채널에 해당하는 것인지.
 	private MultipartFile file;
 	private String fileName;

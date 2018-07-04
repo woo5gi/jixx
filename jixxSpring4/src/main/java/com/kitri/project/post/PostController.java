@@ -9,6 +9,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
@@ -118,6 +120,7 @@ public class PostController implements ApplicationContextAware {
 		mav.addObject("ch_list", chlist);
 		mav.addObject("nicknamelist", nicknamelist);
 		mav.addObject("list", list);
+			System.out.println(list);		
 		return mav;
 	}
 
@@ -139,5 +142,19 @@ public class PostController implements ApplicationContextAware {
 		service.delete(post_id);
 		rda.addAttribute("cn", cn);
 		return "redirect:/post/list.do?page=1";
+	}
+	
+	@RequestMapping(value = "/post/ajax.do", method = RequestMethod.GET, produces = "application/text; charset=utf8")
+	public @ResponseBody String ajax(@RequestParam(value = "page")int page, @RequestParam(value = "cn")int cn) {
+		ArrayList<Post> list = service.show(page, cn);
+        String str = "";
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            str = mapper.writeValueAsString(list);
+            System.out.println(str);
+        } catch (Exception e) {
+        	e.printStackTrace();
+        }
+        return str;
 	}
 }
