@@ -98,8 +98,7 @@ public class PostController implements ApplicationContextAware {
 			}
 		}
 		ModelAndView mav = new ModelAndView("/template/main");
-		Channel ch = service.getChannel(cn);
-		
+		Channel ch = service.getChannel(cn);		
 		mav.addObject("ch", ch);
 		mav.addObject("id", id);
 		mav.addObject("rep_id", rep_id);

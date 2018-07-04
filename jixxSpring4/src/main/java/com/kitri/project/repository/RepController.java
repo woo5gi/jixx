@@ -82,7 +82,7 @@ public class RepController {
 		HttpSession session = req.getSession(false);
 		int id = (int) session.getAttribute("id");
 		session.setAttribute("rep_id", rep_id);
-		String nickname = service.getNickname(id, rep_id);		
+		String nickname = service.getNickname(id, rep_id);
 		session.setAttribute("nickname", nickname);
 		ModelAndView mav = new ModelAndView("template/main");
 		// 채널리스트
@@ -91,15 +91,16 @@ public class RepController {
 		ArrayList<Integer> userlist = service.getUserList(rep_id);
 		ArrayList<String> usernamelist = service.getUserNameList(userlist);
 		ArrayList<String> nicknamelist = service.getNicknameList(rep_id);
-		System.out.println("nicknamelist:"+nicknamelist);
+		System.out.println("nicknamelist:" + nicknamelist);
 		System.out.println("chlist:" + chlist + ";;userlist:" + userlist + ";;usernamelist:" + usernamelist);
 		String email = (String) session.getAttribute("email");
 		ArrayList<String> repnamelist = service.getRepNameListById(id);
 		Member m2 = service.getMember(id);
 		String user_name = m2.getName();
-		Repository r = service.getRepository(rep_id);		
+		Repository r = service.getRepository(rep_id);
 		Channel ch = service.getChannel(rep_id);
-		mav.addObject("ch",ch);
+		mav.addObject("nicknamelist", nicknamelist);
+		mav.addObject("ch", ch);
 		mav.addObject("rep_name", r.getRep_name());
 		mav.addObject("user_name", user_name);
 		mav.addObject("email", email);
@@ -108,7 +109,6 @@ public class RepController {
 		mav.addObject("rep_id", rep_id);
 		mav.addObject("ch_list", chlist);
 		mav.addObject("user_list", usernamelist);
-		mav.addObject("nicknamelist",nicknamelist);
 		return mav;
 	}
 
@@ -147,13 +147,19 @@ public class RepController {
 		// 저장소에참여한사람리스트
 		ArrayList<Integer> userlist = service.getUserList(rep_id);
 		ArrayList<String> usernamelist = service.getUserNameList(userlist);
+		ArrayList<String> nicknamelist = service.getNicknameList(rep_id);
+		ArrayList<String> repnamelist = service.getRepNameListById(id);
 		Repository r = service.getRepository(rep_id);
+		Channel ch = service.getChannel(rep_id);
+		mav.addObject("ch", ch);
 		mav.addObject("rep_name", r.getRep_name());
 		mav.addObject("user_name", user_name);
 		mav.addObject("id", id);
 		mav.addObject("rep_id", rep_id);
 		mav.addObject("ch_list", chlist);
 		mav.addObject("user_list", usernamelist);
+		mav.addObject("nicknamelist", nicknamelist);
+		mav.addObject("rep_list", repnamelist);
 		return mav;
 	}
 
@@ -201,19 +207,20 @@ public class RepController {
 		session = req.getSession();
 		session.setAttribute("id", m2.getId());
 		session.setAttribute("email", m2.getEmail());
+		System.out.println("email:" + m2.getEmail());
 		int id = (int) session.getAttribute("id");
 		ArrayList<Integer> chlist = service.getChList(rep_id);
 		for (int i = 0; i < chlist.size(); i++) {
 			int ch_id = chlist.get(i);
 			System.out.println(ch_id);
 			try {
-			service.createUserMetaInvite(id, rep_id, ch_id);
-			service.addBoard(nickname, id, ch_id);
-			service.setUserMeta2(id, rep_id, nickname);
-			}catch (Exception e) {
+				service.createUserMetaInvite(id, rep_id, ch_id);
+				service.addBoard(nickname, id, ch_id);
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
+		service.setUserMeta2(id, rep_id, nickname);
 		session.setAttribute("rep_id", rep_id);
 		res.setContentType("text/html; charset=UTF-8");
 		PrintWriter out = res.getWriter();
@@ -226,14 +233,20 @@ public class RepController {
 		// 저장소에참여한사람리스트
 		ArrayList<Integer> userlist = service.getUserList(rep_id);
 		ArrayList<String> usernamelist = service.getUserNameList(userlist);
+		ArrayList<String> nicknamelist = service.getNicknameList(rep_id);
+		ArrayList<String> repnamelist = service.getRepNameListById(id);
 		String user_name = m2.getName();
 		Repository r = service.getRepository(rep_id);
+		Channel ch = service.getChannel(rep_id);
 		mav.addObject("rep_name", r.getRep_name());
 		mav.addObject("user_name", user_name);
 		mav.addObject("id", id);
 		mav.addObject("rep_id", rep_id);
 		mav.addObject("ch_list", chlist1);
 		mav.addObject("user_list", usernamelist);
+		mav.addObject("nicknamelist", nicknamelist);
+		mav.addObject("rep_list", repnamelist);
+		mav.addObject("ch", ch);
 		return mav;
 	}
 
@@ -252,7 +265,7 @@ public class RepController {
 	public ModelAndView createChannel(HttpServletRequest req, Repository r,
 			@RequestParam(value = "chtitle") String chtitle) {
 		ModelAndView mav = new ModelAndView("template/main");
-		HttpSession session = req.getSession(false);		
+		HttpSession session = req.getSession(false);
 		int id = (int) session.getAttribute("id");
 		int rep_id = (int) session.getAttribute("rep_id");
 		String email = (String) session.getAttribute("email");
@@ -262,22 +275,23 @@ public class RepController {
 		ArrayList<String> repnamelist = service.getRepNameListById(id);
 		Member m2 = service.getMember(email);
 		String user_name = m2.getName();
-		ArrayList<Integer> chlist = service.getChList(rep_id);		
-		Repository r2 = service.getRepository(rep_id);	
+		ArrayList<Integer> chlist = service.getChList(rep_id);
+		Repository r2 = service.getRepository(rep_id);
 		service.createCh(chtitle, rep_id);
 		Channel ch = service.getChannel(rep_id);
 		int chid = ch.getCh_id();
 		ArrayList<Integer> useridlist = service.getUserList(rep_id);
+		ArrayList<String> nicknamelist = service.getNicknameList(rep_id);
 		System.out.println("repid:" + rep_id + ";;chid:" + chid);
 		for (int i = 0; i < useridlist.size(); i++) {
 			int user_id = useridlist.get(i);
 			System.out.println(user_id);
 			service.createUserMetaCreateChannel1(user_id, rep_id, chid);
 		}
-
+		mav.addObject("nicknamelist", nicknamelist);
 		mav.addObject("rep_list", repnamelist);
-		mav.addObject("ch",ch);
-		mav.addObject("rep_name", r.getRep_name());
+		mav.addObject("ch", ch);
+		mav.addObject("rep_name", r2.getRep_name());
 		mav.addObject("user_name", user_name);
 		mav.addObject("id", id);
 		mav.addObject("rep_id", rep_id);

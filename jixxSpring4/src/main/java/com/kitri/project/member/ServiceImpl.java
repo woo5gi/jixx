@@ -32,9 +32,9 @@ public class ServiceImpl implements Service{
 		return m;
 	}
 	@Override
-	public Member getMemberEmail(String email) {
+	public Member getMemberByEmail(String email) {
 		memberMapper = sqlSession.getMapper(Mapper.class);
-		Member m = memberMapper.selecteMail(email);
+		Member m = memberMapper.selectMemberByEmail(email);
 		return m;
 	}
 	@Override

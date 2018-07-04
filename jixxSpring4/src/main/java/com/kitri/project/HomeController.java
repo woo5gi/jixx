@@ -50,7 +50,7 @@ public class HomeController {
 		try {
 		int id = (int) session.getAttribute("id");
 		String email = (String) session.getAttribute("email");
-		Member m2 = service.getMemberEmail(email);	
+		Member m2 = service.getMemberByEmail(email);	
 		String user_name = m2.getName();
 		mav.addObject("id",id);
 		mav.addObject("email",email);

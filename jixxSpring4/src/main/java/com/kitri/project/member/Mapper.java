@@ -14,7 +14,7 @@ public interface Mapper {
 
 	void delete(int id);
 
-	Member selecteMail(String email);
+	Member selectMemberByEmail(String email);
 	
 	void verify(Member m);
 	

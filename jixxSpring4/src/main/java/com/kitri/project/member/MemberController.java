@@ -56,13 +56,17 @@ public class MemberController {
 
 	// index page이동
 	@RequestMapping(value = "index.do")
-	public ModelAndView index(HttpServletRequest req) {
+	public ModelAndView index(HttpServletRequest req, HttpServletResponse res) throws Exception {
 		HttpSession session = req.getSession(false);
-		ModelAndView mav = new ModelAndView("template/index");
+		res.setContentType("text/html;charset=utf-8");
+		PrintWriter out = res.getWriter();
+		ModelAndView mav = new ModelAndView();
 		try {
 			int id = (int) session.getAttribute("id");
 			String email = (String) session.getAttribute("email");
-			Member m2 = service.getMemberEmail(email);
+			Member m2 = service.getMemberByEmail(email);
+			System.out.println("1111111" + m2.getName());
+			mav = new ModelAndView("template/index");
 			mav.addObject("user_name", m2.getName());
 			mav.addObject("id", id);
 			mav.addObject("email", email);
@@ -71,6 +75,9 @@ public class MemberController {
 			System.out.println(repnamelist);
 		} catch (NullPointerException e) {
 			e.printStackTrace();
+			out.println("<script>alert('session값이 없습니다'); </script>");
+			out.flush();
+			mav = new ModelAndView("member/login");			
 		}
 		return mav;
 	}
@@ -109,7 +116,7 @@ public class MemberController {
 			@RequestParam(value = "checkfrom") String checkfrom) {
 		ModelAndView mav = new ModelAndView("member/idCheck");
 		String str = "";
-		Member m = service.getMemberEmail(email);
+		Member m = service.getMemberByEmail(email);
 		if (m == null) {
 			if (checkfrom.equals("signup")) {
 				str = "사용가능한아이디";
@@ -131,7 +138,7 @@ public class MemberController {
 	@RequestMapping(value = "/login.do")
 	public ModelAndView login(HttpServletRequest req, Member m, HttpServletResponse res) throws Exception {
 		ModelAndView mav = new ModelAndView();
-		Member m2 = service.getMemberEmail(m.getEmail());
+		Member m2 = service.getMemberByEmail(m.getEmail());
 		if (m2 == null || !m2.getPwd().equals(m.getPwd())) {
 			System.out.println("로그인 실패");
 			res.setContentType("text/html; charset=UTF-8");
@@ -187,7 +194,7 @@ public class MemberController {
 		ModelAndView mav = new ModelAndView("workspace/createworkspace1");
 		HttpSession session = req.getSession(false);
 		String email = (String) session.getAttribute("email");
-		Member m = service.getMemberEmail(email);
+		Member m = service.getMemberByEmail(email);
 		mav.addObject("m", m);
 		return mav;
 	}
@@ -295,7 +302,7 @@ public class MemberController {
 	public ModelAndView profileForm(HttpServletRequest req) {
 		ModelAndView mav = new ModelAndView("member/profileform");
 		HttpSession session = req.getSession(false);
-		/*String */
+		/* String */
 		return mav;
 	}
 

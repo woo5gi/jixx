@@ -15,7 +15,14 @@
 		<result property="file_thumbnail" column="file_thumbnail" />
 		<result property="file_original" column="fil_original" />
 		<result property="post_status" column="post_status" />
-		<result property="channel_id" column="channel_id"/>
+		<result property="channel_id" column="channel_id" />
+	</resultMap>
+	<resultMap type="vo.Channel" id="ChResultMap">
+		<result property="ch_id" column="channel_id" />
+		<result property="ch_name" column="channel_name" />
+		<result property="ch_type" column="channel_type" />
+		<result property="ch_status" column="channel_status" />
+		<result property="rep_id" column="rep_id" />
 	</resultMap>
 
 	<insert id="insert" parameterType="vo.Post">
@@ -25,14 +32,27 @@
 		#{content},#{user_id},
 		sysdate,null,#{file_thumbnail},#{file_original},1,1)
 	</insert>
-	<select id="selectAll" parameterType="map" resultMap="PostResultMap">
+	<select id="selectAll" parameterType="map"
+		resultMap="PostResultMap">
 		select * from (select rownum a, a.*
-		from (select * from post where channel_id = ${cn} order by post_logdate desc) a
-		where rownum <![CDATA[<=]]> ${endPage})b
-		where b.a <![CDATA[>=]]> ${startpage}
+		from (select * from post where
+		channel_id = ${cn} order by post_logdate desc) a
+		where rownum <![CDATA[<=]]>
+		${endPage})b
+		where b.a <![CDATA[>=]]>
+		${startpage}
 		order by post_logdate
 	</select>
 	<update id="delete">
-		update post set post_status=0 where post_id=#{post_id}
+		update post set post_status=0 where
+		post_id=#{post_id}
 	</update>
+	<select id="selectChannel" parameterType="Integer"
+		resultMap="ChResultMap">
+		select *
+		from channel
+		where channel_id=(select min(channel_id)
+		from channel where
+		rep_id=#{rep_id})
+	</select>
 </mapper>

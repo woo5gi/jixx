@@ -9,7 +9,7 @@ public interface Service {
 
 	Member getMemberId(int id);
 	
-	Member getMemberEmail(String email);
+	Member getMemberByEmail(String email);
 
 	void editMember(Member m);
 
