@@ -44,17 +44,17 @@ padding:4px;
 	
 	<div class="alert alert-success alert-dismissible">
                 <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-               <c:set var="r" value="${r }" />
+                <c:set var="r" value="${r }" />
                 <h4><i class="icon fa fa-check"></i>${r.rep_name}저장소생성완료!</h4>
                		저장소가 생성되었습니다.
-              </div>
+     </div>
     		<div class="box box-primary">
 			<div class="box-header with-border">
 				<c:set var="r" value="${r}" />
 				<h3 class="box-title">${r.rep_name}저장소로초대</h3>
 			</div>
-
-			<form role="form" action="${pageContext.request.contextPath}/sendinvite.do" id="emailinput"
+			
+			   <form role="form" action="${pageContext.request.contextPath}/sendinvite.do" id="emailinput"
 				method="post" class="form-horizontal">
 				<div class="box-body">
 					<div class="form-group">
@@ -66,7 +66,7 @@ padding:4px;
 						<div id="emailinput" class="col-5">
 							<ul id="input">
 								<li><input type="email" name="address" placeholder="name@example.com"
-									class="form-control" ></li>
+									class="form-control"></li>
 								<br>
 							</ul>
 						</div>
@@ -74,7 +74,7 @@ padding:4px;
 				</div>
 				<div class="box-footer">
 					<button id="skip" class="btn  btn-primary"
-						onclick="location.href='${pageContext.request.contextPath }/gomain.do?rep_id=${r.rep_id}" style="width: 49%">Skip
+						onclick="location.href='${pageContext.request.contextPath }/gomain.do'" style="width: 49%">Skip
 						For Now</button>
 					<button type="submit" form="emailinput" class="btn  btn-primary" style="width: 50%">Send
 						Invitations</button>

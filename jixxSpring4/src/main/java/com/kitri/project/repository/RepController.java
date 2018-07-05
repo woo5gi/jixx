@@ -132,11 +132,11 @@ public class RepController {
 		}
 		MailHandler sendMail = new MailHandler(mailSender);
 		for (String str : address) {
-			sendMail.setSubject(user_name + "님의 JIXX저장소 초대");
-			sendMail.setText(new StringBuffer().append("<h1>" + user_name + "님의 jixx저장소 초대</h1>").append(
+			sendMail.setSubject(user_name + "님의 CETACEA저장소 초대");
+			sendMail.setText(new StringBuffer().append("<h1>" + user_name + "님의 CETACEA저장소 초대</h1>").append(
 					"<a href='localhost:8080/project/invitesignup.do?rep_name=" + rep_name + "&rep_id=" + rep_id)
 					.append("'target='_blenk'>초대 수락</a>").toString());
-			sendMail.setFrom("gusdn4973@gmail.com", "jixx");
+			sendMail.setFrom("gusdn4973@gmail.com", "CETACEA");
 			sendMail.setTo(str);
 			sendMail.send();
 		}
