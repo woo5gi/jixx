@@ -28,7 +28,6 @@
   </div>
 </div>
 
-
 <%--     <div class="content-wrapper" style="min-height: 863px;">
       <div class="container">
         <!-- Main content -->
