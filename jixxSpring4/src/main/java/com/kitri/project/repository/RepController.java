@@ -13,15 +13,16 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Controller;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import vo.Channel;
 import vo.Member;
 import vo.Repository;
+import vo.UserMeta;
+import vo.UserMeta2;
 
 @Controller
 public class RepController {
@@ -71,45 +72,23 @@ public class RepController {
 		service.createUserMeta(id, rep_id1, chid1);
 		service.addBoard(nickname, id, chid1);
 		int rep_id2 = r2.getRep_id();
-		service.setUserMeta2(id, rep_id2, nickname);
+		service.setUserMeta2Create(id, rep_id2, nickname);
 		mav.addObject("r", r2);
 		return mav;
 	}
 
 	// 로그인 이후에 자신의 workspace로 이동
 	@RequestMapping(value = "gomain.do")
-	public ModelAndView goMain(HttpServletRequest req, @RequestParam(value = "rep_id") int rep_id, Member m) {
+	public String goMain(RedirectAttributes rda,HttpServletRequest req, @RequestParam(value = "rep_id") int rep_id, Member m) {
 		HttpSession session = req.getSession(false);
 		int id = (int) session.getAttribute("id");
 		session.setAttribute("rep_id", rep_id);
 		String nickname = service.getNickname(id, rep_id);
-		session.setAttribute("nickname", nickname);
-		ModelAndView mav = new ModelAndView("template/main");
-		// 채널리스트
-		ArrayList<Channel> chlist = service.getChList(rep_id);
-		// 저장소에참여한사람리스트
-		ArrayList<Integer> userlist = service.getUserList(rep_id);
-		ArrayList<String> usernamelist = service.getUserNameList(userlist);
-		ArrayList<String> nicknamelist = service.getNicknameList(rep_id);
-		System.out.println("nicknamelist:" + nicknamelist);
-		System.out.println("chlist:" + chlist + ";;userlist:" + userlist + ";;usernamelist:" + usernamelist);
-		String email = (String) session.getAttribute("email");
-		ArrayList<String> repnamelist = service.getRepNameListById(id);
-		Member m2 = service.getMember(id);
-		String user_name = m2.getName();
-		Repository r = service.getRepository(rep_id);
+		session.setAttribute("nickname", nickname);	
 		Channel ch = service.getChannel(rep_id);
-		mav.addObject("nicknamelist", nicknamelist);
-		mav.addObject("ch", ch);
-		mav.addObject("rep_name", r.getRep_name());
-		mav.addObject("user_name", user_name);
-		mav.addObject("email", email);
-		mav.addObject("rep_list", repnamelist);
-		mav.addObject("id", id);
-		mav.addObject("rep_id", rep_id);
-		mav.addObject("ch_list", chlist);
-		mav.addObject("user_list", usernamelist);
-		return mav;
+		int cn = ch.getCh_id();		
+		rda.addAttribute("cn", cn);
+		return "redirect:/post/list.do?page=1";
 	}
 
 	// 저장소에 회원초대하는기능
@@ -210,7 +189,7 @@ public class RepController {
 		session.setAttribute("id", m2.getId());
 		session.setAttribute("email", m2.getEmail());
 		System.out.println("email:" + m2.getEmail());
-		int id = (int) session.getAttribute("id");
+		int id = m2.getId();
 		ArrayList<Integer> chlist = service.getChIdList(rep_id);
 		for (int i = 0; i < chlist.size(); i++) {
 			int ch_id = chlist.get(i);
@@ -222,7 +201,7 @@ public class RepController {
 				e.printStackTrace();
 			}
 		}
-		service.setUserMeta2(id, rep_id, nickname);
+		service.setUserMeta2Invite(id, rep_id, nickname);
 		session.setAttribute("rep_id", rep_id);
 		res.setContentType("text/html; charset=UTF-8");
 		PrintWriter out = res.getWriter();
@@ -280,7 +259,7 @@ public class RepController {
 		ArrayList<Integer> chlist = service.getChIdList(rep_id);
 		Repository r2 = service.getRepository(rep_id);
 		service.createCh(chtitle, rep_id);
-		Channel ch = service.getChannel(rep_id);
+		Channel ch = service.getMaxChannel(rep_id);
 		int chid = ch.getCh_id();
 		ArrayList<Integer> useridlist = service.getUserList(rep_id);
 		ArrayList<String> nicknamelist = service.getNicknameList(rep_id);
@@ -332,6 +311,28 @@ public class RepController {
 		mav.addObject("repidlist", repidlist);
 		return mav;
 	}	
+	@RequestMapping(value = "repadminform.do")
+	public ModelAndView repadminform(HttpServletRequest req,@RequestParam(value="adminlevel") int adminlevel) {
+		ModelAndView mav = new ModelAndView("workspace/repadminform");
+		HttpSession session = req.getSession(false);
+		int rep_id = (int) session.getAttribute("rep_id");
+		ArrayList<Channel> chlist = service.getChList(rep_id);
+		
+		ArrayList<UserMeta2> um2list = service.getUserMeta2List(rep_id);
+		mav.addObject("chlist",chlist);
+		mav.addObject("um2list",um2list);
+		mav.addObject("adminlevel",adminlevel);
+		return mav;
+	}
+	@RequestMapping(value = "deletech.do")
+	public String deleteCh(@RequestParam(value="chname") String chname) {
+		
+		
+		
+		return "workspace/teaminvite";
+	}
+	
+	
 
 	@RequestMapping(value = "teaminvite.do")
 	public String teamInvite() {

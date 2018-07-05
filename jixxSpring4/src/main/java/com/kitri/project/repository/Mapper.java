@@ -7,6 +7,8 @@ import vo.Channel;
 import vo.Member;
 import vo.Post;
 import vo.Repository;
+import vo.UserMeta;
+import vo.UserMeta2;
 
 public interface Mapper {
 
@@ -52,7 +54,7 @@ public interface Mapper {
 
 	ArrayList<String> selectRepList(int id);
 
-	void insertUserMeta2(Map<String, Object> map);
+	void insertUserMeta2Invite(Map<String, Object> map);
 
 	String selectNickname(Map<String, Object> map);
 
@@ -67,6 +69,16 @@ public interface Mapper {
 	void update(Repository r);
 
 	void delete(int rep_id);
+
+	ArrayList<UserMeta> selectUserMetaList(Map<String, Object> map);
+
+	Channel selectMaxChannel(int rep_id);
+
+	void insertUserMeta2Create(Map<String, Object> map);
+
+	int selectAdminLevel(Map<String, Object> map);
+
+	ArrayList<UserMeta2> selectUserMeta2(int rep_id);
 
 
 

@@ -56,12 +56,24 @@
 		${startpage}
 		order by post_logdate
 	</select>
+	<select id="selectAllMore" parameterType="map"
+		resultMap="PostResultMap">
+		select * from (select rownum a, a.*
+		from (select * from post where
+		channel_id = ${cn} order by post_logdate desc) a
+		where rownum <![CDATA[<=]]>
+		${endPage})b
+		where b.a <![CDATA[>=]]>
+		${startpage}
+		order by post_logdate desc
+	</select>
 	<select id="selectSearchResult" parameterType="map"
 		resultMap="PostResultMap">
 		select * from (select rownum a, a.*
 		from (select p.* from post p,channel c,repository r
 		where p.channel_id=c.channel_id and r.rep_id=c.rep_id and r.rep_id=#{rep_id}
 		and content like '%' || #{search} || '%'
+		and p.post_status != 0
 		order by post_id desc) a
 		where rownum <![CDATA[<=]]> ${endPage})b
 		where b.a <![CDATA[>=]]> ${startpage}

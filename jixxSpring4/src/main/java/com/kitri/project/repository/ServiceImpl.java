@@ -12,6 +12,8 @@ import org.springframework.stereotype.Component;
 import vo.Channel;
 import vo.Member;
 import vo.Repository;
+import vo.UserMeta;
+import vo.UserMeta2;
 
 @Component("repService")
 public class ServiceImpl implements Service {
@@ -192,14 +194,23 @@ public class ServiceImpl implements Service {
 	}
 
 	@Override
-	public void setUserMeta2(int id, int rep_id, String nickname) {
+	public void setUserMeta2Invite(int id, int rep_id, String nickname) {
 		repMapper = sqlSession.getMapper(Mapper.class);
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("user_id", id);	
 		map.put("rep_id", rep_id);
 		map.put("nickname", nickname);
-		repMapper.insertUserMeta2(map);
+		repMapper.insertUserMeta2Invite(map);
 		
+	}
+	@Override
+	public void setUserMeta2Create(int id, int rep_id2, String nickname) {
+		repMapper = sqlSession.getMapper(Mapper.class);
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("user_id", id);	
+		map.put("rep_id", rep_id2);
+		map.put("nickname", nickname);
+		repMapper.insertUserMeta2Create(map);
 	}
 
 	@Override
@@ -216,6 +227,12 @@ public class ServiceImpl implements Service {
 	public Channel getChannel(int rep_id) {
 		repMapper = sqlSession.getMapper(Mapper.class);
 		Channel c = repMapper.selectChannel(rep_id);
+		return c;
+	}
+	@Override
+	public Channel getMaxChannel(int rep_id) {
+		repMapper = sqlSession.getMapper(Mapper.class);
+		Channel c = repMapper.selectMaxChannel(rep_id);
 		return c;
 	}
 
@@ -248,6 +265,17 @@ public class ServiceImpl implements Service {
 		ArrayList<String> list = repMapper.selectrepNameList(map);		
 		return list;
 	}
+	@Override
+	public ArrayList<UserMeta> getUserMeatList(int id, int rep_id) {
+		repMapper = sqlSession.getMapper(Mapper.class);
+		Map<String,Object> map = new HashMap<String,Object>();
+		map.put("id", id);
+		map.put("rep_id", rep_id);	
+		ArrayList<UserMeta> list= repMapper.selectUserMetaList(map);
+		return list;
+	}
+	
+
 	
 	
 	
@@ -266,6 +294,30 @@ public class ServiceImpl implements Service {
 		repMapper.delete(rep_id);
 	}
 
+	@Override
+	public int getUserAdminLevel(int id, int rep_id) {
+		repMapper = sqlSession.getMapper(Mapper.class);
+		Map<String,Object> map = new HashMap<String,Object>();
+		map.put("id", id);
+		map.put("rep_id", rep_id);
+		int t = repMapper.selectAdminLevel(map);
+		return t;
+	}
+
+	@Override
+	public ArrayList<UserMeta2> getUserMeta2List(int rep_id) {
+		repMapper = sqlSession.getMapper(Mapper.class);
+		ArrayList<UserMeta2> um =repMapper.selectUserMeta2(rep_id);
+		return um;
+		
+		
+	}
+
+	
+
+	
+
+	
 	
 
 }
