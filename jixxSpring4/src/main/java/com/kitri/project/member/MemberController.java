@@ -217,7 +217,7 @@ public class MemberController {
 			sendMail.setText(
 					new StringBuffer().append("<h1>이메일인증</h1>").append("<a href='localhost:8080/project/verifyForm.do")
 							.append("'target='_blenk'>이메일 인증 확인</a>").append(ran2).toString());
-			sendMail.setFrom("gusdn4973@gmail.com", "jixx");
+			sendMail.setFrom("gusdn4973@gmail.com", "CETACEA");
 			sendMail.setTo(email);
 			sendMail.send();
 			service.setTempkey(ran2, id);
@@ -227,7 +227,7 @@ public class MemberController {
 			sendMail.setText(new StringBuffer().append("<h1>이메일인증</h1>")
 					.append("<a href='localhost:8080/project/verifypass.do?email=" + email + "&tempkey=" + ran2)
 					.append("'target='_blenk'>새 비밀번호 설정</a>").toString());
-			sendMail.setFrom("gusdn4973@gmail.com", "jixx");
+			sendMail.setFrom("gusdn4973@gmail.com", "CETACEA");
 			sendMail.setTo(email);
 			sendMail.send();
 			service.setTempkey(ran2, email);
