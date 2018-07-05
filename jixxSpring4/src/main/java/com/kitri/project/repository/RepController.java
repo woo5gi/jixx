@@ -13,9 +13,7 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Controller;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -23,6 +21,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import vo.Channel;
 import vo.Member;
 import vo.Repository;
+import vo.UserMeta;
 
 @Controller
 public class RepController {
@@ -72,7 +71,7 @@ public class RepController {
 		service.createUserMeta(id, rep_id1, chid1);
 		service.addBoard(nickname, id, chid1);
 		int rep_id2 = r2.getRep_id();
-		service.setUserMeta2(id, rep_id2, nickname);
+		service.setUserMeta2Create(id, rep_id2, nickname);
 		mav.addObject("r", r2);
 		return mav;
 	}
@@ -89,6 +88,7 @@ public class RepController {
 		int cn = ch.getCh_id();		
 		rda.addAttribute("cn", cn);
 		return "redirect:/post/list.do?page=1";
+
 	}
 
 	// 저장소에 회원초대하는기능
@@ -102,18 +102,20 @@ public class RepController {
 		Member user = service.getMember(id);
 		String user_name = user.getName();
 		int rep_id = 0;
+		System.out.println("rep_name:"+rep_name);
 		if (invitest.equals("0")) {
 			rep_id = service.getRepIdByRepNameUserMeta(rep_name);
+			System.out.println("rep_name:"+rep_name);
 		} else {
 			rep_id = (int) session.getAttribute("rep_id");
 		}
 		MailHandler sendMail = new MailHandler(mailSender);
 		for (String str : address) {
-			sendMail.setSubject(user_name + "님의 JIXX저장소 초대");
-			sendMail.setText(new StringBuffer().append("<h1>" + user_name + "님의 jixx저장소 초대</h1>").append(
+			sendMail.setSubject(user_name + "님의 CETACEA저장소 초대");
+			sendMail.setText(new StringBuffer().append("<h1>" + user_name + "님의 CETACEA저장소 초대</h1>").append(
 					"<a href='localhost:8080/project/invitesignup.do?rep_name=" + rep_name + "&rep_id=" + rep_id)
 					.append("'target='_blenk'>초대 수락</a>").toString());
-			sendMail.setFrom("gusdn4973@gmail.com", "jixx");
+			sendMail.setFrom("gusdn4973@gmail.com", "CETACEA");
 			sendMail.setTo(str);
 			sendMail.send();
 		}
@@ -187,7 +189,7 @@ public class RepController {
 		session.setAttribute("id", m2.getId());
 		session.setAttribute("email", m2.getEmail());
 		System.out.println("email:" + m2.getEmail());
-		int id = (int) session.getAttribute("id");
+		int id = m2.getId();
 		ArrayList<Integer> chlist = service.getChIdList(rep_id);
 		for (int i = 0; i < chlist.size(); i++) {
 			int ch_id = chlist.get(i);
@@ -199,7 +201,7 @@ public class RepController {
 				e.printStackTrace();
 			}
 		}
-		service.setUserMeta2(id, rep_id, nickname);
+		service.setUserMeta2Invite(id, rep_id, nickname);
 		session.setAttribute("rep_id", rep_id);
 		res.setContentType("text/html; charset=UTF-8");
 		PrintWriter out = res.getWriter();
@@ -257,7 +259,7 @@ public class RepController {
 		ArrayList<Integer> chlist = service.getChIdList(rep_id);
 		Repository r2 = service.getRepository(rep_id);
 		service.createCh(chtitle, rep_id);
-		Channel ch = service.getChannel(rep_id);
+		Channel ch = service.getMaxChannel(rep_id);
 		int chid = ch.getCh_id();
 		ArrayList<Integer> useridlist = service.getUserList(rep_id);
 		ArrayList<String> nicknamelist = service.getNicknameList(rep_id);

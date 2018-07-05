@@ -6,6 +6,7 @@ import java.util.Map;
 import vo.Channel;
 import vo.Member;
 import vo.Repository;
+import vo.UserMeta;
 
 public interface Service {
 	Repository selectRepByUrl(String url);
@@ -47,10 +48,11 @@ public interface Service {
 
 	ArrayList<String> getRepNameListById(int id);
 
-	void setUserMeta2(int id, int rep_id, String nickname);
+	void setUserMeta2Invite(int id, int rep_id, String nickname);
 
 	String getNickname(int id, int rep_id);
 	Channel getChannel(int rep_id);
+	Channel getMaxChannel(int rep_id);
 	Repository getRepository(int rep_id);
 	ArrayList<String> getNicknameList(int rep_id);
 
@@ -65,6 +67,12 @@ public interface Service {
 	void delRep(int rep_id);
 
 	ArrayList<String> getRepNameListById(String search);
+
+	ArrayList<UserMeta> getUserMeatList(int id, int rep_id);
+
+	void setUserMeta2Create(int id, int rep_id2, String nickname);
+
+	
 
 
 
