@@ -193,13 +193,14 @@
                page--;
            },
            success : function(data){
-        	  console.log(page);
+        	  console.log(data.length);
         	  if (data.length == '0') {
         		  alert('더이상 불러올 데이터가 없습니다.');
         		  page--;
         	  } else {
         	  for (var i = 1; i < data.length; i++) {
 						var str = "";
+        		  
 					if (data[i].post_status == '3') {
 						str +='<li>'+
 						'<li><i class="fa fa-user bg-aqua"></i>'+
@@ -210,9 +211,6 @@
 						'</h3>'+
 						'</div></li>';
 					} else {
-						if (data[i].logdate != data[i-1].logdate) {
-							str += '<li class="time-label"><span class="bg-red">'+ data[i-1].logdate+'</span></li>';
-		        		}
 						str +='<li>';
 						if (data[i].file_thumbnail != 'x') {
 							str +='<i class="fa fa-camera bg-purple"></i>';
@@ -237,11 +235,22 @@
 							str += '<a href="${pageContext.request.contextPath}/post/download.do?fileName='+data[i].file_original+'">'+ data[i].fileName+'</a>';
 						}
 						str += '</div></li>';
+						if (data[i].logdate != data[i-1].logdate) {
+							var logdate = $('#'+data[i-1].logdate).val();
+							console.log(logdate);
+							if (logdate == undefined) {								
+								str += '<li class="time-label"><span class="bg-red">'+ data[i-1].logdate+'</span></li>';
+							} else {
+								str += '<li class="time-label"><span class="bg-red">'+ data[i-1].logdate+'</span></li>';
+								$('#'+data[i-1].logdate).next().remove();
+								$('#'+data[i-1].logdate).remove();
+							}
+		        		  }
 					}
 						$("#div").prepend(str);
 			 	} 
 			$("#div").trigger("create");
-        	 }
+			}
            }
        });
 	   isLoading = true;
