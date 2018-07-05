@@ -34,10 +34,10 @@ public class ServiceImpl implements Service {
 		int endpage = 0;
 		if (page == 1) {
 			page = 1;
-			endpage = 10; 
+			endpage = 6; 
 		} else {
-			endpage = page * 10; 
-			page = (page -1) *10 +1;
+			endpage = page * 6; 
+			page = (page -1) *6 +1;
 		}
 		Map<String, Integer> map = new HashMap<String, Integer>();
 		map.put("startpage", page);
@@ -53,12 +53,11 @@ public class ServiceImpl implements Service {
 		int endpage = 0;
 		if (page == 1) {
 			page = 1;
-			endpage = 10; 
+			endpage = 6; 
 		} else {
-			endpage = page * 10; 
-			page = (page -1) *10 +1;
+			endpage = page * 6; 
+			page = (page -1) *6;
 		}
-		System.out.println(endpage);
 		Map<String, Integer> map = new HashMap<String, Integer>();
 		map.put("startpage", page);
 		map.put("endPage", endpage);
@@ -150,8 +149,4 @@ public class ServiceImpl implements Service {
 		return i;
 	}
 
-	
-
-	
-	
 }

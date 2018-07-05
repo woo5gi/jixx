@@ -15,7 +15,7 @@
 								<fmt:formatDate value="${post.logdate}" var="logdate" pattern="yyyy.MM.dd" />
 								<fmt:formatDate value="${list[status.index-1].logdate}" var="logdate2" pattern="yyyy.MM.dd" />
 								<c:if test="${logdate ne logdate2}">
-									<li class="time-label"><span class="bg-red"> ${post.logdate}</span></li>
+									<li class="time-label" id="${post.logdate}"><span class="bg-red"> ${post.logdate}</span></li>
 								</c:if>
 								<c:choose>
 									<c:when test="${post.post_status eq 3}">
@@ -125,13 +125,9 @@
         		  alert('더이상 불러올 데이터가 없습니다.');
         		  page--;
         	  } else {
-        	  for (var i = 0; i < data.length; i++) {
+        	  for (var i = 1; i < data.length; i++) {
 						var str = "";
-     			if (i != 0) {
-        		  if (data[i].logdate != data[i-1].logdate) {
-					str += '<li class="time-label"><span class="bg-red">'+ data[i].logdate+'</span></li>';
-        		  }
-				}
+        		  
 					if (data[i].post_status == '3') {
 						str +='<li>'+
 						'<li><i class="fa fa-user bg-aqua"></i>'+
@@ -166,6 +162,17 @@
 							str += '<a href="${pageContext.request.contextPath}/post/download.do?fileName='+data[i].file_original+'">'+ data[i].fileName+'</a>';
 						}
 						str += '</div></li>';
+						if (data[i].logdate != data[i-1].logdate) {
+							var logdate = $('#'+data[i-1].logdate).val();
+							console.log(logdate);
+							if (logdate == undefined) {								
+								str += '<li class="time-label"><span class="bg-red">'+ data[i-1].logdate+'</span></li>';
+							} else {
+								str += '<li class="time-label"><span class="bg-red">'+ data[i-1].logdate+'</span></li>';
+								$('#'+data[i-1].logdate).next().remove();
+								$('#'+data[i-1].logdate).remove();
+							}
+		        		  }
 					}
 						$("#div").prepend(str);
 			 	} 
@@ -191,13 +198,8 @@
         		  alert('더이상 불러올 데이터가 없습니다.');
         		  page--;
         	  } else {
-        	  for (var i = 0; i < data.length; i++) {
+        	  for (var i = 1; i < data.length; i++) {
 						var str = "";
-     			if (i != 0) {
-        		  if (data[i].logdate != data[i-1].logdate) {
-					str += '<li class="time-label"><span class="bg-red">'+ data[i].logdate+'</span></li>';
-        		  }
-				}
 					if (data[i].post_status == '3') {
 						str +='<li>'+
 						'<li><i class="fa fa-user bg-aqua"></i>'+
@@ -208,6 +210,9 @@
 						'</h3>'+
 						'</div></li>';
 					} else {
+						if (data[i].logdate != data[i-1].logdate) {
+							str += '<li class="time-label"><span class="bg-red">'+ data[i-1].logdate+'</span></li>';
+		        		}
 						str +='<li>';
 						if (data[i].file_thumbnail != 'x') {
 							str +='<i class="fa fa-camera bg-purple"></i>';
@@ -236,14 +241,16 @@
 						$("#div").prepend(str);
 			 	} 
 			$("#div").trigger("create");
-			}
-           }            
+        	 }
+           }
        });
 	   isLoading = true;
 	   setTimeout(loadNewPage, 100);
    }
  }
-   
  });
+</script>
+<script>
+
 </script>
 						</html>
