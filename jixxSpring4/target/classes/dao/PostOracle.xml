@@ -73,6 +73,7 @@
 		from (select p.* from post p,channel c,repository r
 		where p.channel_id=c.channel_id and r.rep_id=c.rep_id and r.rep_id=#{rep_id}
 		and content like '%' || #{search} || '%'
+		and p.post_status != 0
 		order by post_id desc) a
 		where rownum <![CDATA[<=]]> ${endPage})b
 		where b.a <![CDATA[>=]]> ${startpage}

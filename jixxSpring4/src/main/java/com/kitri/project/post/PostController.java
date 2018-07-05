@@ -163,7 +163,7 @@ public class PostController implements ApplicationContextAware {
 		ArrayList<Channel> chlist = service.getChList(rep_id);
 		res.setContentType("text/html; charset=UTF-8");
 		PrintWriter out = res.getWriter();
-		ArrayList<Post> list = service.getSearchBoard(page, cn, rep_id, search);
+		ArrayList<Post> list = service.getSearchBoard(page, rep_id, search);
 		if (list.isEmpty()) {
 			System.out.println("리스트가널이여");
 			out.println("<script>alert('일치하는 항목이 없습니다'); </script>");
@@ -206,7 +206,6 @@ public class PostController implements ApplicationContextAware {
 	
 	@RequestMapping(value = "/post/ajax.do", method = RequestMethod.GET, produces = "application/text; charset=utf8")
 	public @ResponseBody String ajax(@RequestParam(value = "page")int page, @RequestParam(value = "cn")int cn) {
-		System.out.println(page + "" + cn);
 		ArrayList<Post> list = service.showMore(page, cn);
 		for (int i = 0; i < list.size(); i++) {
 			if (list.get(i).getPost_status() == 0) {
@@ -229,11 +228,39 @@ public class PostController implements ApplicationContextAware {
         ObjectMapper mapper = new ObjectMapper();
         try {
             str = mapper.writeValueAsString(list);
-            System.out.println(str);
         } catch (Exception e) {
         	e.printStackTrace();
         }
         return str;
-
+	}
+	@RequestMapping(value = "/post/searchAjax.do", method = RequestMethod.GET, produces = "application/text; charset=utf8")
+	public @ResponseBody String searchAjax(@RequestParam(value = "page")int page, @RequestParam(value = "rep_id")int rep_id
+			,@RequestParam(value="search") String search) {
+		ArrayList<Post> list = service.getSearchBoard(page, rep_id, search);
+		for (int i = 0; i < list.size(); i++) {
+			if (list.get(i).getPost_status() == 0) {
+				list.get(i).setFile_original("x");
+				list.get(i).setContent("삭제된 글입니다.");
+				list.get(i).setNickname("삭제된 글입니다.");
+				list.get(i).setFile_thumbnail("x");
+			} else if (list.get(i).getFile_original() != null && !list.get(i).getFile_original().equals("x")) {
+				String str = list.get(i).getFile_original();
+				String name = str.substring(0, str.length() - 40);
+				String realName = name.substring(9);
+				String uuidName = str.substring(9);
+				int pos = str.lastIndexOf(".");
+				String ext = str.substring(pos);
+				list.get(i).setFileName(realName + ext);
+				list.get(i).setFile_original(uuidName);
+			}
+		}
+		 String str = "";
+	        ObjectMapper mapper = new ObjectMapper();
+	        try {
+	            str = mapper.writeValueAsString(list);
+	        } catch (Exception e) {
+	        	e.printStackTrace();
+	        }
+	        return str;
 	}
 }

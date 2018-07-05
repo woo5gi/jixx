@@ -11,49 +11,6 @@
 					<div class="col-md-12">
 						<!-- The time line -->
 						<ul class="timeline" id="div">
-							<!-- timeline time label -->
-							<li class="time-label" ><span class="bg-red"> 10 Feb. 2014 </span></li>
-							<!-- /.timeline-label -->
-							<!-- timeline item -->
-							<li><i class="fa fa-envelope bg-blue"></i>
-
-								<div class="timeline-item">
-									<span class="time"><i class="fa fa-clock-o"></i> 12:05</span>
-
-									<h3 class="timeline-header">
-										<a href="#">Support Team</a>
-										<div class="timelinebtn">
-											<a class="btn btn-danger btn-xs">Delete</a>
-										</div>
-									</h3>
-
-									<div class="timeline-body">Etsy doostang zoodles disqus groupon greplin oooj voxy
-										zoodles, weebly ning heekya handango imeem plugg dopplr jibjab, movity jajah plickers
-										sifteo edmodo ifttt zimbra. Babblely odeo kaboodle quora plaxo ideeli hulu weebly
-										balihoo...</div>
-								</div></li>
-							<li><i class="fa fa-envelope bg-blue"></i>
-
-								<div class="timeline-item">
-									<span class="time"><i class="fa fa-clock-o"></i> 12:05</span>
-
-									<h3 class="timeline-header">
-										<a href="#">Support Team</a>
-										<div class="timelinebtn">
-											<a class="btn btn-danger btn-xs">Delete</a>
-										</div>
-									</h3>
-
-									<div class="timeline-body">Etsy doostang zoodles disqus groupon greplin oooj voxy
-										zoodles, weebly ning heekya handango imeem plugg dopplr jibjab, movity jajah plickers
-										sifteo edmodo ifttt zimbra. Babblely odeo kaboodle quora plaxo ideeli hulu weebly
-										balihoo...</div>
-								</div></li>
-
-							<!-- END timeline item -->
-							<!-- timeline item -->
-							<!-- END timeline item -->
-							<!-- timeline item -->
 							<c:forEach items="${list}" var="post" varStatus="status">
 								<fmt:formatDate value="${post.logdate}" var="logdate" pattern="yyyy.MM.dd" />
 								<fmt:formatDate value="${list[status.index-1].logdate}" var="logdate2" pattern="yyyy.MM.dd" />
@@ -104,52 +61,6 @@
 									</c:otherwise>
 								</c:choose>
 							</c:forEach>
-							<!-- END timeline item -->
-							<!-- timeline time label -->
-							<li class="time-label"><span class="bg-green"> 3 Jan. 2014 </span></li>
-							<!-- /.timeline-label -->
-							<!-- timeline item -->
-							<li><i class="fa fa-camera bg-purple"></i>
-
-								<div class="timeline-item">
-									<span class="time"><i class="fa fa-clock-o"></i> 2 days ago</span>
-
-									<h3 class="timeline-header">
-										<a href="#">Mina Lee</a> uploaded new photos
-										<div class="timelinebtn">
-											<a class="btn btn-danger btn-xs">Delete</a>
-										</div>
-									</h3>
-
-									<div class="timeline-body">
-										<img src="http://placehold.it/150x100" alt="..." class="margin"> <img
-											src="http://placehold.it/150x100" alt="..." class="margin"> <img
-											src="http://placehold.it/150x100" alt="..." class="margin"> <img
-											src="http://placehold.it/150x100" alt="..." class="margin">
-									</div>
-								</div></li>
-							<li><i class="fa fa-camera bg-purple"></i>
-
-								<div class="timeline-item">
-									<span class="time"><i class="fa fa-clock-o"></i> 2 days ago</span>
-
-									<h3 class="timeline-header">
-										<a href="#">Mina Lee</a> uploaded new photos
-										<div class="timelinebtn">
-											<a class="btn btn-danger btn-xs">Delete</a>
-										</div>
-									</h3>
-
-									<div class="timeline-body">
-										<img src="http://placehold.it/150x100" alt="..." class="margin"> <img
-											src="http://placehold.it/150x100" alt="..." class="margin"> <img
-											src="http://placehold.it/150x100" alt="..." class="margin"> <img
-											src="http://placehold.it/150x100" alt="..." class="margin">
-									</div>
-								</div></li>
-							<!-- timeline item -->
-
-							<!-- END timeline item -->
 							<li><i class="fa fa-clock-o bg-gray"></i></li>
 						</ul>
 					</div>
@@ -163,6 +74,26 @@
 </body>
 
  <script type="text/javascript">
+ var getParameters = function (paramName) {
+	    // 리턴값을 위한 변수 선언
+	    var returnValue;
+
+	    // 현재 URL 가져오기
+	    var url = location.href;
+
+	    // get 파라미터 값을 가져올 수 있는 ? 를 기점으로 slice 한 후 split 으로 나눔
+	    var parameters = (url.slice(url.indexOf('?') + 1, url.length)).split('&');
+
+	    // 나누어진 값의 비교를 통해 paramName 으로 요청된 데이터의 값만 return
+	    for (var i = 0; i < parameters.length; i++) {
+	        var varName = parameters[i].split('=')[0];
+	        if (varName.toUpperCase() == paramName.toUpperCase()) {
+	            returnValue = parameters[i].split('=')[1];
+	            return decodeURIComponent(returnValue);
+	        }
+	    }
+	};
+	
  var page = 2;
 
  var isLoading = false;
@@ -175,7 +106,10 @@
  }
 
  $(document).scroll(function() {
+	 var searchitem = getParameters('search');
    if($(document).scrollTop() < 1 && !isLoading) {
+	 if (searchitem == undefined) {
+	console.log(searchitem);
 	   $.ajax({
            type : "GET",
            url : "<%=request.getContextPath()%>/post/ajax.do",
@@ -183,11 +117,13 @@
            dataType : "json",
            error : function(){
                alert('더이상 불러올 데이터가 없습니다.');
+               page--;
            },
            success : function(data){
         	  console.log(data.length);
         	  if (data.length == '0') {
         		  alert('더이상 불러올 데이터가 없습니다.');
+        		  page--;
         	  } else {
         	  for (var i = 0; i < data.length; i++) {
 						var str = "";
@@ -239,7 +175,74 @@
        });
      isLoading = true;
      setTimeout(loadNewPage, 100);
+   } else {
+	   $.ajax({
+           type : "GET",
+           url : "<%=request.getContextPath()%>/post/searchAjax.do",
+           data : { page: page, search: searchitem, rep_id: '${sessionScope.rep_id}' },
+           dataType : "json",
+           error : function(){
+               alert('더이상 불러올 데이터가 없습니다.');
+               page--;
+           },
+           success : function(data){
+        	  console.log(page);
+        	  if (data.length == '0') {
+        		  alert('더이상 불러올 데이터가 없습니다.');
+        		  page--;
+        	  } else {
+        	  for (var i = 0; i < data.length; i++) {
+						var str = "";
+     			if (i != 0) {
+        		  if (data[i].logdate != data[i-1].logdate) {
+					str += '<li class="time-label"><span class="bg-red">'+ data[i].logdate+'</span></li>';
+        		  }
+				}
+					if (data[i].post_status == '3') {
+						str +='<li>'+
+						'<li><i class="fa fa-user bg-aqua"></i>'+
+						'<div class="timeline-item">'+
+						'<span class="time"><i class="fa fa-clock-o"></i> '+data[i].logdate+'</span>'+
+						'<h3 class="timeline-header no-border">'+
+						'<a href="#">'+data[i].nickname+'님</a> ${rep_name}'+ data[i].content+
+						'</h3>'+
+						'</div></li>';
+					} else {
+						str +='<li>';
+						if (data[i].file_thumbnail != 'x') {
+							str +='<i class="fa fa-camera bg-purple"></i>';
+						} else{
+							str += '<li><i class="fa fa-envelope bg-blue"></i>';
+						}
+						str += '<div class="timeline-item">'+
+						'<span class="time"><i class="fa fa-clock-o"></i>'+ data[i].logdate+'</span>'+
+						'<h3 class="timeline-header">'+
+						'<a href="#">'+ data[i].nickname+'</a>'+
+						'<div class="timelinebtn">';
+						if ('${sessionScope.nickname}' == data[i].nickname) {
+							str += '<a class="btn btn-danger btn-xs" href="${pageContext.request.contextPath}/post/delete.do?post_id='+data[i].post_id+'&cn=${ch.ch_id}">Delete</a>';
+						}
+						str +='</div>'+
+						'</h3>'+
+						'<div class="timeline-body">'+data[i].content+'</div>';
+						if (data[i].file_thumbnail != 'x') {
+							str += '<img src="${pageContext.request.contextPath}/resources/img/'+data[i].file_thumbnail + '" class="margin"> <br>';
+						}
+						if (data[i].file_original != 'x') {
+							str += '<a href="${pageContext.request.contextPath}/post/download.do?fileName='+data[i].file_original+'">'+ data[i].fileName+'</a>';
+						}
+						str += '</div></li>';
+					}
+						$("#div").prepend(str);
+			 	} 
+			$("#div").trigger("create");
+			}
+           }            
+       });
+	   isLoading = true;
+	   setTimeout(loadNewPage, 100);
    }
+ }
    
  });
 </script>
