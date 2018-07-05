@@ -21,6 +21,7 @@ import vo.Channel;
 import vo.Member;
 import vo.Repository;
 import vo.UserMeta;
+import vo.UserMeta2;
 
 @Controller
 public class RepController {
@@ -341,12 +342,21 @@ public class RepController {
 		int rep_id = (int) session.getAttribute("rep_id");
 		ArrayList<Channel> chlist = service.getChList(rep_id);
 		
-		ArrayList<String> nicknamelist = service.getNicknameList(rep_id);
+		ArrayList<UserMeta2> um2list = service.getUserMeta2List(rep_id);
 		mav.addObject("chlist",chlist);
-		mav.addObject("nicknamelist",nicknamelist);
+		mav.addObject("um2list",um2list);
 		mav.addObject("adminlevel",adminlevel);
 		return mav;
 	}
+	@RequestMapping(value = "deletech.do")
+	public String deleteCh(@RequestParam(value="chname") String chname) {
+		
+		
+		
+		return "workspace/teaminvite";
+	}
+	
+	
 
 	@RequestMapping(value = "teaminvite.do")
 	public String teamInvite() {

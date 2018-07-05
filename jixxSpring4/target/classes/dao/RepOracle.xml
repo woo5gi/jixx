@@ -34,7 +34,7 @@
 		<result property="user_id" column="user_id" />
 		<result property="rep_id" column="rep_id" />		
 		<result property="nickname" column="nickname" />
-		<result property="amin_level" column="admin_level" />
+		<result property="admin_level" column="admin_level" />
 	</resultMap>
 
 
@@ -208,5 +208,8 @@
 	</select>
 	<select id="selectAdminLevel" parameterType="map" resultType="Integer">
 	select admin_level from user_meta2 where user_id=#{id} and rep_id=#{rep_id}
+	</select>
+	<select id="selectUserMeta2" parameterType="Integer" resultMap="UM2ResultMap">
+	select * from user_meta2 where rep_id=#{rep_id}
 	</select>
 </mapper>
