@@ -62,16 +62,35 @@
 	margin-left: auto;
 	margin-right: auto;
 	width: 450px;
-	padding-top: 5%;
+	padding-top: 13%;
 }
 
 .bg {
 	min-height: 100%;
 	background-color: #ecf0f5;
 }
+    #user-body1{
+    background: #e9e9e9;
+    }
+    .dropdown-menu{
+    overflow-y: scroll;
+    max-height: 500px;
+    
+    }
+    
+    
 </style>
 
 </head>
+<style type="text/css" > 
+BODY 
+{ scrollbar-face-color: #ffffff; scrollbar-shadow-color: #F7F7F7; 
+scrollbar-highlight-color: #ffffff; scrollbar-3dlight-color: #F7F7F7; 
+scrollbar-darkshadow-color: #ffffff; scrollbar-track-color: #ffffff; 
+scrollbar-arrow-color: #ffffff} 
+</style> 
+
+
 <body class="skin-blue layout-top-nav" style="height: auto; min-height: 100%;">
 	<c:set var="user_id" value="${id }" />
 	<c:set var="email" value="${email}" />
@@ -134,49 +153,44 @@
 									</c:when>
 
 									<c:otherwise>
-										<li class="dropdown user user-menu"><a
+										<li class="dropdown user user-menu" style=""><a
 											href="${pageContext.request.contextPath}/gomain.do" class="dropdown-toggle"
 											data-toggle="dropdown" aria-expanded="false"> <span class="hidden-xs">My
 													Workspace</span>
 										</a>
-											<ul class="dropdown-menu">
+											<ul class="dropdown-menu" >
 												<li class="user-header">
-													<p>WorkSpace List</p> <c:forEach var="aa" items="${rep_list}">
+													<p>WorkSpace List</p>
 
-														<li class="user-body"><a
-															href="${pageContext.request.contextPath}/gomain.do?rep_id=${aa.rep_id}"
-															class="hidden-xs text-center">${aa.rep_name}</a></li>
-
-													</c:forEach> <!-- Menu Body -->
+												<li class="user-body" id="user-body1">
+												<a href="${pageContext.request.contextPath}/crw1.do" class="hidden-xs text-center">Create new Workspace</a>
 												</li>
-												<li class="user-body">
-												
-													<div class="pull-left" style="border: 1px;">
-														<a href="${pageContext.request.contextPath}/crw1.do" class="btn btn-default btn-flat"
-															aria-expanded="false"> <span class="hidden-xs">Create new Workspace</span>
-														</a>
-													</div>
-													<div class="pull-left" style="border: 1px;">
-															<a href="${pageContext.request.contextPath}/findworkspaceform.do" class="btn btn-default btn-flat"
-																aria-expanded="false"> <span class="hidden-xs">Find Workspace</span>
-															</a>
-														</div>
-														
+												<c:forEach var="aa" items="${rep_list}">
+														<li class="user-body">
+														<a href="${pageContext.request.contextPath}/gomain.do?rep_id=${aa.rep_id}"
+															class="hidden-xs text-center">${aa.rep_name}</a></li>
+													</c:forEach> <!-- Menu Body -->
+												<li class="user-body" id="user-body1">
+												<a href="${pageContext.request.contextPath}/findworkspaceform.do" class="hidden-xs text-center">Find Workspace</a>
+												</li>
 													
 												</li>
-
 												<!-- Menu Footer-->
 												<li class="user-footer">
 													<div class="pull-left">
 														<a href="${pageContext.request.contextPath}/profileform.do"
 															class="btn btn-default btn-flat">Profile</a>
 													</div>
+													
+														
 													<div class="pull-right">
 														<a href="${pageContext.request.contextPath}/member/logout.do"
 															class="btn btn-default btn-flat">Sign out</a>
 													</div>
 												</li>
-											</ul></li>
+												
+											</ul>
+											</li>
 									</c:otherwise>
 
 								</c:choose>

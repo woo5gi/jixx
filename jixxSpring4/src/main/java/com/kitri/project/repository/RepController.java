@@ -22,6 +22,7 @@ import vo.Channel;
 import vo.Member;
 import vo.Repository;
 import vo.UserMeta;
+import vo.UserMeta2;
 
 @Controller
 public class RepController {
@@ -88,7 +89,6 @@ public class RepController {
 		int cn = ch.getCh_id();		
 		rda.addAttribute("cn", cn);
 		return "redirect:/post/list.do?page=1";
-
 	}
 
 	// 저장소에 회원초대하는기능
@@ -311,6 +311,28 @@ public class RepController {
 		mav.addObject("repidlist", repidlist);
 		return mav;
 	}	
+	@RequestMapping(value = "repadminform.do")
+	public ModelAndView repadminform(HttpServletRequest req,@RequestParam(value="adminlevel") int adminlevel) {
+		ModelAndView mav = new ModelAndView("workspace/repadminform");
+		HttpSession session = req.getSession(false);
+		int rep_id = (int) session.getAttribute("rep_id");
+		ArrayList<Channel> chlist = service.getChList(rep_id);
+		
+		ArrayList<UserMeta2> um2list = service.getUserMeta2List(rep_id);
+		mav.addObject("chlist",chlist);
+		mav.addObject("um2list",um2list);
+		mav.addObject("adminlevel",adminlevel);
+		return mav;
+	}
+	@RequestMapping(value = "deletech.do")
+	public String deleteCh(@RequestParam(value="chname") String chname) {
+		
+		
+		
+		return "workspace/teaminvite";
+	}
+	
+	
 
 	@RequestMapping(value = "teaminvite.do")
 	public String teamInvite() {

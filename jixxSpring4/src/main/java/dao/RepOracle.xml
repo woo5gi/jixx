@@ -30,6 +30,12 @@
 		<result property="channel_id" column="channel_id" />
 		<result property="alram_type" column="alram_type" />
 	</resultMap>
+	<resultMap type="vo.UserMeta2" id="UM2ResultMap">
+		<result property="user_id" column="user_id" />
+		<result property="rep_id" column="rep_id" />		
+		<result property="nickname" column="nickname" />
+		<result property="admin_level" column="admin_level" />
+	</resultMap>
 
 
 	<select id="getRepositoryByUrl" parameterType="vo.Repository"
@@ -199,6 +205,11 @@
 	<select id="selectUserMetaList" parameterType="map"
 		resultMap="UMResultMap">
 		select * from user_meta where user_id=#{id} and rep_id=#{rep_id}
-
+	</select>
+	<select id="selectAdminLevel" parameterType="map" resultType="Integer">
+	select admin_level from user_meta2 where user_id=#{id} and rep_id=#{rep_id}
+	</select>
+	<select id="selectUserMeta2" parameterType="Integer" resultMap="UM2ResultMap">
+	select * from user_meta2 where rep_id=#{rep_id}
 	</select>
 </mapper>

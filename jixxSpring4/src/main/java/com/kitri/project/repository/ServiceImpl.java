@@ -13,6 +13,7 @@ import vo.Channel;
 import vo.Member;
 import vo.Repository;
 import vo.UserMeta;
+import vo.UserMeta2;
 
 @Component("repService")
 public class ServiceImpl implements Service {
@@ -291,6 +292,25 @@ public class ServiceImpl implements Service {
 	public void delRep(int rep_id) {
 		repMapper = sqlSession.getMapper(Mapper.class);
 		repMapper.delete(rep_id);
+	}
+
+	@Override
+	public int getUserAdminLevel(int id, int rep_id) {
+		repMapper = sqlSession.getMapper(Mapper.class);
+		Map<String,Object> map = new HashMap<String,Object>();
+		map.put("id", id);
+		map.put("rep_id", rep_id);
+		int t = repMapper.selectAdminLevel(map);
+		return t;
+	}
+
+	@Override
+	public ArrayList<UserMeta2> getUserMeta2List(int rep_id) {
+		repMapper = sqlSession.getMapper(Mapper.class);
+		ArrayList<UserMeta2> um =repMapper.selectUserMeta2(rep_id);
+		return um;
+		
+		
 	}
 
 	

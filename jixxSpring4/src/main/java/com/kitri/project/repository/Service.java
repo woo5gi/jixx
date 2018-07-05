@@ -7,6 +7,7 @@ import vo.Channel;
 import vo.Member;
 import vo.Repository;
 import vo.UserMeta;
+import vo.UserMeta2;
 
 public interface Service {
 	Repository selectRepByUrl(String url);
@@ -71,6 +72,10 @@ public interface Service {
 	ArrayList<UserMeta> getUserMeatList(int id, int rep_id);
 
 	void setUserMeta2Create(int id, int rep_id2, String nickname);
+
+	int getUserAdminLevel(int id, int rep_id);
+
+	ArrayList<UserMeta2> getUserMeta2List(int rep_id);
 
 	
 

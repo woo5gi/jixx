@@ -8,6 +8,7 @@ import vo.Member;
 import vo.Post;
 import vo.Repository;
 import vo.UserMeta;
+import vo.UserMeta2;
 
 public interface Mapper {
 
@@ -74,6 +75,10 @@ public interface Mapper {
 	Channel selectMaxChannel(int rep_id);
 
 	void insertUserMeta2Create(Map<String, Object> map);
+
+	int selectAdminLevel(Map<String, Object> map);
+
+	ArrayList<UserMeta2> selectUserMeta2(int rep_id);
 
 
 
