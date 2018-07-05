@@ -11,6 +11,7 @@ import vo.Repository;
 public interface Mapper {
 	void insert(Post post);
 	ArrayList<Post> selectAll(Map<String, Integer> map);
+	ArrayList<Post> selectAllMore(Map<String, Integer> map);
 	ArrayList<Post> selectSearchResult(Map<String, Object> map);
 	Post update(Post post);
 	void delete(int post_id);
