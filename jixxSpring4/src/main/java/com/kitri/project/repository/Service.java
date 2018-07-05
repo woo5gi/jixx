@@ -72,6 +72,8 @@ public interface Service {
 
 	void setUserMeta2Create(int id, int rep_id2, String nickname);
 
+	int getUserAdminLevel(int id, int rep_id);
+
 	
 
 

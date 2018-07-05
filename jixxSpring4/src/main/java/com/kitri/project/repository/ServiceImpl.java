@@ -293,6 +293,16 @@ public class ServiceImpl implements Service {
 		repMapper.delete(rep_id);
 	}
 
+	@Override
+	public int getUserAdminLevel(int id, int rep_id) {
+		repMapper = sqlSession.getMapper(Mapper.class);
+		Map<String,Object> map = new HashMap<String,Object>();
+		map.put("id", id);
+		map.put("rep_id", rep_id);
+		int t = repMapper.selectAdminLevel(map);
+		return t;
+	}
+
 	
 
 	

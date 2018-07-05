@@ -75,6 +75,8 @@ public interface Mapper {
 
 	void insertUserMeta2Create(Map<String, Object> map);
 
+	int selectAdminLevel(Map<String, Object> map);
+
 
 
 

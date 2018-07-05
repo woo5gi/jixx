@@ -99,7 +99,8 @@ public class RepController {
 		Repository r = service.getRepository(rep_id);
 		Channel ch = service.getChannel(rep_id);	
 		ArrayList<UserMeta> umlist = service.getUserMeatList(id,rep_id);
-		mav.addObject("umlist",umlist);
+		int adminlevel = service.getUserAdminLevel(id,rep_id);
+		mav.addObject("adminlevel",adminlevel);		
 		mav.addObject("nicknamelist", nicknamelist);
 		mav.addObject("ch", ch);
 		mav.addObject("rep_name", r.getRep_name());
@@ -333,6 +334,19 @@ public class RepController {
 		mav.addObject("repidlist", repidlist);
 		return mav;
 	}	
+	@RequestMapping(value = "repadminform.do")
+	public ModelAndView repadminform(HttpServletRequest req,@RequestParam(value="adminlevel") int adminlevel) {
+		ModelAndView mav = new ModelAndView("workspace/repadminform");
+		HttpSession session = req.getSession(false);
+		int rep_id = (int) session.getAttribute("rep_id");
+		ArrayList<Channel> chlist = service.getChList(rep_id);
+		
+		ArrayList<String> nicknamelist = service.getNicknameList(rep_id);
+		mav.addObject("chlist",chlist);
+		mav.addObject("nicknamelist",nicknamelist);
+		mav.addObject("adminlevel",adminlevel);
+		return mav;
+	}
 
 	@RequestMapping(value = "teaminvite.do")
 	public String teamInvite() {
