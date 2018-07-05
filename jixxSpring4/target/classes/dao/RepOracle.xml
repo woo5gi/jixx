@@ -40,7 +40,7 @@
 	</select>
 	<select id="selectRepByRep" parameterType="vo.Repository"
 		resultMap="RepResultMap">
-		select rep_id from repository where rep_url=#{rep_url}
+		select * from repository where rep_url=#{rep_url}
 	</select>
 	<insert id="insertCh" parameterType="vo.Repository">
 		insert into channel

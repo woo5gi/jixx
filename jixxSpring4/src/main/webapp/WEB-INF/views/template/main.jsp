@@ -117,8 +117,9 @@
 							</c:when>
 
 							<c:otherwise>
-								<li class="dropdown user user-menu"><a class="dropdown-toggle"> ${user_name}님의
-										${rep_name}저장소</a></li>
+								<li class="dropdown user user-menu"><a class="dropdown-toggle"
+									href="${pageContext.request.contextPath}/gomain.do?rep_id=${sessionScope.rep_id}">
+										${user_name}님의 ${rep_name}저장소</a></li>
 
 								<c:choose>
 									<c:when test="${empty replist}">
@@ -208,7 +209,7 @@
 							</c:otherwise>
 						</c:choose>
 
-						
+
 					</ul>
 				</div>
 			</nav>
@@ -260,8 +261,7 @@
 									class="fa fa-asterisk"></i>${aa.ch_name}
 							</a></li>
 						</c:forEach> <!-- <li><a href="#"><i id="icon2" class="fa fa-lock"></i>Channel
-							2</a></li> -->
-					<li class="header"><a href="index.html"> Direct Messages &nbsp; <i
+							2</a></li> --> <li class="header"><a href="index.html"> Direct Messages &nbsp; <i
 							class="fa fa-plus-circle"></i>
 					</a> <c:forEach var="aa" items="${nicknamelist}" varStatus="status">
 							<li><a
@@ -269,8 +269,7 @@
 									<i class="fa fa-asterisk"></i>${aa}
 							</a></li>
 						</c:forEach> <!-- 	<li><a href="#"><i class="fa fa fa-user"></i>사람1</a></li>
-					<li><a href="#"><i class="fa fa-users"></i>사람1,사람2</a></li> -->
-					<li class="header"><a href="${pageContext.request.contextPath }/moreteam.do?"> Invate
+					<li><a href="#"><i class="fa fa-users"></i>사람1,사람2</a></li> --><li cla ss="header"><a href="${pageContext.request.contextPath }/moreteam.do?"> Invate
 							People &nbsp; <i class="fa fa-plus-circle"></i>
 					</a></li>
 
@@ -442,39 +441,39 @@
 </body>
 
 <script type="text/javascript">
- var page = 2;
+	var page = 2;
 
- var isLoading = false;
+	var isLoading = false;
 
- function loadNewPage() {
-     var temp = $(document).height();
-     page++;
-     $(document).scrollTop($(document).height()-temp);
-     isLoading = false;
- }
+	function loadNewPage() {
+		var temp = $(document).height();
+		page++;
+		$(document).scrollTop($(document).height() - temp);
+		isLoading = false;
+	}
 
- $(document).scroll(function() {
-   if($(document).scrollTop() < 1 && !isLoading) {
-	   $.ajax({
-           type : "GET",
-           url : "<%=request.getContextPath()%>/post/ajax.do",
-           data : { page: page, cn: "16" },
-           dataType : "json",
-           error : function(){
-               alert('더이상 불러올 데이터가 없습니다.');
-           },
-           success : function(data){
-        	  console.log(data["0"].post_id);
-           }
-            
-       });
-     $("#div").prepend('<div class="big-box"><h1>Page ' + page + '</h1></div>');
-     isLoading = true;
-     setTimeout(loadNewPage, 100);
-   }
-   
- });
+	$(document).scroll(function() {
+		if ($(document).scrollTop() < 1 && !isLoading) {
+			$.ajax({
+				type : "GET",
+				url : "<%=request.getContextPath()%>/post/ajax.do",
+				data : {
+					page : page,
+					cn : "16"
+				},
+				dataType : "json",
+				error : function() {
+					alert('더이상 불러올 데이터가 없습니다.');
+				},
+				success : function(data) {
+					console.log(data["0"].post_id);
+				}
+			});
+			$("#div").prepend('<div class="big-box"><h1>Page ' + page + '</h1></div>');
+			isLoading = true;
+			setTimeout(loadNewPage, 100);
+		}
 
-
+	});
 </script>
-</html>
+						</html>
