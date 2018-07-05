@@ -36,8 +36,8 @@ public class ServiceImpl implements Service {
 			page = 1;
 			endpage = 5; 
 		} else {
-			page *= 5;
-			endpage = page + 4; 
+			endpage = page * 5; 
+			page = (page -1) *5 +1;
 		}
 		Map<String, Integer> map = new HashMap<String, Integer>();
 		map.put("startpage", page);
@@ -47,6 +47,27 @@ public class ServiceImpl implements Service {
 		ArrayList<Post> list = mapper.selectAll(map);
 		return list;
 	}
+
+	@Override
+	public ArrayList<Post> showMore(int page, int cn) {
+		int endpage = 0;
+		if (page == 1) {
+			page = 1;
+			endpage = 5; 
+		} else {
+			endpage = page * 5; 
+			page = (page -1) *5 +1;
+		}
+		System.out.println(endpage);
+		Map<String, Integer> map = new HashMap<String, Integer>();
+		map.put("startpage", page);
+		map.put("endPage", endpage);
+		map.put("cn", cn);
+		mapper = sqlSession.getMapper(Mapper.class);
+		ArrayList<Post> list = mapper.selectAllMore(map);
+		return list;
+	}
+	
 	@Override
 	public ArrayList<Post> getSearchBoard(int page, int cn,int rep_id,String search) {
 		int endpage = 0;
@@ -54,8 +75,8 @@ public class ServiceImpl implements Service {
 			page = 1;
 			endpage = 10; 
 		} else {
-			page *= 10;
-			endpage = page + 9; 
+			endpage = page * 10; 
+			page = (page -1) *10 +1;
 		}
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("startpage", page);

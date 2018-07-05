@@ -56,6 +56,17 @@
 		${startpage}
 		order by post_logdate
 	</select>
+	<select id="selectAllMore" parameterType="map"
+		resultMap="PostResultMap">
+		select * from (select rownum a, a.*
+		from (select * from post where
+		channel_id = ${cn} order by post_logdate desc) a
+		where rownum <![CDATA[<=]]>
+		${endPage})b
+		where b.a <![CDATA[>=]]>
+		${startpage}
+		order by post_logdate desc
+	</select>
 	<select id="selectSearchResult" parameterType="map"
 		resultMap="PostResultMap">
 		select * from (select rownum a, a.*

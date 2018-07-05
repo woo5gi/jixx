@@ -149,7 +149,7 @@
 									</ul></li>
 							</c:when>
 
-<<<<<<< HEAD
+<%-- <<<<<<< HEAD
 												</li>
 												<!-- Menu Body -->
 												<li class="user-body">
@@ -209,7 +209,7 @@
 													</div>
 												</li>
 											</ul>
-=======
+======= --%>
 							<c:otherwise>
 								<li class="dropdown user user-menu"><a
 									href="${pageContext.request.contextPath}/gomain.do"
@@ -335,9 +335,9 @@
 				<div class="row">
 					<div class="col-md-12">
 						<!-- The time line -->
-						<ul class="timeline">
+						<ul class="timeline" id="div">
 							<!-- timeline time label -->
-							<li class="time-label" id="div"><span class="bg-red"> 10 Feb. 2014 </span></li>
+							<li class="time-label" ><span class="bg-red"> 10 Feb. 2014 </span></li>
 							<!-- /.timeline-label -->
 							<!-- timeline item -->
 							<li><i class="fa fa-envelope bg-blue"></i>
@@ -501,17 +501,64 @@
 	   $.ajax({
            type : "GET",
            url : "<%=request.getContextPath()%>/post/ajax.do",
-           data : { page: page, cn: "16" },
+           data : { page: page, cn: "${ch.ch_id}" },
            dataType : "json",
            error : function(){
                alert('더이상 불러올 데이터가 없습니다.');
            },
            success : function(data){
-        	  console.log(data["0"].post_id);
-           }
-            
+        	  console.log(data.length);
+        	  if (data.length == '0') {
+        		  alert('더이상 불러올 데이터가 없습니다.');
+        	  } else {
+        	  for (var i = 0; i < data.length; i++) {
+						var str = "";
+     			if (i != 0) {
+        		  if (data[i].logdate != data[i-1].logdate) {
+					str += '<li class="time-label"><span class="bg-red">'+ data[i].logdate+'</span></li>';
+        		  }
+				}
+					if (data[i].post_status == '3') {
+						str +='<li>'+
+						'<li><i class="fa fa-user bg-aqua"></i>'+
+						'<div class="timeline-item">'+
+						'<span class="time"><i class="fa fa-clock-o"></i> '+data[i].logdate+'</span>'+
+						'<h3 class="timeline-header no-border">'+
+						'<a href="#">'+data[i].nickname+'님</a> ${rep_name}'+ data[i].content+
+						'</h3>'+
+						'</div></li>';
+					} else {
+						str +='<li>';
+						if (data[i].file_thumbnail != 'x') {
+							str +='<i class="fa fa-camera bg-purple"></i>';
+						} else{
+							str += '<li><i class="fa fa-envelope bg-blue"></i>';
+						}
+						str += '<div class="timeline-item">'+
+						'<span class="time"><i class="fa fa-clock-o"></i>'+ data[i].logdate+'</span>'+
+						'<h3 class="timeline-header">'+
+						'<a href="#">'+ data[i].nickname+'</a>'+
+						'<div class="timelinebtn">';
+						if ('${sessionScope.nickname}' == data[i].nickname) {
+							str += '<a class="btn btn-danger btn-xs" href="${pageContext.request.contextPath}/post/delete.do?post_id='+data[i].post_id+'&cn=${ch.ch_id}">Delete</a>';
+						}
+						str +='</div>'+
+						'</h3>'+
+						'<div class="timeline-body">'+data[i].content+'</div>';
+						if (data[i].file_thumbnail != 'x') {
+							str += '<img src="${pageContext.request.contextPath}/resources/img/'+data[i].file_thumbnail + '" class="margin"> <br>';
+						}
+						if (data[i].file_original != 'x') {
+							str += '<a href="${pageContext.request.contextPath}/post/download.do?fileName='+data[i].file_original+'">'+ data[i].fileName+'</a>';
+						}
+						str += '</div></li>';
+					}
+						$("#div").prepend(str);
+			 	} 
+			$("#div").trigger("create");
+			}
+           }            
        });
-     $("#div").prepend('<div class="big-box"><h1>Page ' + page + '</h1></div>');
      isLoading = true;
      setTimeout(loadNewPage, 100);
    }

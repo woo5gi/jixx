@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import vo.Channel;
 import vo.Member;
@@ -78,38 +79,16 @@ public class RepController {
 
 	// 로그인 이후에 자신의 workspace로 이동
 	@RequestMapping(value = "gomain.do")
-	public ModelAndView goMain(HttpServletRequest req, @RequestParam(value = "rep_id") int rep_id, Member m) {
+	public String goMain(RedirectAttributes rda,HttpServletRequest req, @RequestParam(value = "rep_id") int rep_id, Member m) {
 		HttpSession session = req.getSession(false);
 		int id = (int) session.getAttribute("id");
 		session.setAttribute("rep_id", rep_id);
 		String nickname = service.getNickname(id, rep_id);
-		session.setAttribute("nickname", nickname);
-		ModelAndView mav = new ModelAndView("template/main");
-		// 채널리스트
-		ArrayList<Channel> chlist = service.getChList(rep_id);
-		// 저장소에참여한사람리스트
-		ArrayList<Integer> userlist = service.getUserList(rep_id);
-		ArrayList<String> usernamelist = service.getUserNameList(userlist);
-		ArrayList<String> nicknamelist = service.getNicknameList(rep_id);
-		System.out.println("nicknamelist:" + nicknamelist);
-		System.out.println("chlist:" + chlist + ";;userlist:" + userlist + ";;usernamelist:" + usernamelist);
-		String email = (String) session.getAttribute("email");
-		ArrayList<String> repnamelist = service.getRepNameListById(id);
-		Member m2 = service.getMember(id);
-		String user_name = m2.getName();
-		Repository r = service.getRepository(rep_id);
+		session.setAttribute("nickname", nickname);	
 		Channel ch = service.getChannel(rep_id);
-		mav.addObject("nicknamelist", nicknamelist);
-		mav.addObject("ch", ch);
-		mav.addObject("rep_name", r.getRep_name());
-		mav.addObject("user_name", user_name);
-		mav.addObject("email", email);
-		mav.addObject("rep_list", repnamelist);
-		mav.addObject("id", id);
-		mav.addObject("rep_id", rep_id);
-		mav.addObject("ch_list", chlist);
-		mav.addObject("user_list", usernamelist);
-		return mav;
+		int cn = ch.getCh_id();		
+		rda.addAttribute("cn", cn);
+		return "redirect:/post/list.do?page=1";
 	}
 
 	// 저장소에 회원초대하는기능

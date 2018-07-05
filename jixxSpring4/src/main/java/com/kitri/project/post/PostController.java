@@ -99,6 +99,7 @@ public class PostController implements ApplicationContextAware {
 				list.get(i).setFile_original("삭제된 파일입니다.");
 				list.get(i).setContent("삭제된 글입니다.");
 				list.get(i).setNickname("삭제된 글입니다.");
+				list.get(i).setFile_thumbnail("x");
 			} else if (list.get(i).getFile_original() != null && !list.get(i).getFile_original().equals("x")) {
 				String str = list.get(i).getFile_original();
 				String name = str.substring(0, str.length() - 40);
@@ -173,6 +174,7 @@ public class PostController implements ApplicationContextAware {
 					list.get(i).setFile_original("삭제된 파일입니다.");
 					list.get(i).setContent("삭제된 글입니다.");
 					list.get(i).setNickname("삭제된 글입니다.");
+					list.get(i).setFile_thumbnail("x");
 				} else if (list.get(i).getFile_original() != null && !list.get(i).getFile_original().equals("x")) {
 					String str = list.get(i).getFile_original();
 					String name = str.substring(0, str.length() - 40);
@@ -204,7 +206,25 @@ public class PostController implements ApplicationContextAware {
 	
 	@RequestMapping(value = "/post/ajax.do", method = RequestMethod.GET, produces = "application/text; charset=utf8")
 	public @ResponseBody String ajax(@RequestParam(value = "page")int page, @RequestParam(value = "cn")int cn) {
-		ArrayList<Post> list = service.show(page, cn);
+		System.out.println(page + "" + cn);
+		ArrayList<Post> list = service.showMore(page, cn);
+		for (int i = 0; i < list.size(); i++) {
+			if (list.get(i).getPost_status() == 0) {
+				list.get(i).setFile_original("x");
+				list.get(i).setContent("삭제된 글입니다.");
+				list.get(i).setNickname("삭제된 글입니다.");
+				list.get(i).setFile_thumbnail("x");
+			} else if (list.get(i).getFile_original() != null && !list.get(i).getFile_original().equals("x")) {
+				String str = list.get(i).getFile_original();
+				String name = str.substring(0, str.length() - 40);
+				String realName = name.substring(9);
+				String uuidName = str.substring(9);
+				int pos = str.lastIndexOf(".");
+				String ext = str.substring(pos);
+				list.get(i).setFileName(realName + ext);
+				list.get(i).setFile_original(uuidName);
+			}
+		}
         String str = "";
         ObjectMapper mapper = new ObjectMapper();
         try {

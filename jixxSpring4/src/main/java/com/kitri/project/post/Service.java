@@ -12,6 +12,8 @@ public interface Service {
 
 	ArrayList<Post> show(int page, int cn);
 
+	ArrayList<Post> showMore(int page, int cn);
+	
 	ArrayList<Post> getSearchBoard(int page, int cn, int rep_id, String search);
 
 	Post change(Post post);
