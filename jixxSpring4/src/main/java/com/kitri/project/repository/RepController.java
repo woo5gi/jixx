@@ -13,15 +13,14 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Controller;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import vo.Channel;
 import vo.Member;
 import vo.Repository;
+import vo.UserMeta;
 
 @Controller
 public class RepController {
@@ -71,7 +70,7 @@ public class RepController {
 		service.createUserMeta(id, rep_id1, chid1);
 		service.addBoard(nickname, id, chid1);
 		int rep_id2 = r2.getRep_id();
-		service.setUserMeta2(id, rep_id2, nickname);
+		service.setUserMeta2Create(id, rep_id2, nickname);
 		mav.addObject("r", r2);
 		return mav;
 	}
@@ -98,7 +97,9 @@ public class RepController {
 		Member m2 = service.getMember(id);
 		String user_name = m2.getName();
 		Repository r = service.getRepository(rep_id);
-		Channel ch = service.getChannel(rep_id);
+		Channel ch = service.getChannel(rep_id);	
+		ArrayList<UserMeta> umlist = service.getUserMeatList(id,rep_id);
+		mav.addObject("umlist",umlist);
 		mav.addObject("nicknamelist", nicknamelist);
 		mav.addObject("ch", ch);
 		mav.addObject("rep_name", r.getRep_name());
@@ -210,7 +211,7 @@ public class RepController {
 		session.setAttribute("id", m2.getId());
 		session.setAttribute("email", m2.getEmail());
 		System.out.println("email:" + m2.getEmail());
-		int id = (int) session.getAttribute("id");
+		int id = m2.getId();
 		ArrayList<Integer> chlist = service.getChIdList(rep_id);
 		for (int i = 0; i < chlist.size(); i++) {
 			int ch_id = chlist.get(i);
@@ -222,7 +223,7 @@ public class RepController {
 				e.printStackTrace();
 			}
 		}
-		service.setUserMeta2(id, rep_id, nickname);
+		service.setUserMeta2Invite(id, rep_id, nickname);
 		session.setAttribute("rep_id", rep_id);
 		res.setContentType("text/html; charset=UTF-8");
 		PrintWriter out = res.getWriter();
@@ -280,7 +281,7 @@ public class RepController {
 		ArrayList<Integer> chlist = service.getChIdList(rep_id);
 		Repository r2 = service.getRepository(rep_id);
 		service.createCh(chtitle, rep_id);
-		Channel ch = service.getChannel(rep_id);
+		Channel ch = service.getMaxChannel(rep_id);
 		int chid = ch.getCh_id();
 		ArrayList<Integer> useridlist = service.getUserList(rep_id);
 		ArrayList<String> nicknamelist = service.getNicknameList(rep_id);

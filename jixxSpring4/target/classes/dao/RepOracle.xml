@@ -24,6 +24,13 @@
 		<result property="tempkey" column="user_tempkey" />
 		<result property="auth" column="user_auth" />
 	</resultMap>
+	<resultMap type="vo.UserMeta" id="UMResultMap">
+		<result property="user_id" column="user_id" />
+		<result property="rep_id" column="rep_id" />		
+		<result property="channel_id" column="channel_id" />
+		<result property="alram_type" column="alram_type" />
+	</resultMap>
+
 
 	<select id="getRepositoryByUrl" parameterType="vo.Repository"
 		resultMap="RepResultMap">
@@ -58,28 +65,29 @@
 	</select>
 	<insert id="insertUserMeta" parameterType="map">
 		insert into user_meta
-		values(#{user_id},#{rep_id},3,#{ch_id},1)
+		values(#{user_id},#{rep_id},#{ch_id},1)
 	</insert>
 	<insert id="insertUserMetaCreateChannel" parameterType="map">
 		<foreach collection="user_id" item="type">
 			insert into user_meta
-			values(#{type.value},#{rep_id},3,#{ch_id},1)
+			values(#{type.value},#{rep_id},#{ch_id},1)
 		</foreach>
 	</insert>
 	<insert id="insertUserMetaCreateChannel1" parameterType="map">
 		insert
-		into user_meta values(#{user_id},#{rep_id},3,#{ch_id},1)
+		into user_meta values(#{user_id},#{rep_id},#{ch_id},1)
 	</insert>
 
 	<insert id="insertUserMetaInvite" parameterType="map">
 		insert into
-		user_meta values(#{user_id},#{rep_id},1,#{ch_id},1)
+		user_meta values(#{user_id},#{rep_id},#{ch_id},1)
 	</insert>
 	<insert id="insertBoard" parameterType="map">
 		insert into post
 		values((select max(post_id)+1 from post),null,#{nickname},
 		'저장소에
-		오신것을 환영합니다', #{user_id}, sysdate,null,'x',null,3,#{ch_id})
+		오신것을
+		환영합니다', #{user_id}, sysdate,null,'x',null,3,#{ch_id})
 	</insert>
 	<select id="getNameById" parameterType="Integer"
 		resultMap="MemberResultMap">
@@ -98,11 +106,13 @@
 	</select>
 	<select id="selectChIdList" parameterType="Integer"
 		resultType="java.lang.Integer">
-		select channel_id from channel where rep_id=#{rep_id} order by channel_id 
+		select channel_id from channel where rep_id=#{rep_id} order
+		by channel_id
 	</select>
 	<select id="selectChList" parameterType="Integer"
 		resultMap="ChResultMap">
-		select * from channel where rep_id=#{rep_id} order by channel_id
+		select * from channel where rep_id=#{rep_id} order by
+		channel_id
 	</select>
 	<select id="selectUserIdByEmail" parameterType="String"
 		resultMap="MemberResultMap">
@@ -137,9 +147,12 @@
 		r.rep_id=um.rep_id and
 		um.user_id=m.user_id and m.user_id=#{id}
 	</select>
-	<insert id="insertUserMeta2" parameterType="map">
+	<insert id="insertUserMeta2Invite" parameterType="map">
 		insert into
-		user_meta2 values(#{user_id},#{rep_id},#{nickname})
+		user_meta2 values(#{user_id},#{rep_id},#{nickname},1)
+	</insert>
+	<insert id="insertUserMeta2Create" parameterType="map">
+	insert into user_meta2 values(#{user_id},#{rep_id},#{nickname},3)
 	</insert>
 	<select id="selectNickname" parameterType="map"
 		resultType="String">
@@ -150,24 +163,42 @@
 		resultMap="ChResultMap">
 		select *
 		from channel
-		where channel_id=(select min(channel_id) from channel where
+		where channel_id=(select min(channel_id)
+		from channel where
 		rep_id=#{rep_id})
 	</select>
-	<select id="selectNicknameList" parameterType="Integer" resultType="String">
-	select nickname from user_meta2 where rep_id=#{rep_id}
+	<select id="selectMaxChannel" parameterType="Integer"
+		resultMap="ChResultMap">
+		select *
+		from channel
+		where channel_id=(select max(channel_id)
+		from channel where
+		rep_id=#{rep_id})
 	</select>
-	<select id="selectRepBySearch" parameterType="String" resultType="Integer">
-	select rep_id from repository where rep_url=#{search}
+	<select id="selectNicknameList" parameterType="Integer"
+		resultType="String">
+		select nickname from user_meta2 where rep_id=#{rep_id}
 	</select>
-	<select id="selectrepNameList" parameterType="map" resultType="String">
-	select user_name from member m,user_meta2 um,repository r 
-	where r.rep_id=um.rep_id and um.user_id=m.user_id and um.rep_id in
-	<foreach collection="rep_id" item="type" open="(" close=")"
+	<select id="selectRepBySearch" parameterType="String"
+		resultType="Integer">
+		select rep_id from repository where rep_url=#{search}
+	</select>
+	<select id="selectrepNameList" parameterType="map"
+		resultType="String">
+		select user_name from member m,user_meta2 um,repository r
+		where r.rep_id=um.rep_id and um.user_id=m.user_id and um.rep_id in
+		<foreach collection="rep_id" item="type" open="(" close=")"
 			separator=",">
 			#{type.value}
 		</foreach>
 	</select>
-	<select id="selectRepNameBySearch" parameterType="String" resultType="String">
-	select rep_name from repository where rep_url=#{search}
+	<select id="selectRepNameBySearch" parameterType="String"
+		resultType="String">
+		select rep_name from repository where rep_url=#{search}
+	</select>
+	<select id="selectUserMetaList" parameterType="map"
+		resultMap="UMResultMap">
+		select * from user_meta where user_id=#{id} and rep_id=#{rep_id}
+
 	</select>
 </mapper>
