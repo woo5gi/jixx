@@ -10,9 +10,9 @@
 				function() {
 					$('ul#input')
 						.append(
-							"<li class='adddedemail'><input type='email' name='address' placeholder='name@example.com' class='form-control' required='required'><input type='button' class='fa fa-fw fa-minus-square' name='delete'><i class='fa fa-fw fa-minus-square'></i></li><br>");
+							"<li class='adddedemail'><input type='email' name='address' placeholder='name@example.com' class='form-control'><button id ='mbtn' type='button' class='btn btn-primary btn-sm' name='delete'><i class='fa fa-fw fa-minus-square'></i></li><br>");
 				
-		$('input[type=button]').on('click', function() {
+		$('button[type=button]').on('click', function() {
 	        $(this).parent('li.adddedemail').next().remove(); // remove the <br>
 			$(this).parent('li.adddedemail').remove();
 			});
@@ -27,10 +27,18 @@ li{
 list-style-type:none;
 }
 .form-control {
-width:250px;
+width:325px;
+float: left;
+margin-bottom: 10px;
+}
+#mbtn{
+
+float: right;
+margin: 5px;
+padding:4px;
+}
+
 </style>
-<i class="fa fa-fw fa-minus-square"></i>
-<i class="fa fa-fw fa-plus-square"></i>
 <div class="bg">
 	<div class="centered">
 		<div class="box box-primary">
@@ -47,11 +55,11 @@ width:250px;
 						<label class="form-text text-muted"> You'Anybody else you'd like to invate?</label> <label
 							class="control-label mb-1">Email address</label> <input type="hidden" name="rep_name"
 							value="${r.rep_name}"> <input type="hidden" name="invitest" value="1">
-						<button type="button" id="addemail" class="btn btn-primary btn-sm"><i class="fa fa-fw fa-plus-square"></i></button>
+						<button type="button" id="addemail" class="btn btn-primary btn-sm" style="float: right;margin: 5px;padding: 4px;"><i class="fa fa-fw fa-plus-square"></i></button>
 						<div id="emailinput" class="col-5">
 							<ul id="input">
 								<li><input type="email" name="address" placeholder="name@example.com"
-									class="form-control" required="required"></li>
+									class="form-control"></li>
 								<br>
 							</ul>
 						</div>
