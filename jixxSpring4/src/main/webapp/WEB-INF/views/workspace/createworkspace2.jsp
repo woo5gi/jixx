@@ -63,7 +63,7 @@
 				</div>
 
 				<div class="box-footer">
-					<button type="submit" class="btn btn-block btn-primary" id="createws">Create Workspace</button>
+					<button type="button" class="btn btn-block btn-primary" id="createws">Create Workspace</button>
 				</div>
 			</form>
 		</div>

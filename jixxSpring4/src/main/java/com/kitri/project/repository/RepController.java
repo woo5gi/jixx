@@ -123,8 +123,10 @@ public class RepController {
 		Member user = service.getMember(id);
 		String user_name = user.getName();
 		int rep_id = 0;
+		System.out.println("rep_name:"+rep_name);
 		if (invitest.equals("0")) {
 			rep_id = service.getRepIdByRepNameUserMeta(rep_name);
+			System.out.println("rep_name:"+rep_name);
 		} else {
 			rep_id = (int) session.getAttribute("rep_id");
 		}

@@ -42,7 +42,7 @@
 						<form action="${pageContext.request.contextPath}/sendinvite.do"
 							id="emailinput" method="post" class="form-horizontal">
 							<div class="row form-group">
-								<input type="hidden" name="rep_name" value="${r.rep_name}">
+								<input type="text" name="rep_name" value="${r.rep_name}">
 								<input type="hidden" name="invitest" value="0">
 								<button type="button" id="addemail"
 									class="btn btn-primary btn-sm">more invitation</button>
