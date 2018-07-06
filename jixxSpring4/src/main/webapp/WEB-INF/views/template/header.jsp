@@ -73,30 +73,37 @@
 #user-body1 {
 	background: #e9e9e9;
 }
-
-.dropdown-menu {
-	overflow-y: scroll;
-	max-height: 500px;
+.liscroll{
+   overflow-y: auto; 
+   min-height:58px; 
+   max-height: 180px;
 }
+::-webkit-scrollbar{width: 16px;}
+::-webkit-scrollbar-track {background-color:#222d32;}
+::-webkit-scrollbar-thumb {background-color:#555;}
+::-webkit-scrollbar-thumb:hover {background: #555;}
+::-webkit-scrollbar-button:start:decrement,::-webkit-scrollbar-button:end:increment {
+width:0px;height:0px;background:#222d32;}
+
+.listyle{
+padding: 15px;
+border-bottom: 1px solid #f4f4f4;
+border-top: 1px solid #dddddd;
+}
+
+.dropdown-menu>div>li>a{
+    display: block;
+    padding: 3px 20px;
+    clear: both;
+    font-weight: 400;
+    line-height: 1.42857143;
+    color: #333;
+    white-space: nowrap;
+}
+
 </style>
 
 </head>
-<<<<<<< HEAD
-=======
-<style type="text/css">
-BODY {
-	scrollbar-face-color: #ffffff;
-	scrollbar-shadow-color: #F7F7F7;
-	scrollbar-highlight-color: #ffffff;
-	scrollbar-3dlight-color: #F7F7F7;
-	scrollbar-darkshadow-color: #ffffff;
-	scrollbar-track-color: #ffffff;
-	scrollbar-arrow-color: #ffffff
-}
-</style>
-
-
->>>>>>> 1937c733e17c69c516de8af8fc612c55af4bc2f0
 <body class="skin-blue layout-top-nav" style="height: auto; min-height: 100%;">
 	<c:set var="user_id" value="${id }" />
 	<c:set var="email" value="${email}" />
@@ -136,11 +143,9 @@ BODY {
 													</p>
 												</li>
 
-<<<<<<< HEAD
 												<li class="user-body" id="user-body1">
 															<a href="${pageContext.request.contextPath}/findworkspaceform.do" class="hidden-xs text-center"
 																aria-expanded="false">Find Workspace</a>
-=======
 												<li class="user-body">
 													<div class="row">
 														<div class="pull-left" style="border: 1px;">
@@ -150,7 +155,6 @@ BODY {
 															</a>
 														</div>
 													</div>
->>>>>>> 1937c733e17c69c516de8af8fc612c55af4bc2f0
 												</li>
 												<!-- Menu Footer-->
 												<li class="user-footer">
@@ -178,11 +182,13 @@ BODY {
 												<li class="user-body" id="user-body1"><a
 													href="${pageContext.request.contextPath}/crw1.do" class="hidden-xs text-center">Create
 														new Workspace</a></li>
+												<div  class="liscroll">
 												<c:forEach var="aa" items="${rep_list}">
-													<li class="user-body"><a
+													<li class="user-body listyle"><a
 														href="${pageContext.request.contextPath}/gomain.do?rep_id=${aa.rep_id}"
 														class="hidden-xs text-center">${aa.rep_name}</a></li>
 												</c:forEach>
+												</div>
 												<!-- Menu Body -->
 												<li class="user-body" id="user-body1"><a
 													href="${pageContext.request.contextPath}/findworkspaceform.do"
