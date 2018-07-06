@@ -52,10 +52,15 @@ public class MemberController {
 	@RequestMapping(value = "verifyForm.do")
 	public String verifyForm() {
 		return "member/verify";
-	}	
+	}
+
 	@RequestMapping(value = "repdlverifyform.do")
 	public String repDeleteVerifyForm() {
 		return "member/verifydelrep";
+	}
+	@RequestMapping(value = "memberoutverifyform.do")
+	public String memberOUtVeryForm() {
+		return "member/memberoutverifyform";
 	}
 
 	// index page이동
@@ -81,7 +86,7 @@ public class MemberController {
 			e.printStackTrace();
 			out.println("<script>alert('session값이 없습니다'); </script>");
 			out.flush();
-			mav = new ModelAndView("member/login");			
+			mav = new ModelAndView("member/login");
 		}
 		return mav;
 	}
@@ -141,7 +146,7 @@ public class MemberController {
 	// 로그인기능
 	@RequestMapping(value = "/login.do")
 	public ModelAndView login(HttpServletRequest req, Member m, HttpServletResponse res) throws Exception {
-		ModelAndView mav = new ModelAndView();
+		ModelAndView mav = new ModelAndView();		
 		Member m2 = service.getMemberByEmail(m.getEmail());
 		if (m2 == null || !m2.getPwd().equals(m.getPwd())) {
 			System.out.println("로그인 실패");
@@ -181,16 +186,7 @@ public class MemberController {
 		return "member/login";
 	}
 
-	// 탈퇴기능
-	@RequestMapping(value = "/member/out.do")
-	public String out(HttpServletRequest req) {
-		HttpSession session = req.getSession(false);
-		String id = (String) session.getAttribute("id");
-		service.delMember(Integer.parseInt(id));
-		session.removeAttribute("id");
-		session.invalidate();
-		return "member/login";
-	}
+	
 
 	// create workspace누르면 인증번호 메일전송하는 페이지로이동
 	@RequestMapping(value = "crw1.do")
@@ -210,7 +206,7 @@ public class MemberController {
 			throws MessagingException, UnsupportedEncodingException {
 		HttpSession session = req.getSession(false);
 		MailHandler sendMail = new MailHandler(mailSender);
-		System.out.println("email:"+email);
+		System.out.println("email:" + email);
 		Random ran = new Random();
 		int ran2 = 0;
 		while (ran2 <= 100000) {
@@ -237,43 +233,52 @@ public class MemberController {
 			sendMail.send();
 			service.setTempkey(ran2, email);
 			return "member/verifypass";
-		}else if(requestfrom.equals("deleterep")) {
+		} else if (requestfrom.equals("deleterep")) {
 			sendMail.setSubject("FILE CETACEA 저장소삭제 이메일인증");
-			sendMail.setText(new StringBuffer().append("<h1>이메일인증</h1>").append("<a href='localhost:8080/project/repdlverifyform.do")
+			sendMail.setText(new StringBuffer().append("<h1>이메일인증</h1>")
+					.append("<a href='localhost:8080/project/repdlverifyform.do")
 					.append("'target='_blenk'>이메일 인증 확인</a>").append(ran2).toString());
 			sendMail.setFrom("gusdn4973@gmail.com", "CETACEA");
 			sendMail.setTo(email);
 			sendMail.send();
 			service.setTempkey(ran2, email);
-			return "member/verifydelrep";			
+			return "member/verifydelrep";
+		}else if (requestfrom.equals("memberout")) {
+			sendMail.setSubject("FILE CETACEA 회원탈퇴 이메일인증");
+			sendMail.setText(new StringBuffer().append("<h1>이메일인증</h1>")
+					.append("<a href='localhost:8080/project/memberoutverifyform.do")
+					.append("'target='_blenk'>이메일 인증 확인</a>").append(ran2).toString());
+			sendMail.setFrom("gusdn4973@gmail.com", "CETACEA");
+			sendMail.setTo(email);
+			sendMail.send();
+			service.setTempkey(ran2, email);
+			return "member/memberoutverifyform";
 		}
 		return null;
 	}
 
 	// 메일로보낸 인증키와 입력받은값 비교하여 메일인증
 	@RequestMapping(value = "verify.do")
-	public ModelAndView verify(HttpServletRequest req, @RequestParam(value = "verify") int tempKey, HttpServletResponse res,
-			@RequestParam(value="requestfrom") String requestfrom)
-			throws Exception {
+	public ModelAndView verify(HttpServletRequest req, @RequestParam(value = "verify") int tempKey,
+			HttpServletResponse res, @RequestParam(value = "requestfrom") String requestfrom) throws Exception {
 		ModelAndView mav = new ModelAndView();
-		HttpSession session = req.getSession(false);
-		String email = (String) session.getAttribute("email");
-		int rep_id=(int) session.getAttribute("rep_id");
-
-		Member m = new Member();
-		m.setEmail(email);
-		int tempKeydb = service.selectTempKey(email);
+		HttpSession session = req.getSession(false);		
 		res.setContentType("text/html; charset=UTF-8");
 		PrintWriter out = res.getWriter();
-		if (tempKey == tempKeydb) {			
+		String email = (String) session.getAttribute("email");		
+		Member m = new Member();
+		m.setEmail(email);
+		
+		int tempKeydb = service.selectTempKey(email);		
+		if (tempKey == tempKeydb) {
 			service.verifyMember(m);
-			if(requestfrom.equals("createwsauth")) {
-			mav=new ModelAndView("workspace/createworkspace2");
-			}else if(requestfrom.equals("deleterepauth")) {
-				service.delRepository(rep_id);
-				out.println("<script>alert('저장소 삭제가 완료되었습니다.'); </script>");
-				out.flush();
-				int id = (int) session.getAttribute("id");				
+			if (requestfrom.equals("createwsauth")) {
+				mav = new ModelAndView("workspace/createworkspace2");
+			} else if (requestfrom.equals("deleterepauth")) {
+				int rep_id = (int) session.getAttribute("rep_id");
+				service.delRepository(rep_id);				
+				
+				int id = (int) session.getAttribute("id");
 				Member m2 = service.getMemberByEmail(email);
 				System.out.println("1111111" + m2.getName());
 				mav = new ModelAndView("template/index");
@@ -281,17 +286,40 @@ public class MemberController {
 				mav.addObject("id", id);
 				mav.addObject("email", email);
 				ArrayList<String> repnamelist = service.getRepNameListById(id);
-				mav.addObject("rep_list", repnamelist);				
+				mav.addObject("rep_list", repnamelist);
+				out.println("<script>alert('저장소 삭제가 완료되었습니다.'); </script>");
+				out.flush();
+			}else if (requestfrom.equals("memberout")) {				
+				int id = (int) session.getAttribute("id");
+				System.out.println("id:"+id);
+				mav = new ModelAndView("template/index");
+				service.delMember(id);
+				/*session.removeAttribute("id");
+				session.removeAttribute("email");
+				session.removeAttribute("rep_id");*/
+			/*	session.invalidate();*/
+				out.println("<script>alert('+회원탈퇴완료+'); </script>");
+				out.flush();
+				
+				/*
+				Member m2 = service.getMemberByEmail(email);
+				System.out.println("1111111" + m2.getName());*/
+				
+				/*mav.addObject("user_name", m2.getName());
+				mav.addObject("id", id);
+				mav.addObject("email", email);
+				ArrayList<String> repnamelist = service.getRepNameListById(id);
+				mav.addObject("rep_list", repnamelist);*/
 			}
-		} else {
-			if (isNumber(String.valueOf(tempKey))) {
+		}else {			
+			if (isNumber(String.valueOf(tempKey))) {				
 				out.println("<script>alert('인증번호가 일치하지 않습니다'); </script>");
 				out.flush();
-			} else {
+			} else {				
 				out.println("<script>alert('숫자를 입력하세요'); </script>");
 				out.flush();
 			}
-		}
+		}		
 		return mav;
 	}
 
@@ -351,9 +379,61 @@ public class MemberController {
 
 	// 회원정보수정기능
 	@RequestMapping(value = "/member/edit.do")
-	public String edit(Member m) {
-		service.editMember(m);
-		return "member/main";
+	public ModelAndView edit(Member m,HttpServletRequest req, HttpServletResponse res) throws Exception{
+		HttpSession session = req.getSession(false);
+		res.setContentType("text/html;charset=utf-8");
+		PrintWriter out = res.getWriter();
+		ModelAndView mav = new ModelAndView();
+		System.out.println("id:"+m.getId()+";;email:"+m.getEmail()+";;password:"+m.getPwd());
+		service.editMember(m);		
+		out.println("<script>alert('정보수정이 완료되었습니다');</script>");
+		out.flush();
+		try {
+			int id = (int) session.getAttribute("id");
+			String email = (String) session.getAttribute("email");
+			Member m2 = service.getMemberByEmail(email);
+			System.out.println("1111111" + m2.getName());
+			mav = new ModelAndView("template/index");
+			mav.addObject("user_name", m2.getName());
+			mav.addObject("id", id);
+			mav.addObject("email", email);
+			ArrayList<String> repnamelist = service.getRepNameListById(id);
+			mav.addObject("rep_list", repnamelist);
+			System.out.println(repnamelist);
+		} catch (NullPointerException e) {
+			e.printStackTrace();
+			out.println("<script>alert('session값이 없습니다'); </script>");
+			out.flush();
+			mav = new ModelAndView("member/login");			
+		}
+		return mav;
+	}
+
+	@RequestMapping(value = "editprofile.do")
+	public ModelAndView editProfile(HttpServletRequest req) {
+		HttpSession session = req.getSession(false);
+		int id = (int) session.getAttribute("id");
+		ModelAndView mav = new ModelAndView("member/editprofile");
+		Member m = service.getMember(id);
+
+		mav.addObject("m", m);
+		return mav;
+	}
+
+	@RequestMapping(value = "profile.do")
+	public ModelAndView profile(HttpServletRequest req) {
+		HttpSession session = req.getSession(false);
+		int id = (int) session.getAttribute("id");
+		ModelAndView mav = new ModelAndView("member/profile");
+		Member m = service.getMember(id);
+
+		mav.addObject("m", m);
+		return mav;
+	}
+
+	@RequestMapping(value = "profileform.do")
+	public String profileForm() {
+		return "member/profileform";
 	}
 
 }

@@ -146,7 +146,8 @@ BODY {
 												<!-- Menu Footer-->
 												<li class="user-footer">
 													<div class="pull-left">
-														<a href="#" class="btn btn-default btn-flat">Profile</a>
+														<a href="${pageContext.request.contextPath}/profile.do?"
+															class="btn btn-default btn-flat">Profile</a>
 													</div>
 													<div class="pull-right">
 														<a href="${pageContext.request.contextPath}/member/logout.do"
@@ -181,7 +182,7 @@ BODY {
 												<!-- Menu Footer-->
 												<li class="user-footer">
 													<div class="pull-left">
-														<a href="${pageContext.request.contextPath}/profileform.do"
+														<a href="${pageContext.request.contextPath}/profile.do?"
 															class="btn btn-default btn-flat">Profile</a>
 													</div>
 

@@ -36,4 +36,6 @@ public interface Service {
 
 	ArrayList<String> getRepNameListById(int id);
 
+	int getUserAdminLevel(int id, int rep_id);
+
 }

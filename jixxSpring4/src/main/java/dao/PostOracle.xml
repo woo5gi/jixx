@@ -121,4 +121,7 @@
 		r.rep_id=um.rep_id and
 		um.user_id=m.user_id and m.user_id=#{id}
 	</select>
+	<select id="selectUserAdminLevel" parameterType="map" resultType="Integer">
+	select admin_level from user_meta2 where user_id=#{id} and rep_id=#{rep_id}
+	</select>
 </mapper>

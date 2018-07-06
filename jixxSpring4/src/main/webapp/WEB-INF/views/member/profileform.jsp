@@ -46,16 +46,7 @@
 								<input type="text" class="form-control" id="inputAuthority"
 									placeholder="Authority">
 							</div>
-						</div>
-
-						<div class="form-group">
-							<label for="inputImg" class="col-sm-2 control-label">img</label>
-
-							<div class="col-sm-10">
-								<input type="file" class="form-control" id="inputImg"
-									placeholder="img">
-							</div>
-						</div>
+						</div>						
 
 					</form>
 

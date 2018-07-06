@@ -118,6 +118,8 @@ public class PostController implements ApplicationContextAware {
 		ModelAndView mav = new ModelAndView("/template/main");
 		Channel ch = service.getChannel(cn);
 		System.out.println("chid:" + ch.getCh_id());
+		int adminlevel=service.getUserAdminLevel(id,rep_id);
+		mav.addObject("adminlevel",adminlevel);
 		mav.addObject("rep_list", repnamelist);
 		mav.addObject("rep_name", r.getRep_name());
 		mav.addObject("user_name", user_name);

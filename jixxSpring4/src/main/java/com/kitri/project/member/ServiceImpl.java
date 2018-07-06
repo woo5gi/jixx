@@ -102,5 +102,11 @@ public class ServiceImpl implements Service{
 		memberMapper.delRepository(rep_id);
 		
 	}
+	@Override
+	public Member getMember(int id) {
+		memberMapper = sqlSession.getMapper(Mapper.class);
+		Member t =memberMapper.selectMemberAll(id);
+		return t;
+	}
 }
 

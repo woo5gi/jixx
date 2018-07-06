@@ -32,6 +32,8 @@ public interface Mapper {
 
 	void delRepository(int rep_id);
 
+	Member selectMemberAll(int id);
+
 	
 
 		

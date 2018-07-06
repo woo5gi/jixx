@@ -23,5 +23,5 @@ public interface Mapper {
 	Repository selectRepository(int rep_id);
 	int selectFirstChannelId(int rep_id);
 	ArrayList<String> selectRepList(int id);
-	
+	int selectUserAdminLevel(Map<String, Object> map);
 }
