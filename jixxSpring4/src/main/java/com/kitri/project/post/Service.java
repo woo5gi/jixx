@@ -38,4 +38,5 @@ public interface Service {
 
 	ArrayList<String> getRepNameListById(int id);
 
+	ArrayList<Post> getRepost(ArrayList<Post> list);
 }

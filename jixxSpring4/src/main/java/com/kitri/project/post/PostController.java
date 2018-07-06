@@ -17,7 +17,6 @@ import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Controller;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -94,6 +93,7 @@ public class PostController implements ApplicationContextAware {
 		ArrayList<String> nicknamelist = service.getNicknameList(rep_id);
 		ArrayList<Channel> chlist = service.getChList(rep_id);
 		ArrayList<Post> list = service.show(page, cn);
+		ArrayList<Post> repost = service.getRepost(list);
 		postListChange(list);
 		Member m2 = service.getMember(id);
 		ArrayList<String> repnamelist = service.getRepNameListById(id);
@@ -102,6 +102,8 @@ public class PostController implements ApplicationContextAware {
 		ModelAndView mav = new ModelAndView("/template/main");
 		Channel ch = service.getChannel(cn);
 		System.out.println("chid:" + ch.getCh_id());
+		System.out.println(repost.size());
+		mav.addObject("repost", repost);
 		mav.addObject("rep_list", repnamelist);
 		mav.addObject("rep_name", r.getRep_name());
 		mav.addObject("user_name", user_name);
