@@ -13,7 +13,8 @@ public interface Mapper {
 	ArrayList<Post> selectAll(Map<String, Integer> map);
 	ArrayList<Post> selectAllMore(Map<String, Integer> map);
 	ArrayList<Post> selectSearchResult(Map<String, Object> map);
-	Post update(Post post);
+	ArrayList<Post> selectSearchResultMore(Map<String, Object> map);
+	void update(Map<String, Object> map);
 	void delete(int post_id);
 	Channel selectChannel(int cn);
 	ArrayList<String> selectNicknameList(int rep_id);

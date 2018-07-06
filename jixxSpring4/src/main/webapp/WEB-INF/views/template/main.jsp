@@ -27,7 +27,7 @@
 												<h3 class="timeline-header no-border">
 													<a href="#">${post.nickname}님</a> ${rep_name} ${post.content }
 												</h3>
-											</div></li>
+											</div></li><br>
 									</c:when>
 									<c:otherwise>
 										<li><i class="fa fa-envelope bg-blue"></i> <c:if test="${post.file_thumbnail ne 'x'}">
@@ -43,13 +43,14 @@
 														<c:set var="usernickname" value="${sessionScope.nickname}" />
 														<c:set var="writtennickname" value="${post.nickname}" />
 														<c:if test="${usernickname eq writtennickname}">
+														<a class="change"> 수정</a>
 															<a class="btn btn-danger btn-xs"
-																href="<%= request.getContextPath() %>/post/delete.do?post_id=${post.post_id}&cn=${ch.ch_id}">Delete</a>
+																href="<%= request.getContextPath() %>/post/delete.do?post_id=${post.post_id}&cn=${ch.ch_id}" id="delete">Delete</a>
 														</c:if>
 													</div>
 												</h3>
 
-												<div class="timeline-body">${post.content}</div>
+												<div class="timeline-body" id="${post.post_id}">${post.content}</div>
 												<c:if test="${post.file_thumbnail ne 'x'}">
 													<img src="<%= request.getContextPath() %>/resources/img/${post.file_thumbnail}"
 														class="margin">
@@ -57,7 +58,11 @@
 												</c:if>
 												<a
 													href="<%= request.getContextPath() %>/post/download.do?fileName=${ post.file_original}">${ post.fileName}</a>
-											</div></li>
+													<c:if test="${param.search ne null}">
+													<a href="<%=request.getContextPath()%>/post/list.do?page=1&cn=${post.channel_id}">채널
+														</a>
+													</c:if>
+											</div></li><br>
 									</c:otherwise>
 								</c:choose>
 							</c:forEach>
@@ -75,16 +80,12 @@
 
  <script type="text/javascript">
  var getParameters = function (paramName) {
-	    // 리턴값을 위한 변수 선언
 	    var returnValue;
 
-	    // 현재 URL 가져오기
 	    var url = location.href;
 
-	    // get 파라미터 값을 가져올 수 있는 ? 를 기점으로 slice 한 후 split 으로 나눔
 	    var parameters = (url.slice(url.indexOf('?') + 1, url.length)).split('&');
 
-	    // 나누어진 값의 비교를 통해 paramName 으로 요청된 데이터의 값만 return
 	    for (var i = 0; i < parameters.length; i++) {
 	        var varName = parameters[i].split('=')[0];
 	        if (varName.toUpperCase() == paramName.toUpperCase()) {
@@ -103,8 +104,32 @@
      page++;
      $(document).scrollTop($(document).height()-temp);
      isLoading = false;
+ 	$('.change').on('click',function(){
+		var content = $(this).parent().parent().next('div.timeline-body').text().trim();
+		var thisA = $(this);
+		$(this).parent().parent().next('div.timeline-body').empty();
+		$(this).parent().parent().next('div.timeline-body').append('<input type="text" value="'+content+'"/>');
+		$(this).parent().parent().next('div.timeline-body').append('<button class="cencel">취소</button>');
+		$(this).parent().parent().next('div.timeline-body').append('<button class="ok">완료</button>');
+		$(this).hide();
+		$('.cencel').on('click',function(){	
+			thisA.show();
+			$(this).parent().text(content);
+		});
+		$('.ok').on('click',function(){
+			var updatecontent = $(this).prev().prev().val();
+			var postID = $(this).parent().attr("id");
+			 $.ajax({
+				type : "GET",
+		        url : "<%=request.getContextPath()%>/post/update.do",
+		        data : { content: updatecontent, post_id: postID},
+			});
+			thisA.show();
+			$(this).parent().text(updatecontent);
+		});
+	});
  }
-
+ $( document ).ready(function() {
  $(document).scroll(function() {
 	 var searchitem = getParameters('search');
    if($(document).scrollTop() < 1 && !isLoading) {
@@ -129,6 +154,15 @@
 						var str = "";
         		  
 					if (data[i].post_status == '3') {
+						if (data.length == i+1) {
+							var logdate1 = $('#'+data[i-1].logdate).val();
+							if (logdate1 == undefined) {								
+								str += '<li class="time-label" id="'+data[i-1].logdate+'"><span class="bg-red">'+ data[i-1].logdate+'</span></li>';
+							} else {
+								str += '<li class="time-label" id="'+data[i-1].logdate+'"><span class="bg-red">'+ data[i-1].logdate+'</span></li>';
+								$('#'+data[i-1].logdate).remove();
+							}
+						}
 						str +='<li>'+
 						'<li><i class="fa fa-user bg-aqua"></i>'+
 						'<div class="timeline-item">'+
@@ -137,7 +171,25 @@
 						'<a href="#">'+data[i].nickname+'님</a> ${rep_name}'+ data[i].content+
 						'</h3>'+
 						'</div></li>';
+						if (data[i].logdate != data[i-1].logdate) {
+							var logdate = $('#'+data[i-1].logdate).val();
+							if (logdate == undefined) {								
+								str += '<li class="time-label" id="'+data[i-1].logdate+'"><span class="bg-red">'+ data[i-1].logdate+'</span></li>';
+							} else {
+								str += '<li class="time-label" id="'+data[i-1].logdate+'"><span class="bg-red">'+ data[i-1].logdate+'</span></li>';
+								$('#'+data[i-1].logdate).remove();
+							}
+		        		  }
 					} else {
+						if (data.length == i+1) {
+							var logdate1 = $('#'+data[i-1].logdate).val();
+							if (logdate1 == undefined) {								
+								str += '<li class="time-label" id="'+data[i-1].logdate+'"><span class="bg-red">'+ data[i-1].logdate+'</span></li>';
+							} else {
+								str += '<li class="time-label" id="'+data[i-1].logdate+'"><span class="bg-red">'+ data[i-1].logdate+'</span></li>';
+								$('#'+data[i-1].logdate).remove();
+							}
+						}
 						str +='<li>';
 						if (data[i].file_thumbnail != 'x') {
 							str +='<i class="fa fa-camera bg-purple"></i>';
@@ -150,7 +202,8 @@
 						'<a href="#">'+ data[i].nickname+'</a>'+
 						'<div class="timelinebtn">';
 						if ('${sessionScope.nickname}' == data[i].nickname) {
-							str += '<a class="btn btn-danger btn-xs" href="${pageContext.request.contextPath}/post/delete.do?post_id='+data[i].post_id+'&cn=${ch.ch_id}">Delete</a>';
+							str += '<a class="change"> 수정</a>'+
+							'<a class="btn btn-danger btn-xs" href="${pageContext.request.contextPath}/post/delete.do?post_id='+data[i].post_id+'&cn=${ch.ch_id}">Delete</a>';
 						}
 						str +='</div>'+
 						'</h3>'+
@@ -164,12 +217,10 @@
 						str += '</div></li>';
 						if (data[i].logdate != data[i-1].logdate) {
 							var logdate = $('#'+data[i-1].logdate).val();
-							console.log(logdate);
 							if (logdate == undefined) {								
-								str += '<li class="time-label"><span class="bg-red">'+ data[i-1].logdate+'</span></li>';
+								str += '<li class="time-label" id="'+data[i-1].logdate+'"><span class="bg-red">'+ data[i-1].logdate+'</span></li>';
 							} else {
-								str += '<li class="time-label"><span class="bg-red">'+ data[i-1].logdate+'</span></li>';
-								$('#'+data[i-1].logdate).next().remove();
+								str += '<li class="time-label" id="'+data[i-1].logdate+'"><span class="bg-red">'+ data[i-1].logdate+'</span></li>';
 								$('#'+data[i-1].logdate).remove();
 							}
 		        		  }
@@ -202,6 +253,15 @@
 						var str = "";
         		  
 					if (data[i].post_status == '3') {
+						if (data.length == i+1) {
+							var logdate1 = $('#'+data[i-1].logdate).val();
+							if (logdate1 == undefined) {								
+								str += '<li class="time-label" id="'+data[i-1].logdate+'"><span class="bg-red">'+ data[i-1].logdate+'</span></li>';
+							} else {
+								str += '<li class="time-label" id="'+data[i-1].logdate+'"><span class="bg-red">'+ data[i-1].logdate+'</span></li>';
+								$('#'+data[i-1].logdate).remove();
+							}
+						}
 						str +='<li>'+
 						'<li><i class="fa fa-user bg-aqua"></i>'+
 						'<div class="timeline-item">'+
@@ -210,7 +270,25 @@
 						'<a href="#">'+data[i].nickname+'님</a> ${rep_name}'+ data[i].content+
 						'</h3>'+
 						'</div></li>';
+						if (data[i].logdate != data[i-1].logdate) {
+							var logdate = $('#'+data[i-1].logdate).val();
+							if (logdate == undefined) {								
+								str += '<li class="time-label" id="'+data[i-1].logdate+'"><span class="bg-red">'+ data[i-1].logdate+'</span></li>';
+							} else {
+								str += '<li class="time-label" id="'+data[i-1].logdate+'"><span class="bg-red">'+ data[i-1].logdate+'</span></li>';
+								$('#'+data[i-1].logdate).remove();
+							}
+		        		  }
 					} else {
+						if (data.length == i+1) {
+							var logdate1 = $('#'+data[i-1].logdate).val();
+							if (logdate1 == undefined) {								
+								str += '<li class="time-label" id="'+data[i-1].logdate+'"><span class="bg-red">'+ data[i-1].logdate+'</span></li>';
+							} else {
+								str += '<li class="time-label" id="'+data[i-1].logdate+'"><span class="bg-red">'+ data[i-1].logdate+'</span></li>';
+								$('#'+data[i-1].logdate).remove();
+							}
+						}
 						str +='<li>';
 						if (data[i].file_thumbnail != 'x') {
 							str +='<i class="fa fa-camera bg-purple"></i>';
@@ -223,7 +301,8 @@
 						'<a href="#">'+ data[i].nickname+'</a>'+
 						'<div class="timelinebtn">';
 						if ('${sessionScope.nickname}' == data[i].nickname) {
-							str += '<a class="btn btn-danger btn-xs" href="${pageContext.request.contextPath}/post/delete.do?post_id='+data[i].post_id+'&cn=${ch.ch_id}">Delete</a>';
+							str += '<a class="change"> 수정</a>'+
+							'<a class="btn btn-danger btn-xs" href="${pageContext.request.contextPath}/post/delete.do?post_id='+data[i].post_id+'&cn=${ch.ch_id}">Delete</a>';
 						}
 						str +='</div>'+
 						'</h3>'+
@@ -234,15 +313,14 @@
 						if (data[i].file_original != 'x') {
 							str += '<a href="${pageContext.request.contextPath}/post/download.do?fileName='+data[i].file_original+'">'+ data[i].fileName+'</a>';
 						}
+						str += '<a href="${pageContext.request.contextPath}/post/list.do?page=1&cn='+data[i].channel_id+'"> <iclass="fa fa-asterisk">채널</i></a>';
 						str += '</div></li>';
 						if (data[i].logdate != data[i-1].logdate) {
 							var logdate = $('#'+data[i-1].logdate).val();
-							console.log(logdate);
 							if (logdate == undefined) {								
-								str += '<li class="time-label"><span class="bg-red">'+ data[i-1].logdate+'</span></li>';
+								str += '<li class="time-label" id="'+data[i-1].logdate+'"><span class="bg-red">'+ data[i-1].logdate+'</span></li>';
 							} else {
-								str += '<li class="time-label"><span class="bg-red">'+ data[i-1].logdate+'</span></li>';
-								$('#'+data[i-1].logdate).next().remove();
+								str += '<li class="time-label" id="'+data[i-1].logdate+'"><span class="bg-red">'+ data[i-1].logdate+'</span></li>';
 								$('#'+data[i-1].logdate).remove();
 							}
 		        		  }
@@ -256,7 +334,34 @@
 	   isLoading = true;
 	   setTimeout(loadNewPage, 100);
    }
+	 
  }
+
+ });
+	$('.change').on('click',function(){
+		var content = $(this).parent().parent().next('div.timeline-body').text().trim();
+		var thisA = $(this);
+		$(this).parent().parent().next('div.timeline-body').empty();
+		$(this).parent().parent().next('div.timeline-body').append('<input type="text" value="'+content+'"/>');
+		$(this).parent().parent().next('div.timeline-body').append('<button class="cencel">취소</button>');
+		$(this).parent().parent().next('div.timeline-body').append('<button class="ok">완료</button>');
+		$(this).hide();
+		$('.cencel').on('click',function(){	
+			thisA.show();
+			$(this).parent().text(content);
+		});
+		$('.ok').on('click',function(){
+			var updatecontent = $(this).prev().prev().val();
+			var postID = $(this).parent().attr("id");
+			 $.ajax({
+				type : "GET",
+		        url : "<%=request.getContextPath()%>/post/update.do",
+		        data : { content: updatecontent, post_id: postID},
+			});
+			thisA.show();
+			$(this).parent().text(updatecontent);
+		});
+	});
  });
 </script>
 <script>
