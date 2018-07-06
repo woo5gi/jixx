@@ -104,6 +104,8 @@ public class PostController implements ApplicationContextAware {
 		System.out.println("chid:" + ch.getCh_id());
 		System.out.println(repost.size());
 		mav.addObject("repost", repost);
+		int adminlevel=service.getUserAdminLevel(id,rep_id);
+		mav.addObject("adminlevel",adminlevel);
 		mav.addObject("rep_list", repnamelist);
 		mav.addObject("rep_name", r.getRep_name());
 		mav.addObject("user_name", user_name);

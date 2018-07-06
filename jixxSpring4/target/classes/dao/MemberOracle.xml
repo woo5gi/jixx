@@ -37,12 +37,12 @@
 	<update id="update" parameterType="vo.Member">
 		update member
 		set
-		pwd=#{pwd},
-		name=#{name}, email=#{email} where id=#{id}
+		user_email=#{email},
+		user_name=#{name} where user_id=#{id}
 	</update>
-	<delete id="delete" parameterType="String">
-		delete member where
-		id=#{id}
+	<delete id="delete" parameterType="Integer">
+		delete from member where
+		user_id=#{id}
 	</delete>
 	<update id="verify" parameterType="vo.Member">
 		update member set user_auth =
@@ -73,4 +73,7 @@
 	<delete id="delRepository" parameterType="Integer">
 	delete from repository where rep_id=#{rep_id}
 	</delete>
+	<select id="selectMemberAll" parameterType="Integer" resultMap="MemberResultMap">
+	select * from member where user_id=#{id}
+	</select>
 </mapper>

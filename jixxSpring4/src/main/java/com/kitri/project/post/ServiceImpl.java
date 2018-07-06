@@ -173,4 +173,12 @@ public class ServiceImpl implements Service {
 		return repost;
 	}
 
+	public int getUserAdminLevel(int id, int rep_id) {
+		mapper = sqlSession.getMapper(Mapper.class);
+		Map<String,Object> map = new HashMap<String,Object>();
+		map.put("id", id);
+		map.put("rep_id",rep_id);
+		int t = mapper.selectUserAdminLevel(map);
+		return t;
+	}
 }

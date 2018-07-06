@@ -26,4 +26,5 @@ public interface Mapper {
 	ArrayList<String> selectRepList(int id);
 	ArrayList<Post> selectRepost(ArrayList<Post> list);
 	
+	int selectUserAdminLevel(Map<String, Object> map);
 }

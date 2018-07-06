@@ -145,5 +145,7 @@
 			separator=",">
 			#{item.post_id}
 		</foreach>
+	<select id="selectUserAdminLevel" parameterType="map" resultType="Integer">
+	select admin_level from user_meta2 where user_id=#{id} and rep_id=#{rep_id}
 	</select>
 </mapper>

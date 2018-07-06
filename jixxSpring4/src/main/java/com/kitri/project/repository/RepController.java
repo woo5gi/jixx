@@ -67,12 +67,12 @@ public class RepController {
 		Repository r2 = service.getRepository(r);
 		service.createCh(r2);
 		int rep_id1 = r2.getRep_id();
+		session.setAttribute("rep_id", rep_id1);
 		Channel ch = service.getChId(r2);
 		int chid1 = ch.getCh_id();
 		service.createUserMeta(id, rep_id1, chid1);
 		service.addBoard(nickname, id, chid1);
-		int rep_id2 = r2.getRep_id();
-		service.setUserMeta2Create(id, rep_id2, nickname);
+		service.setUserMeta2Create(id, rep_id1, nickname);
 		mav.addObject("r", r2);
 		return mav;
 	}
@@ -89,6 +89,7 @@ public class RepController {
 		Channel ch = service.getChannel(rep_id);
 		int cn = ch.getCh_id();
 		rda.addAttribute("cn", cn);
+		service.getUserAdminLevel(id, rep_id);
 		return "redirect:/post/list.do?page=1";
 	}
 
@@ -356,19 +357,6 @@ public class RepController {
 		return "workspace/workspaceurl";
 	}
 
-	@RequestMapping(value = "editprofile.do")
-	public String editProfile() {
-		return "member/EditFrofile";
-	}
-
-	@RequestMapping(value = "profile.do")
-	public String profile() {
-		return "member/frofile";
-	}
-
-	@RequestMapping(value = "profileform.do")
-	public String profileForm() {
-		return "member/frofileForm";
-	}
+	
 
 }

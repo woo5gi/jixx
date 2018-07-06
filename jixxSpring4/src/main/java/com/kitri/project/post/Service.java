@@ -39,4 +39,6 @@ public interface Service {
 	ArrayList<String> getRepNameListById(int id);
 
 	ArrayList<Post> getRepost(ArrayList<Post> list);
+	int getUserAdminLevel(int id, int rep_id);
+
 }

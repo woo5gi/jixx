@@ -29,6 +29,8 @@ public interface Service {
 
 	ArrayList<String> getRepNameListById(int id);
 
-	void delRepository(int rep_id);	
+	void delRepository(int rep_id);
+
+	Member getMember(int id);	
 
 }
