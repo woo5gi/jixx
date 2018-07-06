@@ -77,6 +77,10 @@ public interface Service {
 
 	ArrayList<UserMeta2> getUserMeta2List(int rep_id);
 
+	void deleteChannel(int ch_id);
+
+	Member getMemberAll(int id);
+
 	
 
 

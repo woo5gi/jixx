@@ -96,5 +96,11 @@ public class ServiceImpl implements Service{
 		ArrayList<String> t = memberMapper.selectRepList(id);
 		return t;
 	}
+	@Override
+	public void delRepository(int rep_id) {
+		memberMapper = sqlSession.getMapper(Mapper.class);
+		memberMapper.delRepository(rep_id);
+		
+	}
 }
 

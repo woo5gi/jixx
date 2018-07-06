@@ -80,6 +80,10 @@ public interface Mapper {
 
 	ArrayList<UserMeta2> selectUserMeta2(int rep_id);
 
+	void deleteCh(int ch_id);
+
+	Member selectMember(int id);
+
 
 
 

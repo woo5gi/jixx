@@ -61,7 +61,7 @@ padding:4px;
 
 						<label class="form-text text-muted"> You'Anybody else you'd like to invate?</label> <label
 							class="control-label mb-1">Email address</label> <input type="hidden" name="rep_name"
-							value="${r.rep_name}"> <input type="hidden" name="invitest" value="1">
+							value="${r.rep_name}"> <input type="hidden" name="invitest" value="0">
 						<button type="button" id="addemail" class="btn btn-primary btn-sm" style="float: right;margin: 5px;padding: 4px;"><i class="fa fa-fw fa-plus-square"></i></button>
 						<div id="emailinput" class="col-5">
 							<ul id="input">

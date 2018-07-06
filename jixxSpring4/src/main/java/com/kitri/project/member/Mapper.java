@@ -30,6 +30,8 @@ public interface Mapper {
 
 	ArrayList<String> selectRepList(int id);
 
+	void delRepository(int rep_id);
+
 	
 
 		

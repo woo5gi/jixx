@@ -112,11 +112,13 @@ public class PostController implements ApplicationContextAware {
 			}
 		}
 		Member m2 = service.getMember(id);
+		ArrayList<String> repnamelist = service.getRepNameListById(id);
 		String user_name = m2.getName();
 		Repository r = service.getRepository(rep_id);
 		ModelAndView mav = new ModelAndView("/template/main");
 		Channel ch = service.getChannel(cn);
 		System.out.println("chid:" + ch.getCh_id());
+		mav.addObject("rep_list", repnamelist);
 		mav.addObject("rep_name", r.getRep_name());
 		mav.addObject("user_name", user_name);
 		mav.addObject("ch", ch);

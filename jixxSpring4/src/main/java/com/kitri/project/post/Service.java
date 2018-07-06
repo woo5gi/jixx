@@ -34,4 +34,6 @@ public interface Service {
 
 	int getFirstChannelId(int rep_id);
 
+	ArrayList<String> getRepNameListById(int id);
+
 }
