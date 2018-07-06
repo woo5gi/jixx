@@ -22,5 +22,6 @@ public interface Mapper {
 	Member selectMember(int id);
 	Repository selectRepository(int rep_id);
 	int selectFirstChannelId(int rep_id);
+	ArrayList<String> selectRepList(int id);
 	
 }

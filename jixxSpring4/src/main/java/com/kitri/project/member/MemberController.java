@@ -52,6 +52,10 @@ public class MemberController {
 	@RequestMapping(value = "verifyForm.do")
 	public String verifyForm() {
 		return "member/verify";
+	}	
+	@RequestMapping(value = "repdlverifyform.do")
+	public String repDeleteVerifyForm() {
+		return "member/verifydelrep";
 	}
 
 	// index page이동
@@ -206,6 +210,7 @@ public class MemberController {
 			throws MessagingException, UnsupportedEncodingException {
 		HttpSession session = req.getSession(false);
 		MailHandler sendMail = new MailHandler(mailSender);
+		System.out.println("email:"+email);
 		Random ran = new Random();
 		int ran2 = 0;
 		while (ran2 <= 100000) {
@@ -232,25 +237,52 @@ public class MemberController {
 			sendMail.send();
 			service.setTempkey(ran2, email);
 			return "member/verifypass";
+		}else if(requestfrom.equals("deleterep")) {
+			sendMail.setSubject("FILE CETACEA 저장소삭제 이메일인증");
+			sendMail.setText(new StringBuffer().append("<h1>이메일인증</h1>").append("<a href='localhost:8080/project/repdlverifyform.do")
+					.append("'target='_blenk'>이메일 인증 확인</a>").append(ran2).toString());
+			sendMail.setFrom("gusdn4973@gmail.com", "CETACEA");
+			sendMail.setTo(email);
+			sendMail.send();
+			service.setTempkey(ran2, email);
+			return "member/verifydelrep";			
 		}
 		return null;
 	}
 
 	// 메일로보낸 인증키와 입력받은값 비교하여 메일인증
 	@RequestMapping(value = "verify.do")
-	public String verify(HttpServletRequest req, @RequestParam(value = "verify") int tempKey, HttpServletResponse res)
+	public ModelAndView verify(HttpServletRequest req, @RequestParam(value = "verify") int tempKey, HttpServletResponse res,
+			@RequestParam(value="requestfrom") String requestfrom)
 			throws Exception {
+		ModelAndView mav = new ModelAndView();
 		HttpSession session = req.getSession(false);
 		String email = (String) session.getAttribute("email");
+		int rep_id=(int) session.getAttribute("rep_id");
 
 		Member m = new Member();
 		m.setEmail(email);
 		int tempKeydb = service.selectTempKey(email);
 		res.setContentType("text/html; charset=UTF-8");
 		PrintWriter out = res.getWriter();
-		if (tempKey == tempKeydb) {
+		if (tempKey == tempKeydb) {			
 			service.verifyMember(m);
-			return "workspace/createworkspace2";
+			if(requestfrom.equals("createwsauth")) {
+			mav=new ModelAndView("workspace/createworkspace2");
+			}else if(requestfrom.equals("deleterepauth")) {
+				service.delRepository(rep_id);
+				out.println("<script>alert('저장소 삭제가 완료되었습니다.'); </script>");
+				out.flush();
+				int id = (int) session.getAttribute("id");				
+				Member m2 = service.getMemberByEmail(email);
+				System.out.println("1111111" + m2.getName());
+				mav = new ModelAndView("template/index");
+				mav.addObject("user_name", m2.getName());
+				mav.addObject("id", id);
+				mav.addObject("email", email);
+				ArrayList<String> repnamelist = service.getRepNameListById(id);
+				mav.addObject("rep_list", repnamelist);				
+			}
 		} else {
 			if (isNumber(String.valueOf(tempKey))) {
 				out.println("<script>alert('인증번호가 일치하지 않습니다'); </script>");
@@ -260,7 +292,7 @@ public class MemberController {
 				out.flush();
 			}
 		}
-		return "member/verify";
+		return mav;
 	}
 
 	// 비번찾기누르면 인증번호 메일전송하는 페이지로이동

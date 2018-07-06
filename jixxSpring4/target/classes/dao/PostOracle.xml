@@ -113,4 +113,12 @@
 	<select id="selectFirstChannelId" parameterType="Integer" resultType="Integer">
 	select min(channel_id) from channel where rep_id=#{rep_id}
 	</select>
+	<select id="selectRepList" parameterType="Integer"
+		resultMap="RepResultMap">
+		select distinct(r.rep_id), r.rep_name, r.rep_url from
+		repository r,member m,user_meta um
+		where
+		r.rep_id=um.rep_id and
+		um.user_id=m.user_id and m.user_id=#{id}
+	</select>
 </mapper>

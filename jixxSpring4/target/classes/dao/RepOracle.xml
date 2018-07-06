@@ -212,4 +212,10 @@
 	<select id="selectUserMeta2" parameterType="Integer" resultMap="UM2ResultMap">
 	select * from user_meta2 where rep_id=#{rep_id}
 	</select>
+	<delete id="deleteCh" parameterType="Integer">
+	delete from channel where channel_id=#{ch_id}
+	</delete>
+	<select id="selectMember" parameterType="Integer" resultMap="MemberResultMap">
+	select * from member where user_id=#{id}
+	</select>
 </mapper>
