@@ -67,7 +67,7 @@ padding:4px;
 				</div>
 				<div class="box-footer">
 					<button id="skip" class="btn  btn-primary"
-						onclick="location.href='${pageContext.request.contextPath }/gomain.do'" style="width: 49%">Skip
+						onclick="location.href='${pageContext.request.contextPath }/gomain.do?rep_id=${sessionScope.rep_id}'" style="width: 49%">Skip
 						For Now</button>
 					<button type="submit" form="emailinput" class="btn  btn-primary" style="width: 50%">Send
 						Invitations</button>
