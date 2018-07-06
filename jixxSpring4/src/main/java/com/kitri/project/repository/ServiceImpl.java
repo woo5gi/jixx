@@ -274,11 +274,29 @@ public class ServiceImpl implements Service {
 		ArrayList<UserMeta> list= repMapper.selectUserMetaList(map);
 		return list;
 	}
-	
 
-	
-	
-	
+	@Override
+	public int getUserAdminLevel(int id, int rep_id) {
+		repMapper = sqlSession.getMapper(Mapper.class);
+		Map<String,Object> map = new HashMap<String,Object>();
+		map.put("id", id);
+		map.put("rep_id", rep_id);
+		int t = repMapper.selectAdminLevel(map);
+		return t;
+	}
+
+	@Override
+	public ArrayList<UserMeta2> getUserMeta2List(int rep_id) {
+		repMapper = sqlSession.getMapper(Mapper.class);
+		ArrayList<UserMeta2> um =repMapper.selectUserMeta2(rep_id);
+		return um;	
+		
+	}	
+	@Override
+	public void deleteChannel(int ch_id) {
+		repMapper= sqlSession.getMapper(Mapper.class);
+		repMapper.deleteCh(ch_id);		
+	}
 
 
 
@@ -295,23 +313,13 @@ public class ServiceImpl implements Service {
 	}
 
 	@Override
-	public int getUserAdminLevel(int id, int rep_id) {
+	public Member getMemberAll(int id) {
 		repMapper = sqlSession.getMapper(Mapper.class);
-		Map<String,Object> map = new HashMap<String,Object>();
-		map.put("id", id);
-		map.put("rep_id", rep_id);
-		int t = repMapper.selectAdminLevel(map);
-		return t;
+		Member m = repMapper.selectMember(id);
+		return m;
 	}
 
-	@Override
-	public ArrayList<UserMeta2> getUserMeta2List(int rep_id) {
-		repMapper = sqlSession.getMapper(Mapper.class);
-		ArrayList<UserMeta2> um =repMapper.selectUserMeta2(rep_id);
-		return um;
-		
-		
-	}
+	
 
 	
 

@@ -79,14 +79,15 @@ public class RepController {
 
 	// 로그인 이후에 자신의 workspace로 이동
 	@RequestMapping(value = "gomain.do")
-	public String goMain(RedirectAttributes rda,HttpServletRequest req, @RequestParam(value = "rep_id") int rep_id, Member m) {
+	public String goMain(RedirectAttributes rda, HttpServletRequest req, @RequestParam(value = "rep_id") int rep_id,
+			Member m) {
 		HttpSession session = req.getSession(false);
 		int id = (int) session.getAttribute("id");
 		session.setAttribute("rep_id", rep_id);
 		String nickname = service.getNickname(id, rep_id);
-		session.setAttribute("nickname", nickname);	
+		session.setAttribute("nickname", nickname);
 		Channel ch = service.getChannel(rep_id);
-		int cn = ch.getCh_id();		
+		int cn = ch.getCh_id();
 		rda.addAttribute("cn", cn);
 		return "redirect:/post/list.do?page=1";
 	}
@@ -102,10 +103,10 @@ public class RepController {
 		Member user = service.getMember(id);
 		String user_name = user.getName();
 		int rep_id = 0;
-		System.out.println("rep_name:"+rep_name);
+		System.out.println("rep_name:" + rep_name);
 		if (invitest.equals("0")) {
 			rep_id = service.getRepIdByRepNameUserMeta(rep_name);
-			System.out.println("rep_name:"+rep_name);
+			System.out.println("rep_name:" + rep_name);
 		} else {
 			rep_id = (int) session.getAttribute("rep_id");
 		}
@@ -300,39 +301,50 @@ public class RepController {
 			errorresult = null;
 		} catch (Exception e) {
 			e.printStackTrace();
-			repidlist=null;
-			repnamelist=null;
-			usernamelist=null;
-			errorresult="검색결과가없습니다";
+			repidlist = null;
+			repnamelist = null;
+			usernamelist = null;
+			errorresult = "검색결과가없습니다";
 		}
 		mav.addObject("errorresult", errorresult);
 		mav.addObject("repnamelist", repnamelist);
 		mav.addObject("usernamelist", usernamelist);
 		mav.addObject("repidlist", repidlist);
 		return mav;
-	}	
+	}
+
 	@RequestMapping(value = "repadminform.do")
-	public ModelAndView repadminform(HttpServletRequest req,@RequestParam(value="adminlevel") int adminlevel) {
+	public ModelAndView repadminform(HttpServletRequest req, @RequestParam(value = "adminlevel") int adminlevel) {
 		ModelAndView mav = new ModelAndView("workspace/repadminform");
 		HttpSession session = req.getSession(false);
+		int id= (int) session.getAttribute("id");
 		int rep_id = (int) session.getAttribute("rep_id");
 		ArrayList<Channel> chlist = service.getChList(rep_id);
-		
 		ArrayList<UserMeta2> um2list = service.getUserMeta2List(rep_id);
-		mav.addObject("chlist",chlist);
-		mav.addObject("um2list",um2list);
-		mav.addObject("adminlevel",adminlevel);
+		Repository r = service.getRepository(rep_id);
+		Member m = service.getMemberAll(id);
+		System.out.println("email"+m.getEmail());
+		mav.addObject("chlist", chlist);
+		mav.addObject("um2list", um2list);
+		mav.addObject("adminlevel", adminlevel);
+		mav.addObject("r",r);
+		mav.addObject("m",m);
 		return mav;
 	}
+
 	@RequestMapping(value = "deletech.do")
-	public String deleteCh(@RequestParam(value="chname") String chname) {
-		
-		
-		
-		return "workspace/teaminvite";
+	public String deleteCh(RedirectAttributes rda, HttpServletRequest req, @RequestParam(value = "ch_id") int ch_id) {
+		HttpSession session = req.getSession(false);
+		int rep_id = (int) session.getAttribute("rep_id");
+		System.out.println("ch_id:" + ch_id);
+		service.deleteChannel(ch_id);
+
+		Channel ch = service.getChannel(rep_id);
+		int cn = ch.getCh_id();
+		rda.addAttribute("cn", cn);
+
+		return "redirect:/post/list.do?page=1";
 	}
-	
-	
 
 	@RequestMapping(value = "teaminvite.do")
 	public String teamInvite() {

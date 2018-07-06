@@ -173,4 +173,11 @@ public class ServiceImpl implements Service {
 		return i;
 	}
 
+	@Override
+	public ArrayList<String> getRepNameListById(int id) {
+		mapper = sqlSession.getMapper(Mapper.class);
+		 ArrayList<String> t = mapper.selectRepList(id);
+		return t;
+	}
+
 }

@@ -70,4 +70,7 @@
 	select r.* from repository r,member m,user_meta2 um 
 	where r.rep_id=um.rep_id and um.user_id=m.user_id and m.user_id=#{id}
 	</select>
+	<delete id="delRepository" parameterType="Integer">
+	delete from repository where rep_id=#{rep_id}
+	</delete>
 </mapper>
