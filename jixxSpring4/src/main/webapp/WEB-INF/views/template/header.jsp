@@ -82,15 +82,6 @@
 </style>
 
 </head>
-<style type="text/css" > 
-BODY 
-{ scrollbar-face-color: #ffffff; scrollbar-shadow-color: #F7F7F7; 
-scrollbar-highlight-color: #ffffff; scrollbar-3dlight-color: #F7F7F7; 
-scrollbar-darkshadow-color: #ffffff; scrollbar-track-color: #ffffff; 
-scrollbar-arrow-color: #ffffff} 
-</style> 
-
-
 <body class="skin-blue layout-top-nav" style="height: auto; min-height: 100%;">
 	<c:set var="user_id" value="${id }" />
 	<c:set var="email" value="${email}" />
@@ -130,14 +121,9 @@ scrollbar-arrow-color: #ffffff}
 													</p>
 												</li>
 
-												<li class="user-body">
-													<div class="row">
-														<div class="pull-left" style="border: 1px;">
-															<a href="${pageContext.request.contextPath}/findworkspaceform.do" class="btn btn-default btn-flat"
-																aria-expanded="false"> <span class="hidden-xs">Find Workspace</span>
-															</a>
-														</div>
-													</div>
+												<li class="user-body" id="user-body1">
+															<a href="${pageContext.request.contextPath}/findworkspaceform.do" class="hidden-xs text-center"
+																aria-expanded="false">Find Workspace</a>
 												</li>
 												<!-- Menu Footer-->
 												<li class="user-footer">

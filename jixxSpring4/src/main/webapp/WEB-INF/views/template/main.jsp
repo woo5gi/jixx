@@ -1,10 +1,16 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
-
+<style>
+.bg {
+	min-height: 100%;
+	background-color: #ecf0f5;
+	margin-left:230px;
+}
+</style>
 <jsp:include page="mainHeader.jsp" flush="false" />
+<div class="bg">
 		<!-- Content Wrapper. Contains page content -->
-		<div class="content-wrapper">
 			<section class="content ">
 				<!-- row -->
 				<div class="row">
@@ -262,4 +268,5 @@
 <script>
 
 </script>
+</div>
 						</html>
