@@ -2,7 +2,9 @@ package com.kitri.project.member;
 
 import java.util.ArrayList;
 
+import vo.Channel;
 import vo.Member;
+import vo.UserMeta2;
 
 public interface Service {
 	void addMember(Member m);
@@ -31,6 +33,12 @@ public interface Service {
 
 	void delRepository(int rep_id);
 
-	Member getMember(int id);	
+	Member getMember(int id);
+
+	UserMeta2 getUserMeta2(int id, int rep_id);
+
+	void editUM2(UserMeta2 um2);
+
+	Channel getChannel(int rep_id);	
 
 }

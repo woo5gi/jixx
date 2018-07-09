@@ -231,8 +231,8 @@
 							</c:when>
 
 							<c:otherwise>
-								<li class="dropdown user user-menu"><a class="dropdown-toggle"> ${user_name}님
-										환영합니다 </a></li>
+								<li class="dropdown user user-menu"><a href="${pageContext.request.contextPath}/gomain.do?rep_id=${sessionScope.rep_id} "class="dropdown-toggle"> ${user_name}님
+										의 ${rep_name}저장소 </a></li>
 
 								<c:choose>
 									<c:when test="${empty replist}">
@@ -296,6 +296,10 @@
 													class="btn btn-default ">Profile</a>
 											</div> <c:choose>
 												<c:when test="${adminlevel eq 1 }">
+												<div class="pull-left">
+														<a href="${pageContext.request.contextPath}/repadminform.do?adminlevel=1"
+															class="btn btn-default btn-flat">저장소관리</a>
+													</div>
 												</c:when>
 												<c:when test="${adminlevel eq 2 }">
 													<div class="pull-left">

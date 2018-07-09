@@ -81,6 +81,12 @@ public interface Service {
 
 	Member getMemberAll(int id);
 
+	void deleteUserMeta(int id, int rep_id);
+
+	void deleteUserMeta2(int id, int rep_id);
+
+	
+
 	
 
 

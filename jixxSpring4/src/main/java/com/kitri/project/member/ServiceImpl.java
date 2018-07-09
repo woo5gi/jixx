@@ -9,7 +9,11 @@ import javax.annotation.Resource;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Component;
 
+import com.kitri.project.member.Mapper;
+
+import vo.Channel;
 import vo.Member;
+import vo.UserMeta2;
 
 @Component("memService")
 public class ServiceImpl implements Service{
@@ -107,6 +111,26 @@ public class ServiceImpl implements Service{
 		memberMapper = sqlSession.getMapper(Mapper.class);
 		Member t =memberMapper.selectMemberAll(id);
 		return t;
+	}
+	@Override
+	public UserMeta2 getUserMeta2(int id, int rep_id) {
+		memberMapper = sqlSession.getMapper(Mapper.class);
+		Map<String,Object> map= new HashMap<String,Object>();
+		map.put("id", id);
+		map.put("rep_id", rep_id);
+		UserMeta2 t =memberMapper.selectUserMeta2(map);
+		return t;
+	}
+	@Override
+	public void editUM2( UserMeta2 um2) {
+		memberMapper = sqlSession.getMapper(Mapper.class);		
+		memberMapper.editUM2(um2);
+	}
+	@Override
+	public Channel getChannel(int rep_id) {
+		memberMapper = sqlSession.getMapper(Mapper.class);
+		Channel c = memberMapper.selectChannel(rep_id);
+		return c;
 	}
 }
 

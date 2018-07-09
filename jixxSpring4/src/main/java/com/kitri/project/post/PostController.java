@@ -104,8 +104,8 @@ public class PostController implements ApplicationContextAware {
 		System.out.println("chid:" + ch.getCh_id());
 		System.out.println(repost.size());
 		mav.addObject("repost", repost);
-		int adminlevel=service.getUserAdminLevel(id,rep_id);
-		mav.addObject("adminlevel",adminlevel);
+		int adminlevel = service.getUserAdminLevel(id, rep_id);
+		mav.addObject("adminlevel", adminlevel);
 		mav.addObject("rep_list", repnamelist);
 		mav.addObject("rep_name", r.getRep_name());
 		mav.addObject("user_name", user_name);
@@ -115,7 +115,7 @@ public class PostController implements ApplicationContextAware {
 		mav.addObject("ch_list", chlist);
 		mav.addObject("nicknamelist", nicknamelist);
 		mav.addObject("list", list);
-			System.out.println(list);		
+		System.out.println(list);
 		return mav;
 	}
 
@@ -138,7 +138,6 @@ public class PostController implements ApplicationContextAware {
 		rda.addAttribute("cn", cn);
 		return "redirect:/post/list.do?page=1";
 	}
-
 
 	@RequestMapping(value = "searchboard.do")
 	public ModelAndView searchBoard(HttpServletResponse res, HttpServletRequest req,
@@ -177,43 +176,44 @@ public class PostController implements ApplicationContextAware {
 		return mav;
 	}
 
-	
 	@RequestMapping(value = "/post/ajax.do", method = RequestMethod.GET, produces = "application/text; charset=utf8")
-	public @ResponseBody String ajax(@RequestParam(value = "page")int page, @RequestParam(value = "cn")int cn) {
+	public @ResponseBody String ajax(@RequestParam(value = "page") int page, @RequestParam(value = "cn") int cn) {
 		ArrayList<Post> list = service.showMore(page, cn);
 		postListChange(list);
 		for (int j = 0; j < list.size(); j++) {
-			System.out.println(list.get(j).getPost_id());			
+			System.out.println(list.get(j).getPost_id());
 		}
-        String str = "";
-        ObjectMapper mapper = new ObjectMapper();
-        try {
-            str = mapper.writeValueAsString(list);
-        } catch (Exception e) {
-        	e.printStackTrace();
-        }
-        return str;
+		String str = "";
+		ObjectMapper mapper = new ObjectMapper();
+		try {
+			str = mapper.writeValueAsString(list);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return str;
 	}
+
 	@RequestMapping(value = "/post/searchAjax.do", method = RequestMethod.GET, produces = "application/text; charset=utf8")
-	public @ResponseBody String searchAjax(@RequestParam(value = "page")int page, @RequestParam(value = "rep_id")int rep_id
-			,@RequestParam(value="search") String search) {
+	public @ResponseBody String searchAjax(@RequestParam(value = "page") int page,
+			@RequestParam(value = "rep_id") int rep_id, @RequestParam(value = "search") String search) {
 		ArrayList<Post> list = service.getSearchBoardMore(page, rep_id, search);
 		postListChange(list);
-		 String str = "";
-	        ObjectMapper mapper = new ObjectMapper();
-	        try {
-	            str = mapper.writeValueAsString(list);
-	            System.out.println(str);
-	        } catch (Exception e) {
-	        	e.printStackTrace();
-	        }
-	        return str;
+		String str = "";
+		ObjectMapper mapper = new ObjectMapper();
+		try {
+			str = mapper.writeValueAsString(list);
+			System.out.println(str);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return str;
 	}
-	@RequestMapping(value ="/post/update.do", method = RequestMethod.GET)
-	public void update(@RequestParam(value="content")String content, @RequestParam(value="post_id")int post_id) {
+
+	@RequestMapping(value = "/post/update.do", method = RequestMethod.GET)
+	public void update(@RequestParam(value = "content") String content, @RequestParam(value = "post_id") int post_id) {
 		service.change(content, post_id);
 	}
-	
+
 	void postListChange(ArrayList<Post> list) {
 		for (int i = 0; i < list.size(); i++) {
 			if (list.get(i).getPost_status() == 0) {

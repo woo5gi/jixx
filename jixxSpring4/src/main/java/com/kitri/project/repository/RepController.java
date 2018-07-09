@@ -221,6 +221,8 @@ public class RepController {
 		String user_name = m2.getName();
 		Repository r = service.getRepository(rep_id);
 		Channel ch = service.getChannel(rep_id);
+		int adminlevel = service.getUserAdminLevel(id, rep_id);
+		mav.addObject("adminlevel",adminlevel);
 		mav.addObject("rep_name", r.getRep_name());
 		mav.addObject("user_name", user_name);
 		mav.addObject("id", id);
@@ -339,13 +341,24 @@ public class RepController {
 		int rep_id = (int) session.getAttribute("rep_id");
 		System.out.println("ch_id:" + ch_id);
 		service.deleteChannel(ch_id);
-
 		Channel ch = service.getChannel(rep_id);
 		int cn = ch.getCh_id();
 		rda.addAttribute("cn", cn);
-
 		return "redirect:/post/list.do?page=1";
 	}
+	@RequestMapping(value="repout.do")
+	public String repOut(HttpServletRequest req) {
+		HttpSession session = req.getSession(false);
+		int rep_id = (int) session.getAttribute("rep_id");
+		int id = (int) session.getAttribute("id");
+		service.deleteUserMeta(id, rep_id);
+		service.deleteUserMeta2(id,rep_id);
+		session.removeAttribute("rep_id");
+		session.removeAttribute("nickname");	
+		
+		return "redirect:/index.do";		
+	}
+	
 
 	@RequestMapping(value = "teaminvite.do")
 	public String teamInvite() {
