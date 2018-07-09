@@ -53,6 +53,28 @@ p {
 	-webkit-margin-start: 0px;
 	-webkit-margin-end: 0px;
 }
+ ::-webkit-scrollbar {
+	width: 16px;
+}
+
+::-webkit-scrollbar-track {
+	background-color: #222d32;
+}
+
+::-webkit-scrollbar-thumb {
+	background-color: #555;
+}
+
+::-webkit-scrollbar-thumb:hover {
+	background: #555;
+}
+
+::-webkit-scrollbar-button:start:decrement, ::-webkit-scrollbar-button:end:increment
+	{
+	width: 0px;
+	height: 0px;
+	background: #222d32;
+}
 </style>
 <script type="text/javascript">
 </script>

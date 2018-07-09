@@ -8,11 +8,16 @@
   margin-left: auto;
   margin-right: auto;
   width: 980px;
-  padding-top: 13%;
+  padding-top: 8%;
 }
 .listbox{
   overflow-y: scroll;
   height: 350px;
+}
+.callout{
+background-color: #001f3f;
+}
+.bg-navy {margin: 0px;
 }
 
 </style>
@@ -60,6 +65,85 @@
 	});
 </script>
 
+
+	
+<div class="bg">
+    <div class="centered1">
+    
+      <div class="callout ">
+      		<form id="deleterepform" action="${pageContext.request.contextPath}/emailauth.do">
+				<h2 id="rep_name_lb" style="text-align: center; color: #fff">${r.rep_name}저장소</h2>
+			</form>
+      </div>
+      
+		<div class="row">
+			<div class="col-md-6">
+				<div class="box listbox">
+					<div class="box-header">
+						<h3 class="box-title">채널 관리</h3>
+					</div>
+
+					<div class="box-body table-responsive no-padding">
+						<table class="table table-hover">
+							<tbody>
+								<tr>
+									<th>Channel</th>
+									<th>Delete</th>
+
+								</tr>
+								<tr>
+									<td>183</td>
+									<td><button type="button" class="btn bg-navy margin">.btn.bg-navy</button></td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-md-6">
+					<div class="box listbox">
+						<div class="box-header">
+							<h3 class="box-title">멤버 관리</h3>
+						</div>
+						<!-- /.box-header -->
+						<div class="box-body table-responsive no-padding">
+							<table class="table table-hover">
+								<tbody>
+									<tr>
+
+										<th>User</th>
+										<th>Rol</th>
+									</tr>
+									<tr>
+										<td>11-7-2014</td>
+										<td><select
+											class="form-control select2 select2-hidden-accessible"
+											style="width: 100%;" tabindex="-1" aria-hidden="true">
+												<option selected="selected">Alabama</option>
+												<option>Alaska</option>
+												<option>California</option>
+												<option>Delaware</option>
+												<option>Tennessee</option>
+												<option>Texas</option>
+												<option>Washington</option>
+										</select></td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	<form id="deleterepform" action="${pageContext.request.contextPath}/emailauth.do">
+		<input type="hidden" name="rep_id"value="${r.rep_id}"> 
+		<input type="hidden" name="requestfrom" value="deleterep">
+		<input type="hidden" name="email" value="${m.email}"> 
+		<input type="button" id="deleterep" value="저장소삭제" class="btn  btn-danger btn-lg" style="float :right;">
+	</form>
+</div>
 
 	<c:choose>
 		<c:when test="${adminlevel eq 1 }">
@@ -121,134 +205,5 @@
 	</c:choose>
 	
 	
-	  <div class="bg">
-    <div class="centered1">
-      <div class="callout callout-warning">
-        <h4>ㅌㅌㅌ저장소</h4>
-
-        <p>저장소다 <button type="button" class="btn btn-default btn-flat">Default</button></p>
-      </div>
-
-      <div class="row">
-        <div class="col-md-6">
-          <div class="box listbox">
-            <div class="box-header">
-              <h3 class="box-title">채널 관리</h3>
-
-              <div class="box-tools">
-                <div class="input-group input-group-sm" style="width: 150px;">
-                  <input type="text" name="table_search" class="form-control pull-right" placeholder="Search">
-
-                  <div class="input-group-btn">
-                    <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="box-body table-responsive no-padding">
-              <table class="table table-hover">
-                <tbody><tr>
-                  <th>ID</th>
-                  <th>User</th>
-                  <th>Date</th>
-                  <th>Status</th>
-
-                </tr>
-                <tr>
-                  <td>183</td>
-                  <td>John Doe</td>
-                  <td>11-7-2014</td>
-                  <td><span class="label label-success">Approved</span></td>
-                </tr>
-                <tr>
-                  <td>219</td>
-                  <td>Alexander Pierce</td>
-                  <td>11-7-2014</td>
-                  <td><span class="label label-warning">Pending</span></td>
-
-                </tr>
-                <tr>
-                  <td>657</td>
-                  <td>Bob Doe</td>
-                  <td>11-7-2014</td>
-                  <td><span class="label label-primary">Approved</span></td>
-
-                </tr>
-                <tr>
-                  <td>175</td>
-                  <td>Mike Doe</td>
-                  <td>11-7-2014</td>
-                  <td><span class="label label-danger">Denied</span></td>
-
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-
-      <div class="row">
-        <div class="col-md-6">
-          <div class="box listbox">
-            <div class="box-header">
-              <h3 class="box-title">멤버 관리</h3>
-
-              <div class="box-tools">
-                <div class="input-group input-group-sm" style="width: 150px;">
-                  <input type="text" name="table_search" class="form-control pull-right" placeholder="Search">
-
-                  <div class="input-group-btn">
-                    <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <!-- /.box-header -->
-            <div class="box-body table-responsive no-padding">
-             <table class="table table-hover">
-                <tbody><tr>
-                  <th>ID</th>
-                  <th>User</th>
-                  <th>Date</th>
-                  <th>Status</th>
-
-                </tr>
-                <tr>
-                  <td>183</td>
-                  <td>John Doe</td>
-                  <td>11-7-2014</td>
-                  <td><span class="label label-success">Approved</span></td>
-                </tr>
-                <tr>
-                  <td>219</td>
-                  <td>Alexander Pierce</td>
-                  <td>11-7-2014</td>
-                  <td><span class="label label-warning">Pending</span></td>
-
-                </tr>
-                <tr>
-                  <td>657</td>
-                  <td>Bob Doe</td>
-                  <td>11-7-2014</td>
-                  <td><span class="label label-primary">Approved</span></td>
-
-                </tr>
-                <tr>
-                  <td>175</td>
-                  <td>Mike Doe</td>
-                  <td>11-7-2014</td>
-                  <td><span class="label label-danger">Denied</span></td>
-
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-</div>
 </body>
 </html>
