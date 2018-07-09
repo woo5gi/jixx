@@ -17,8 +17,8 @@
 </script>
 <div class="bg">
 	<div class="centered">
-	<div class="box">
-            <div class="box-header">
+	<div class="box box-primary">
+            <div class="box-header with-border">
               <h3 class="box-title">Find Workspace</h3>
             </div>
             <div class="box-body no-padding">
@@ -26,7 +26,7 @@
                 <tbody>
                 <tr>
                   <th>NO.</th>
-                  <th>멤버닉네임</th>
+                  <th>멤버</th>
                   <th>저장소이름</th>
                   <th>가입</th>
                 </tr>

@@ -16,10 +16,10 @@
 </script>
 <div class="bg">
 	<div class="centered">
-		<div class="box ">
+		<div class="box box-primary">
 			<div class="register-box-body">
 
-				<h2 class="headline text-yellow">
+				<h2 class="headline text-black">
 					<i class="fa fa-search"></i> &nbsp; Find Workspace
 				</h2>
 				<form class="search-form" id="form"
@@ -31,7 +31,7 @@
 
 						<div class="input-group-btn">
 							<button type="submit" name="submit" id="search"
-								class="btn btn-warning btn-flat">
+								class="btn  btn-flat" style="padding:9.5px;">
 								<i class="fa fa-search"></i>
 							</button>
 						</div>
