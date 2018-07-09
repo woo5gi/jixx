@@ -17,10 +17,10 @@ import vo.UserMeta;
 
 @Component("postService")
 public class ServiceImpl implements Service {
-	@Resource(name="sqlSession")
+	@Resource(name = "sqlSession")
 	private SqlSession sqlSession;
 	private Mapper mapper;
-	
+
 	@Override
 	public void write(Post post) {
 		mapper = sqlSession.getMapper(Mapper.class);
@@ -53,46 +53,46 @@ public class ServiceImpl implements Service {
 		ArrayList<Post> list = mapper.selectAllMore(map);
 		return list;
 	}
-	
+
 	@Override
-	public ArrayList<Post> getSearchBoard(int page, int rep_id,String search) {
+	public ArrayList<Post> getSearchBoard(int page, int rep_id, String search) {
 		int[] pages = pageTuning(page);
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("startpage", pages[0]);
 		map.put("endPage", pages[1]);
 		map.put("rep_id", rep_id);
-		map.put("search", search);		
+		map.put("search", search);
 		mapper = sqlSession.getMapper(Mapper.class);
 		ArrayList<Post> list = mapper.selectSearchResult(map);
 		return list;
 	}
-	
+
 	@Override
-	public ArrayList<Post> getSearchBoardMore(int page, int rep_id,String search) {
+	public ArrayList<Post> getSearchBoardMore(int page, int rep_id, String search) {
 		int[] pages = pageTuning(page);
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("startpage", pages[0]);
 		map.put("endPage", pages[1]);
 		map.put("rep_id", rep_id);
-		map.put("search", search);		
+		map.put("search", search);
 		mapper = sqlSession.getMapper(Mapper.class);
 		ArrayList<Post> list = mapper.selectSearchResultMore(map);
 		return list;
 	}
-	
+
 	public int[] pageTuning(int page) {
 		int endpage = 0;
 		if (page == 1) {
 			page = 1;
-			endpage = 10; 
+			endpage = 10;
 		} else {
-			endpage = page * 10; 
-			page = (page -1) *10 ;
+			endpage = page * 10;
+			page = (page - 1) * 10;
 		}
-		int[] pages = {page,endpage};
+		int[] pages = { page, endpage };
 		return pages;
 	}
-	
+
 	@Override
 	public Channel getChannel(int cn) {
 		mapper = sqlSession.getMapper(Mapper.class);
@@ -117,7 +117,7 @@ public class ServiceImpl implements Service {
 
 	@Override
 	public ArrayList<String> getNicknameList(int rep_id) {
-		mapper = sqlSession.getMapper(Mapper.class);			
+		mapper = sqlSession.getMapper(Mapper.class);
 		ArrayList<String> t = mapper.selectNicknameList(rep_id);
 		return t;
 	}
@@ -130,9 +130,9 @@ public class ServiceImpl implements Service {
 	}
 
 	@Override
-	public String getNickname(int id,int rep_id) {
+	public String getNickname(int id, int rep_id) {
 		mapper = sqlSession.getMapper(Mapper.class);
-		Map<String,Object> map = new HashMap<String,Object>();
+		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("id", id);
 		map.put("rep_id", rep_id);
 		String s = mapper.selectNickname(map);
@@ -163,22 +163,22 @@ public class ServiceImpl implements Service {
 	@Override
 	public ArrayList<String> getRepNameListById(int id) {
 		mapper = sqlSession.getMapper(Mapper.class);
-		 ArrayList<String> t = mapper.selectRepList(id);
+		ArrayList<String> t = mapper.selectRepList(id);
 		return t;
 	}
 
 	@Override
 	public ArrayList<Post> getRepost(ArrayList<Post> list) {
-		mapper = sqlSession.getMapper(Mapper.class);			
+		mapper = sqlSession.getMapper(Mapper.class);
 		ArrayList<Post> repost = mapper.selectRepost(list);
 		return repost;
 	}
 
 	public int getUserAdminLevel(int id, int rep_id) {
 		mapper = sqlSession.getMapper(Mapper.class);
-		Map<String,Object> map = new HashMap<String,Object>();
+		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("id", id);
-		map.put("rep_id",rep_id);
+		map.put("rep_id", rep_id);
 		int t = mapper.selectUserAdminLevel(map);
 		return t;
 	}
@@ -193,20 +193,22 @@ public class ServiceImpl implements Service {
 	public int getRepostID(int user_id) {
 		mapper = sqlSession.getMapper(Mapper.class);
 		return mapper.selectRepostID(user_id);
+	}
+
 	public UserMeta getUserMeta(int id, int rep_id, int chid) {
 		mapper = sqlSession.getMapper(Mapper.class);
-		Map<String,Object> map = new HashMap<String,Object>();
+		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("id", id);
-		map.put("rep_id",rep_id);
+		map.put("rep_id", rep_id);
 		map.put("ch_id", chid);
 		UserMeta um = mapper.selectUserMeta(map);
 		return um;
 	}
 
 	@Override
-	public ArrayList<Integer> getMemberId(int cn,int id) {
+	public ArrayList<Integer> getMemberId(int cn, int id) {
 		mapper = sqlSession.getMapper(Mapper.class);
-		Map<String,Object> map = new HashMap<String,Object>();
+		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("cn", cn);
 		map.put("id", id);
 		ArrayList<Integer> t = mapper.selectMemberId(map);
@@ -216,16 +218,16 @@ public class ServiceImpl implements Service {
 	@Override
 	public ArrayList<String> getMemberEmail(ArrayList<Integer> idlist) {
 		mapper = sqlSession.getMapper(Mapper.class);
-		Map<String,Object> map = new HashMap<String,Object>();
+		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("idlist", idlist);
 		ArrayList<String> t = mapper.selectMemberEmail(map);
 		return t;
 	}
 
 	@Override
-	public ArrayList<Integer> getAlarmType(int id, int rep_id,  int[] chidlist) {
+	public ArrayList<Integer> getAlarmType(int id, int rep_id, int[] chidlist) {
 		mapper = sqlSession.getMapper(Mapper.class);
-		Map<String,Object> map = new HashMap<String,Object>();
+		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("id", id);
 		map.put("rep_id", rep_id);
 		map.put("cn", chidlist);
