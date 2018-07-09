@@ -141,6 +141,7 @@
 .i1 {
 	padding-right: 10px
 }
+
 </style>
 <script type="text/javascript">
 	function myFunction() {

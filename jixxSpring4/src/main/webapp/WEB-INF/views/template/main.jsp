@@ -7,6 +7,7 @@
 	background-color: #ecf0f5;
 	margin-left:230px;
 }
+
 </style>
 <jsp:include page="mainHeader.jsp" flush="false" />
 <div class="bg">
