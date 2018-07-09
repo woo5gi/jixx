@@ -13,6 +13,7 @@ import vo.Channel;
 import vo.Member;
 import vo.Post;
 import vo.Repository;
+import vo.UserMeta;
 
 @Component("postService")
 public class ServiceImpl implements Service {
@@ -179,6 +180,56 @@ public class ServiceImpl implements Service {
 		map.put("id", id);
 		map.put("rep_id",rep_id);
 		int t = mapper.selectUserAdminLevel(map);
+		return t;
+	}
+
+	@Override
+	public void repostWrite(Post post) {
+		mapper = sqlSession.getMapper(Mapper.class);
+		mapper.repostInsert(post);
+	}
+
+	@Override
+	public int getRepostID(int user_id) {
+		mapper = sqlSession.getMapper(Mapper.class);
+		return mapper.selectRepostID(user_id);
+	public UserMeta getUserMeta(int id, int rep_id, int chid) {
+		mapper = sqlSession.getMapper(Mapper.class);
+		Map<String,Object> map = new HashMap<String,Object>();
+		map.put("id", id);
+		map.put("rep_id",rep_id);
+		map.put("ch_id", chid);
+		UserMeta um = mapper.selectUserMeta(map);
+		return um;
+	}
+
+	@Override
+	public ArrayList<Integer> getMemberId(int cn,int id) {
+		mapper = sqlSession.getMapper(Mapper.class);
+		Map<String,Object> map = new HashMap<String,Object>();
+		map.put("cn", cn);
+		map.put("id", id);
+		ArrayList<Integer> t = mapper.selectMemberId(map);
+		return t;
+	}
+
+	@Override
+	public ArrayList<String> getMemberEmail(ArrayList<Integer> idlist) {
+		mapper = sqlSession.getMapper(Mapper.class);
+		Map<String,Object> map = new HashMap<String,Object>();
+		map.put("idlist", idlist);
+		ArrayList<String> t = mapper.selectMemberEmail(map);
+		return t;
+	}
+
+	@Override
+	public ArrayList<Integer> getAlarmType(int id, int rep_id,  int[] chidlist) {
+		mapper = sqlSession.getMapper(Mapper.class);
+		Map<String,Object> map = new HashMap<String,Object>();
+		map.put("id", id);
+		map.put("rep_id", rep_id);
+		map.put("cn", chidlist);
+		ArrayList<Integer> t = mapper.selectAlarmType(map);
 		return t;
 	}
 }

@@ -84,6 +84,16 @@ public interface Mapper {
 
 	Member selectMember(int id);
 
+	void deleteUserMeta(Map<String, Object> map);
+
+	void deleteUserMeta2(Map<String, Object> map);
+
+	void updateAdminLevel(UserMeta2 um2);
+
+	void plusAlarmCheck(Map<String, Object> map);
+
+	void minusAlarmCheck(Map<String, Object> map);
+
 
 
 
