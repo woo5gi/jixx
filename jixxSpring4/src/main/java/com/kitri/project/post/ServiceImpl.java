@@ -183,6 +183,25 @@ public class ServiceImpl implements Service {
 		return t;
 	}
 
+	@Override
+	public void repostWrite(Post post) {
+		mapper = sqlSession.getMapper(Mapper.class);
+		mapper.repostInsert(post);
+	}
+
+	@Override
+	public int getRepostID(int user_id) {
+		mapper = sqlSession.getMapper(Mapper.class);
+		return mapper.selectRepostID(user_id);
+	public UserMeta getUserMeta(int id, int rep_id, int chid) {
+		mapper = sqlSession.getMapper(Mapper.class);
+		Map<String,Object> map = new HashMap<String,Object>();
+		map.put("id", id);
+		map.put("rep_id",rep_id);
+		map.put("ch_id", chid);
+		UserMeta um = mapper.selectUserMeta(map);
+		return um;
+	}
 
 	@Override
 	public ArrayList<Integer> getMemberId(int cn,int id) {

@@ -151,9 +151,22 @@
 			separator=",">
 			#{item.post_id}
 		</foreach>
+	order by post_logdate
 	</select>
 	<select id="selectUserAdminLevel" parameterType="map" resultType="Integer">
 	select admin_level from user_meta2 where user_id=#{id} and rep_id=#{rep_id}
+	</select>
+	<insert id="repostInsert" parameterType="map">
+		Insert into post
+		values
+		((select max(post_id) from post)+1,#{repost_id}, #{nickname},
+		#{content},#{user_id},
+		sysdate,null,'x','x',1,#{channel_id})
+	</insert>
+	<select id="selectRepostID" parameterType="Integer" resultType="Integer">
+		select max(post_id) from post where user_id = #{user_id}
+	<select id="selectUserMeta" parameterType="map" resultMap="UMResultMap">
+	select * from user_meta where user_id=#{id} and rep_id=#{rep_id} and channel_id=#{ch_id}
 	</select>
 	<select id="selectMemberId" parameterType="map" resultType="Integer">
 	select user_id from user_meta where channel_id=#{cn} and not user_id=#{id}  and alarm_type=1

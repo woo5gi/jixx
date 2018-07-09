@@ -77,13 +77,13 @@
    overflow-y: auto; 
    min-height:58px; 
    max-height: 180px;
-}
+}/* 
 ::-webkit-scrollbar{width: 16px;}
 ::-webkit-scrollbar-track {background-color:#222d32;}
 ::-webkit-scrollbar-thumb {background-color:#555;}
 ::-webkit-scrollbar-thumb:hover {background: #555;}
 ::-webkit-scrollbar-button:start:decrement,::-webkit-scrollbar-button:end:increment {
-width:0px;height:0px;background:#222d32;}
+width:0px;height:0px;background:#222d32;} */
 
 .listyle{
 padding: 15px;

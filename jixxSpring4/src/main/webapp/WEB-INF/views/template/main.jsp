@@ -7,6 +7,7 @@
 	background-color: #ecf0f5;
 	margin-left:230px;
 }
+
 </style>
 <jsp:include page="mainHeader.jsp" flush="false" />
 <div class="bg">
@@ -71,18 +72,23 @@
 													</c:if>
 													<c:forEach items="${repost}" var="repost">
 													<c:if test="${repost.repost_id eq post.post_id }">
+													<c:choose>
+													<c:when test="${repost.post_status eq 0 }">
+														<div> 삭제된 댓글입니다. </div>
+													</c:when>
+													<c:otherwise>
 														<div class="timeline-item">
-			
 															<span class="time"><i class="fa fa-clock-o"></i>${repost.logdate}</span>
 																<a href="#">${repost.nickname}</a>
 															<span class="timeline-body" id="${repost.post_id}">${repost.content}</span>
-															<a class="change"> 수정</a>
 															<a class="btn btn-danger btn-xs"
 																href="<%= request.getContextPath() %>/post/delete.do?post_id=${repost.post_id}&cn=${ch.ch_id}" id="delete">Delete</a>
 														</div>
+													</c:otherwise>
+													</c:choose>
 													</c:if>
 													</c:forEach>
-											</div></li><br>
+													</div></li><br>
 									</c:otherwise>
 								</c:choose>
 							</c:forEach>
@@ -99,6 +105,7 @@
 </body>
 
  <script type="text/javascript">
+ var flag = true;
  var getParameters = function (paramName) {
 	    var returnValue;
 
@@ -120,6 +127,7 @@
  var isLoading = false;
 
  function loadNewPage() {
+	 console.log("무한스크롤 로드");
      var temp = $(document).height();
      page++;
      $(document).scrollTop($(document).height()-temp);
@@ -148,111 +156,171 @@
 			$(this).parent().text(updatecontent);
 		});
 	});
+ 	$('.repost').on('click',function(){
+			var repostA = $(this);
+			var str = "<div class='repostdata'>";
+			str += "<hr><p>댓글</p>" +
+			'<input type="text" value=""/>' +
+			'<button class="repostCencel">취소</button>' +
+			'<button class="repostOk">완료</button>' +
+			'</div>';
+			$(this).parent().parent().next('div.timeline-body').after(str);
+			repostA.hide();
+		$('.repostCencel').on('click',function(){	
+		repostA.show();
+		$(this).parent('.repostdata').remove();
+	});
+	$('.repostOk').on('click',function(){
+		var repostOk = $(this);
+		var repostContent = $(this).prev().prev().val();
+		var postID = $(this).parent().prev(".timeline-body").attr("id");
+		var repostAppend = $(this).parent().parent();
+		 $.ajax({
+			type : "post",
+	        url : "<%=request.getContextPath()%>/post/repost.do",
+	        data : { content: repostContent, repost_id: postID, channel_id:'${ch.ch_id}'},
+	        dataType : "json",
+	           error : function(){
+	               alert('실패 ㅠ');
+	           },
+	        success : function(data){
+	        var str = '<div class="timeline-item">';
+	        str += '<span class="time"><i class="fa fa-clock-o"></i>'+ (new Date).yyyymmdd() +'</span>'+
+	        '<a href="#">'+data.nickName+'</a>'+
+	        '<span class="timeline-body" >'+repostContent+'</span>'+
+	        '<a class="btn btn-danger btn-xs"'+
+	        'href="${pageContext.request.contextPath}/post/delete.do?post_id='+data.post_id+'&cn=${ch.ch_id}" id="delete">Delete</a>'+
+	        '</div>';
+	        repostAppend.append(str);
+	        }
+		});
+		 $(this).parent('.repostdata').remove();
+		 repostA.show();
+		});
+	});
  }
  $( document ).ready(function() {
  $(document).scroll(function() {
 	 var searchitem = getParameters('search');
    if($(document).scrollTop() < 1 && !isLoading) {
 	 if (searchitem == undefined) {
-	console.log(searchitem);
 	   $.ajax({
            type : "GET",
            url : "<%=request.getContextPath()%>/post/ajax.do",
            data : { page: page, cn: "${ch.ch_id}" },
            dataType : "json",
            error : function(){
-               alert('더이상 불러올 데이터가 없습니다.');
-               page--;
+               flag = false;
+			console.log("flag = " + flag);
            },
            success : function(data){
-        	  console.log(data.length);
-        	  if (data.length == '0') {
+        	   flag = true;
+        	   var list = data.list;
+        	   var repost = data.repost;
+        	  if (list.length == '0') {
+        		  flag = false;
         		  alert('더이상 불러올 데이터가 없습니다.');
-        		  page--;
         	  } else {
-        	  for (var i = 1; i < data.length; i++) {
+        	  for (var i = 1; i < list.length; i++) {
 						var str = "";
         		  
-					if (data[i].post_status == '3') {
+					if (list[i].post_status == '3') {
 						if (data.length == i+1) {
-							var logdate1 = $('#'+data[i-1].logdate).val();
+							var logdate1 = $('#'+list[i-1].logdate).val();
 							if (logdate1 == undefined) {								
-								str += '<li class="time-label" id="'+data[i-1].logdate+'"><span class="bg-red">'+ data[i-1].logdate+'</span></li>';
+								str += '<li class="time-label" id="'+list[i-1].logdate+'"><span class="bg-red">'+ list[i-1].logdate+'</span></li>';
 							} else {
-								str += '<li class="time-label" id="'+data[i-1].logdate+'"><span class="bg-red">'+ data[i-1].logdate+'</span></li>';
-								$('#'+data[i-1].logdate).remove();
+								str += '<li class="time-label" id="'+list[i-1].logdate+'"><span class="bg-red">'+ list[i-1].logdate+'</span></li>';
+								$('#'+list[i-1].logdate).remove();
 							}
 						}
 						str +='<li>'+
 						'<li><i class="fa fa-user bg-aqua"></i>'+
 						'<div class="timeline-item">'+
-						'<span class="time"><i class="fa fa-clock-o"></i> '+data[i].logdate+'</span>'+
+						'<span class="time"><i class="fa fa-clock-o"></i> '+list[i].logdate+'</span>'+
 						'<h3 class="timeline-header no-border">'+
-						'<a href="#">'+data[i].nickname+'님</a> ${rep_name}'+ data[i].content+
+						'<a href="#">'+list[i].nickname+'님</a> ${rep_name}'+ list[i].content+
 						'</h3>'+
 						'</div></li>';
-						if (data[i].logdate != data[i-1].logdate) {
-							var logdate = $('#'+data[i-1].logdate).val();
-							if (logdate == undefined) {								
-								str += '<li class="time-label" id="'+data[i-1].logdate+'"><span class="bg-red">'+ data[i-1].logdate+'</span></li>';
-							} else {
-								str += '<li class="time-label" id="'+data[i-1].logdate+'"><span class="bg-red">'+ data[i-1].logdate+'</span></li>';
-								$('#'+data[i-1].logdate).remove();
+						var logdate = $('#'+list[i-1].logdate).val();
+						if (logdate == undefined) {
+							if (list[i].logdate != list[i-1].logdate) {
+							str += '<li class="time-label" id="'+list[i-1].logdate+'"><span class="bg-red">'+ list[i-1].logdate+'</span></li>';
 							}
-		        		  }
+						}
 					} else {
 						if (data.length == i+1) {
-							var logdate1 = $('#'+data[i-1].logdate).val();
+							var logdate1 = $('#'+list[i-1].logdate).val();
 							if (logdate1 == undefined) {								
-								str += '<li class="time-label" id="'+data[i-1].logdate+'"><span class="bg-red">'+ data[i-1].logdate+'</span></li>';
+								str += '<li class="time-label" id="'+list[i-1].logdate+'"><span class="bg-red">'+ list[i-1].logdate+'</span></li>';
 							} else {
-								str += '<li class="time-label" id="'+data[i-1].logdate+'"><span class="bg-red">'+ data[i-1].logdate+'</span></li>';
-								$('#'+data[i-1].logdate).remove();
+								str += '<li class="time-label" id="'+list[i-1].logdate+'"><span class="bg-red">'+ list[i-1].logdate+'</span></li>';
+								$('#'+list[i-1].logdate).remove();
 							}
 						}
 						str +='<li>';
-						if (data[i].file_thumbnail != 'x') {
+						if (list[i].file_thumbnail != 'x') {
 							str +='<i class="fa fa-camera bg-purple"></i>';
 						} else{
 							str += '<li><i class="fa fa-envelope bg-blue"></i>';
 						}
 						str += '<div class="timeline-item">'+
-						'<span class="time"><i class="fa fa-clock-o"></i>'+ data[i].logdate+'</span>'+
+						'<span class="time"><i class="fa fa-clock-o"></i>'+ list[i].logdate+'</span>'+
 						'<h3 class="timeline-header">'+
-						'<a href="#">'+ data[i].nickname+'</a>'+
-						'<div class="timelinebtn">';
-						if ('${sessionScope.nickname}' == data[i].nickname) {
+						'<a href="#">'+ list[i].nickname+'</a>'+
+						'<div class="timelinebtn">'+
+						'<a class="repost">댓글달기</a>';
+						if ('${sessionScope.nickname}' == list[i].nickname) {
 							str += '<a class="change"> 수정</a>'+
-							'<a class="btn btn-danger btn-xs" href="${pageContext.request.contextPath}/post/delete.do?post_id='+data[i].post_id+'&cn=${ch.ch_id}">Delete</a>';
+							'<a class="btn btn-danger btn-xs" href="${pageContext.request.contextPath}/post/delete.do?post_id='+list[i].post_id+'&cn=${ch.ch_id}">Delete</a>';
 						}
 						str +='</div>'+
 						'</h3>'+
-						'<div class="timeline-body">'+data[i].content+'</div>';
-						if (data[i].file_thumbnail != 'x') {
-							str += '<img src="${pageContext.request.contextPath}/resources/img/'+data[i].file_thumbnail + '" class="margin"> <br>';
+						'<div class="timeline-body">'+list[i].content+'</div>';
+						if (list[i].file_thumbnail != 'x') {
+							str += '<img src="${pageContext.request.contextPath}/resources/img/'+list[i].file_thumbnail + '" class="margin"> <br>';
 						}
-						if (data[i].file_original != 'x') {
-							str += '<a href="${pageContext.request.contextPath}/post/download.do?fileName='+data[i].file_original+'">'+ data[i].fileName+'</a>';
+						if (list[i].file_original != 'x') {
+							str += '<a href="${pageContext.request.contextPath}/post/download.do?fileName='+list[i].file_original+'">'+ list[i].fileName+'</a>';
+						}
+						for (var j = 0; j < repost.length; j++) {
+							if (list[i].post_id == repost[j].repost_id) {
+								if (repost[j].post_status == 0) {
+									str += '<div> 삭제된 댓글입니다. </div>';
+								} else {
+									str += '<div class="timeline-item">'+
+								    '<span class="time"><i class="fa fa-clock-o"></i>'+ (new Date).yyyymmdd() +'</span>'+
+								    '<a href="#">'+repost[j].nickname+'</a>'+
+								    '<span class="timeline-body" >'+repost[j].centent+'</span>'+
+								    '<a class="btn btn-danger btn-xs"'+
+								    'href="${pageContext.request.contextPath}/post/delete.do?post_id='+repost[j].post_id+'&cn=${ch.ch_id}" id="delete">Delete</a>'+
+								    '</div>';
+								}
+							}
 						}
 						str += '</div></li>';
-						if (data[i].logdate != data[i-1].logdate) {
-							var logdate = $('#'+data[i-1].logdate).val();
-							if (logdate == undefined) {								
-								str += '<li class="time-label" id="'+data[i-1].logdate+'"><span class="bg-red">'+ data[i-1].logdate+'</span></li>';
-							} else {
-								str += '<li class="time-label" id="'+data[i-1].logdate+'"><span class="bg-red">'+ data[i-1].logdate+'</span></li>';
-								$('#'+data[i-1].logdate).remove();
+						var logdate = $('#'+list[i-1].logdate).val();
+							if (logdate == undefined) {
+								if (list[i].logdate != list[i-1].logdate) {
+								str += '<li class="time-label" id="'+list[i-1].logdate+'"><span class="bg-red">'+ list[i-1].logdate+'</span></li>';
+								}
 							}
-		        		  }
-					}
+						}
 						$("#div").prepend(str);
-			 	} 
+			 		} 
+					if (logdate != undefined) {
+						console.log(logdate);
+						$('#'+list[i-1].logdate).remove();	
+						$('#div').prepend('<li class="time-label" id="'+list[i-1].logdate+'"><span class="bg-red">'+ list[i-1].logdate+'</span></li>');
+					}
 			$("#div").trigger("create");
-			}
+				}
            }            
        });
+	   if (flag == true) {
      isLoading = true;
-     setTimeout(loadNewPage, 100);
+     setTimeout(loadNewPage, 100);		
+	}
    } else {
 	   $.ajax({
            type : "GET",
@@ -260,99 +328,123 @@
            data : { page: page, search: searchitem, rep_id: '${sessionScope.rep_id}' },
            dataType : "json",
            error : function(){
-               alert('더이상 불러올 데이터가 없습니다.');
-               page--;
+               flag = false;
+               alert('실패염');
            },
            success : function(data){
-        	  console.log(data.length);
-        	  if (data.length == '0') {
+       		   flag = true;
+        	   var list = data.list;
+        	   var repost = data.repost;
+        	   if (data.length == '0') {
         		  alert('더이상 불러올 데이터가 없습니다.');
-        		  page--;
+        		  flag = false;
         	  } else {
-        	  for (var i = 1; i < data.length; i++) {
+        		  console.log(data);
+        	  for (var i = 1; i < list.length; i++) {
 						var str = "";
         		  
-					if (data[i].post_status == '3') {
+					if (list[i].post_status == '3') {
 						if (data.length == i+1) {
-							var logdate1 = $('#'+data[i-1].logdate).val();
+							var logdate1 = $('#'+list[i-1].logdate).val();
 							if (logdate1 == undefined) {								
-								str += '<li class="time-label" id="'+data[i-1].logdate+'"><span class="bg-red">'+ data[i-1].logdate+'</span></li>';
+								str += '<li class="time-label" id="'+list[i-1].logdate+'"><span class="bg-red">'+ list[i-1].logdate+'</span></li>';
 							} else {
-								str += '<li class="time-label" id="'+data[i-1].logdate+'"><span class="bg-red">'+ data[i-1].logdate+'</span></li>';
-								$('#'+data[i-1].logdate).remove();
+								str += '<li class="time-label" id="'+list[i-1].logdate+'"><span class="bg-red">'+ list[i-1].logdate+'</span></li>';
+								$('#'+list[i-1].logdate).remove();
 							}
 						}
 						str +='<li>'+
 						'<li><i class="fa fa-user bg-aqua"></i>'+
 						'<div class="timeline-item">'+
-						'<span class="time"><i class="fa fa-clock-o"></i> '+data[i].logdate+'</span>'+
+						'<span class="time"><i class="fa fa-clock-o"></i> '+list[i].logdate+'</span>'+
 						'<h3 class="timeline-header no-border">'+
-						'<a href="#">'+data[i].nickname+'님</a> ${rep_name}'+ data[i].content+
+						'<a href="#">'+list[i].nickname+'님</a> ${rep_name}'+ list[i].content+
 						'</h3>'+
 						'</div></li>';
-						if (data[i].logdate != data[i-1].logdate) {
-							var logdate = $('#'+data[i-1].logdate).val();
+						if (list[i].logdate != list[i-1].logdate) {
+							var logdate = $('#'+list[i-1].logdate).val();
 							if (logdate == undefined) {								
-								str += '<li class="time-label" id="'+data[i-1].logdate+'"><span class="bg-red">'+ data[i-1].logdate+'</span></li>';
+								str += '<li class="time-label" id="'+list[i-1].logdate+'"><span class="bg-red">'+ list[i-1].logdate+'</span></li>';
 							} else {
-								str += '<li class="time-label" id="'+data[i-1].logdate+'"><span class="bg-red">'+ data[i-1].logdate+'</span></li>';
-								$('#'+data[i-1].logdate).remove();
+								str += '<li class="time-label" id="'+list[i-1].logdate+'"><span class="bg-red">'+ list[i-1].logdate+'</span></li>';
+								$('#'+list[i-1].logdate).remove();
 							}
 		        		  }
 					} else {
 						if (data.length == i+1) {
-							var logdate1 = $('#'+data[i-1].logdate).val();
+							var logdate1 = $('#'+list[i-1].logdate).val();
 							if (logdate1 == undefined) {								
-								str += '<li class="time-label" id="'+data[i-1].logdate+'"><span class="bg-red">'+ data[i-1].logdate+'</span></li>';
+								str += '<li class="time-label" id="'+list[i-1].logdate+'"><span class="bg-red">'+ list[i-1].logdate+'</span></li>';
 							} else {
-								str += '<li class="time-label" id="'+data[i-1].logdate+'"><span class="bg-red">'+ data[i-1].logdate+'</span></li>';
-								$('#'+data[i-1].logdate).remove();
+								str += '<li class="time-label" id="'+list[i-1].logdate+'"><span class="bg-red">'+ list[i-1].logdate+'</span></li>';
+								$('#'+list[i-1].logdate).remove();
 							}
 						}
 						str +='<li>';
-						if (data[i].file_thumbnail != 'x') {
+						if (list[i].file_thumbnail != 'x') {
 							str +='<i class="fa fa-camera bg-purple"></i>';
 						} else{
 							str += '<li><i class="fa fa-envelope bg-blue"></i>';
 						}
 						str += '<div class="timeline-item">'+
-						'<span class="time"><i class="fa fa-clock-o"></i>'+ data[i].logdate+'</span>'+
+						'<span class="time"><i class="fa fa-clock-o"></i>'+ list[i].logdate+'</span>'+
 						'<h3 class="timeline-header">'+
-						'<a href="#">'+ data[i].nickname+'</a>'+
-						'<div class="timelinebtn">';
-						if ('${sessionScope.nickname}' == data[i].nickname) {
+						'<a href="#">'+ list[i].nickname+'</a>'+
+						'<div class="timelinebtn">'+
+						'<a class="repost">댓글달기</a>';
+						if ('${sessionScope.nickname}' == list[i].nickname) {
 							str += '<a class="change"> 수정</a>'+
-							'<a class="btn btn-danger btn-xs" href="${pageContext.request.contextPath}/post/delete.do?post_id='+data[i].post_id+'&cn=${ch.ch_id}">Delete</a>';
+							'<a class="btn btn-danger btn-xs" href="${pageContext.request.contextPath}/post/delete.do?post_id='+list[i].post_id+'&cn=${ch.ch_id}">Delete</a>';
 						}
 						str +='</div>'+
 						'</h3>'+
-						'<div class="timeline-body">'+data[i].content+'</div>';
-						if (data[i].file_thumbnail != 'x') {
-							str += '<img src="${pageContext.request.contextPath}/resources/img/'+data[i].file_thumbnail + '" class="margin"> <br>';
+						'<div class="timeline-body">'+list[i].content+'</div>';
+						if (list[i].file_thumbnail != 'x') {
+							str += '<img src="${pageContext.request.contextPath}/resources/img/'+list[i].file_thumbnail + '" class="margin"> <br>';
 						}
-						if (data[i].file_original != 'x') {
-							str += '<a href="${pageContext.request.contextPath}/post/download.do?fileName='+data[i].file_original+'">'+ data[i].fileName+'</a>';
+						if (list[i].file_original != 'x') {
+							str += '<a href="${pageContext.request.contextPath}/post/download.do?fileName='+list[i].file_original+'">'+ list[i].fileName+'</a>';
 						}
-						str += '<a href="${pageContext.request.contextPath}/post/list.do?page=1&cn='+data[i].channel_id+'"> <iclass="fa fa-asterisk">채널</i></a>';
-						str += '</div></li>';
-						if (data[i].logdate != data[i-1].logdate) {
-							var logdate = $('#'+data[i-1].logdate).val();
-							if (logdate == undefined) {								
-								str += '<li class="time-label" id="'+data[i-1].logdate+'"><span class="bg-red">'+ data[i-1].logdate+'</span></li>';
-							} else {
-								str += '<li class="time-label" id="'+data[i-1].logdate+'"><span class="bg-red">'+ data[i-1].logdate+'</span></li>';
-								$('#'+data[i-1].logdate).remove();
+						for (var j = 0; j < repost.length; j++) {
+							if (list[i].post_id == repost[j].repost_id) {
+								if (repost[j].post_status == 0) {
+									str += '<div> 삭제된 댓글입니다. </div>';
+								} else {
+									str += '<div class="timeline-item">'+
+								    '<span class="time"><i class="fa fa-clock-o"></i>'+ (new Date).yyyymmdd() +'</span>'+
+								    '<a href="#">'+repost[j].nickname+'</a>'+
+								    '<span class="timeline-body" >'+repost[j].centent+'</span>'+
+								    '<a class="btn btn-danger btn-xs"'+
+								    'href="${pageContext.request.contextPath}/post/delete.do?post_id='+repost[j].post_id+'&cn=${ch.ch_id}" id="delete">Delete</a>'+
+								    '</div>';
+								}
 							}
-		        		  }
+						}
+						str += '<a href="${pageContext.request.contextPath}/post/list.do?page=1&cn='+list[i].channel_id+'"> <iclass="fa fa-asterisk">채널</i></a>';
+						str += '</div></li>';
+						var logdate = $('#'+list[i-1].logdate).val();
+						if (logdate == undefined) {
+							if (list[i].logdate != list[i-1].logdate) {
+							str += '<li class="time-label" id="'+list[i-1].logdate+'"><span class="bg-red">'+ list[i-1].logdate+'</span></li>';
+							}
+						}
 					}
 						$("#div").prepend(str);
-			 	} 
+			 	}
+        	  if (logdate != undefined) {
+					console.log(logdate);
+					$('#'+list[i-1].logdate).remove();	
+					$('#div').prepend('<li class="time-label" id="'+list[i-1].logdate+'"><span class="bg-red">'+ list[i-1].logdate+'</span></li>');
+				}
 			$("#div").trigger("create");
 			}
            }
        });
-	   isLoading = true;
-	   setTimeout(loadNewPage, 100);
+	   if (flag == true) {
+		   console.log(flag);
+		     isLoading = true;
+		     setTimeout(loadNewPage, 100);		
+		}
    }
 	 
  }
@@ -385,7 +477,55 @@
  });
 </script>
 <script>
-
+	$(function(){
+ 		$('.repost').on('click',function(){
+ 			var repostA = $(this);
+ 			var str = "<div class='repostdata'>";
+ 			str += "<hr><p>댓글</p>" +
+ 			'<input type="text" value=""/>' +
+ 			'<button class="repostCencel">취소</button>' +
+ 			'<button class="repostOk">완료</button>' +
+ 			'</div>';
+ 			$(this).parent().parent().next('div.timeline-body').after(str);
+ 			repostA.hide();
+ 		$('.repostCencel').on('click',function(){	
+			repostA.show();
+			$(this).parent('.repostdata').remove();
+		});
+		$('.repostOk').on('click',function(){
+			var repostOk = $(this);
+			var repostContent = $(this).prev().prev().val();
+			var postID = $(this).parent().prev(".timeline-body").attr("id");
+			var repostAppend = $(this).parent().parent();
+			 $.ajax({
+				type : "post",
+		        url : "<%=request.getContextPath()%>/post/repost.do",
+		        data : { content: repostContent, repost_id: postID, channel_id:'${ch.ch_id}'},
+		        dataType : "json",
+		           error : function(){
+		           },
+		        success : function(data){
+		        var str = '<div class="timeline-item">';
+		        str += '<span class="time"><i class="fa fa-clock-o"></i>'+ (new Date).yyyymmdd() +'</span>'+
+		        '<a href="#">'+data.nickName+'</a>'+
+		        '<span class="timeline-body" >'+repostContent+'</span>'+
+		        '<a class="btn btn-danger btn-xs"'+
+		        'href="${pageContext.request.contextPath}/post/delete.do?post_id='+data.post_id+'&cn=${ch.ch_id}" id="delete">Delete</a>'+
+		        '</div>';
+		        repostAppend.append(str);
+		        }
+			});
+			 $(this).parent('.repostdata').remove();
+			 repostA.show();
+			});
+ 		});
+ 	});
+ Date.prototype.yyyymmdd = function(){
+    var yyyy = this.getFullYear().toString();
+    var mm = (this.getMonth() + 1).toString();
+    var dd = this.getDate().toString();
+    return yyyy +"-"+(mm[1] ? mm : '0'+mm[0])+"-"+(dd[1] ? dd : '0'+dd[0]);
+}; 
 </script>
 </div>
 						</html>

@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 import javax.annotation.Resource;
@@ -205,6 +207,7 @@ public class PostController implements ApplicationContextAware {
 		res.setContentType("text/html; charset=UTF-8");
 		PrintWriter out = res.getWriter();
 		ArrayList<Post> list = service.getSearchBoard(page, rep_id, search);
+		ArrayList<Post> repost = service.getRepost(list);
 		if (list.isEmpty()) {
 			System.out.println("리스트가널이여");
 			out.println("<script>alert('일치하는 항목이 없습니다'); </script>");
@@ -217,6 +220,7 @@ public class PostController implements ApplicationContextAware {
 		Repository r = service.getRepository(rep_id);
 		Channel ch = service.getChannel(cn);
 		System.out.println("chid:" + ch.getCh_id());
+		mav.addObject("repost", repost);
 		mav.addObject("rep_name", r.getRep_name());
 		mav.addObject("user_name", user_name);
 		mav.addObject("ch", ch);
@@ -231,7 +235,20 @@ public class PostController implements ApplicationContextAware {
 	@RequestMapping(value = "/post/ajax.do", method = RequestMethod.GET, produces = "application/text; charset=utf8")
 	public @ResponseBody String ajax(@RequestParam(value = "page") int page, @RequestParam(value = "cn") int cn) {
 		ArrayList<Post> list = service.showMore(page, cn);
+		ArrayList<Post> repost = service.getRepost(list);
 		postListChange(list);
+		Map<String, ArrayList<Post>> map = new HashMap<String, ArrayList<Post>>();
+		map.put("list", list);
+		map.put("repost", repost);
+        String str = "";
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            str = mapper.writeValueAsString(map);
+            System.out.println(str);
+        } catch (Exception e) {
+        	e.printStackTrace();
+        }
+        return str;
 		for (int j = 0; j < list.size(); j++) {
 			System.out.println(list.get(j).getPost_id());
 		}
@@ -249,7 +266,20 @@ public class PostController implements ApplicationContextAware {
 	public @ResponseBody String searchAjax(@RequestParam(value = "page") int page,
 			@RequestParam(value = "rep_id") int rep_id, @RequestParam(value = "search") String search) {
 		ArrayList<Post> list = service.getSearchBoardMore(page, rep_id, search);
+		ArrayList<Post> repost = service.getRepost(list);
 		postListChange(list);
+		Map<String, ArrayList<Post>> map = new HashMap<String, ArrayList<Post>>();
+		map.put("list", list);
+		map.put("repost", repost);
+		 String str = "";
+	        ObjectMapper mapper = new ObjectMapper();
+	        try {
+	            str = mapper.writeValueAsString(map);
+	            System.out.println(str);
+	        } catch (Exception e) {
+	        	e.printStackTrace();
+	        }
+	        return str;
 		String str = "";
 		ObjectMapper mapper = new ObjectMapper();
 		try {
@@ -265,6 +295,21 @@ public class PostController implements ApplicationContextAware {
 	public void update(@RequestParam(value = "content") String content, @RequestParam(value = "post_id") int post_id) {
 		service.change(content, post_id);
 	}
+	
+	@RequestMapping(value="/post/repost.do", method = RequestMethod.POST)
+	public @ResponseBody String repost(HttpServletRequest req, Post post) {
+		HttpSession session = req.getSession(false);
+		int user_id = (int) session.getAttribute("id");
+		int rep_id = (int) session.getAttribute("rep_id");
+		String nickName = service.getNickname(user_id, rep_id);
+		post.setUser_id(user_id);
+		post.setNickname(nickName);
+		service.repostWrite(post);
+		int rePost = service.getRepostID(user_id);
+		String str = "{\"post_id\":\""+rePost+"\",\"nickName\":\""+nickName+"\"}";
+		return str;
+	}
+	
 
 	void postListChange(ArrayList<Post> list) {
 		for (int i = 0; i < list.size(); i++) {
