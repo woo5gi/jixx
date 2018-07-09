@@ -44,4 +44,8 @@ public interface Service {
 
 	UserMeta getUserMeta(int id, int rep_id, int chid);
 
+	ArrayList<Integer> getMemberId(int cn,int id);
+
+	ArrayList<String> getMemberEmail(ArrayList<Integer> idlist);
+
 }

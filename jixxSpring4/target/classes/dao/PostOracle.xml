@@ -158,4 +158,14 @@
 	<select id="selectUserMeta" parameterType="map" resultMap="UMResultMap">
 	select * from user_meta where user_id=#{id} and rep_id=#{rep_id} and channel_id=#{ch_id}
 	</select>
+	<select id="selectMemberId" parameterType="map" resultType="Integer">
+	select user_id from user_meta where channel_id=#{cn} and not user_id=#{id}  and alarm_type=1
+	</select>
+	<select id="selectMemberEmail" parameterType="map" resultType="String">
+	select user_email from member where user_id in
+	<foreach collection="idlist" item="type" open="(" close=")"
+			separator=",">
+			#{type.value}
+		</foreach>
+	</select>
 </mapper>

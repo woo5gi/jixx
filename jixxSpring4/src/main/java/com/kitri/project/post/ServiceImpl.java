@@ -193,4 +193,23 @@ public class ServiceImpl implements Service {
 		UserMeta um = mapper.selectUserMeta(map);
 		return um;
 	}
+
+	@Override
+	public ArrayList<Integer> getMemberId(int cn,int id) {
+		mapper = sqlSession.getMapper(Mapper.class);
+		Map<String,Object> map = new HashMap<String,Object>();
+		map.put("cn", cn);
+		map.put("id", id);
+		ArrayList<Integer> t = mapper.selectMemberId(map);
+		return t;
+	}
+
+	@Override
+	public ArrayList<String> getMemberEmail(ArrayList<Integer> idlist) {
+		mapper = sqlSession.getMapper(Mapper.class);
+		Map<String,Object> map = new HashMap<String,Object>();
+		map.put("idlist", idlist);
+		ArrayList<String> t = mapper.selectMemberEmail(map);
+		return t;
+	}
 }
