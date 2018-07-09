@@ -49,7 +49,7 @@
 		resultMap="PostResultMap">
 		select * from (select rownum a, a.*
 		from (select * from post where
-		channel_id = ${cn} order by post_logdate desc) a
+		channel_id = ${cn} and repost_id = 0 order by post_logdate desc) a
 		where rownum <![CDATA[<=]]>
 		${endPage})b
 		where b.a <![CDATA[>=]]>
@@ -60,7 +60,7 @@
 		resultMap="PostResultMap">
 		select * from (select rownum a, a.*
 		from (select * from post where
-		channel_id = ${cn} order by post_logdate desc) a
+		channel_id = ${cn} and repost_id = 0 order by post_logdate desc) a
 		where rownum <![CDATA[<=]]>
 		${endPage})b
 		where b.a <![CDATA[>=]]>
@@ -71,7 +71,7 @@
 		resultMap="PostResultMap">
 		select * from (select rownum a, a.*
 		from (select p.*, c.channel_name from post p,channel c,repository r
-		where p.channel_id=c.channel_id and r.rep_id=c.rep_id and r.rep_id=#{rep_id}
+		where p.channel_id=c.channel_id and r.rep_id=c.rep_id and r.rep_id=#{rep_id} and repost_id = 0
 		and content like '%' || #{search} || '%'
 		and p.post_status != 0
 		order by post_id desc) a
@@ -83,7 +83,7 @@
 		resultMap="PostResultMap">
 		select * from (select rownum a, a.*
 		from (select p.*, c.channel_name from post p,channel c,repository r
-		where p.channel_id=c.channel_id and r.rep_id=c.rep_id and r.rep_id=#{rep_id}
+		where p.channel_id=c.channel_id and r.rep_id=c.rep_id and r.rep_id=#{rep_id} and repost_id = 0
 		and content like '%' || #{search} || '%'
 		and p.post_status != 0
 		order by post_id desc) a
@@ -136,6 +136,15 @@
 		where
 		r.rep_id=um.rep_id and
 		um.user_id=m.user_id and m.user_id=#{id}
+	</select>
+	<select id="selectRepost" parameterType="list" resultMap="PostResultMap">
+	select *
+	from post
+	where repost_id in 
+	<foreach collection="list" item="item" open="(" close=")"
+			separator=",">
+			#{item.post_id}
+		</foreach>
 	</select>
 	<select id="selectUserAdminLevel" parameterType="map" resultType="Integer">
 	select admin_level from user_meta2 where user_id=#{id} and rep_id=#{rep_id}

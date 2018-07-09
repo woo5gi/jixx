@@ -31,17 +31,10 @@ public class ServiceImpl implements Service {
 
 	@Override
 	public ArrayList<Post> show(int page, int cn) {
-		int endpage = 0;
-		if (page == 1) {
-			page = 1;
-			endpage = 10; 
-		} else {
-			endpage = page * 10; 
-			page = (page -1) *10 +1;
-		}
+		int[] pages = pageTuning(page);
 		Map<String, Integer> map = new HashMap<String, Integer>();
-		map.put("startpage", page);
-		map.put("endPage", endpage);
+		map.put("startpage", pages[0]);
+		map.put("endPage", pages[1]);
 		map.put("cn", cn);
 		mapper = sqlSession.getMapper(Mapper.class);
 		ArrayList<Post> list = mapper.selectAll(map);
@@ -50,17 +43,10 @@ public class ServiceImpl implements Service {
 
 	@Override
 	public ArrayList<Post> showMore(int page, int cn) {
-		int endpage = 0;
-		if (page == 1) {
-			page = 1;
-			endpage = 10; 
-		} else {
-			endpage = page * 10; 
-			page = (page -1) *10;
-		}
+		int[] pages = pageTuning(page);
 		Map<String, Integer> map = new HashMap<String, Integer>();
-		map.put("startpage", page);
-		map.put("endPage", endpage);
+		map.put("startpage", pages[0]);
+		map.put("endPage", pages[1]);
 		map.put("cn", cn);
 		mapper = sqlSession.getMapper(Mapper.class);
 		ArrayList<Post> list = mapper.selectAllMore(map);
@@ -69,17 +55,10 @@ public class ServiceImpl implements Service {
 	
 	@Override
 	public ArrayList<Post> getSearchBoard(int page, int rep_id,String search) {
-		int endpage = 0;
-		if (page == 1) {
-			page = 1;
-			endpage = 10; 
-		} else {
-			endpage = page * 10; 
-			page = (page -1) *10 +1;
-		}
+		int[] pages = pageTuning(page);
 		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("startpage", page);
-		map.put("endPage", endpage);
+		map.put("startpage", pages[0]);
+		map.put("endPage", pages[1]);
 		map.put("rep_id", rep_id);
 		map.put("search", search);		
 		mapper = sqlSession.getMapper(Mapper.class);
@@ -89,6 +68,18 @@ public class ServiceImpl implements Service {
 	
 	@Override
 	public ArrayList<Post> getSearchBoardMore(int page, int rep_id,String search) {
+		int[] pages = pageTuning(page);
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("startpage", pages[0]);
+		map.put("endPage", pages[1]);
+		map.put("rep_id", rep_id);
+		map.put("search", search);		
+		mapper = sqlSession.getMapper(Mapper.class);
+		ArrayList<Post> list = mapper.selectSearchResultMore(map);
+		return list;
+	}
+	
+	public int[] pageTuning(int page) {
 		int endpage = 0;
 		if (page == 1) {
 			page = 1;
@@ -97,15 +88,10 @@ public class ServiceImpl implements Service {
 			endpage = page * 10; 
 			page = (page -1) *10 ;
 		}
-		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("startpage", page);
-		map.put("endPage", endpage);
-		map.put("rep_id", rep_id);
-		map.put("search", search);		
-		mapper = sqlSession.getMapper(Mapper.class);
-		ArrayList<Post> list = mapper.selectSearchResultMore(map);
-		return list;
+		int[] pages = {page,endpage};
+		return pages;
 	}
+	
 	@Override
 	public Channel getChannel(int cn) {
 		mapper = sqlSession.getMapper(Mapper.class);
@@ -181,6 +167,12 @@ public class ServiceImpl implements Service {
 	}
 
 	@Override
+	public ArrayList<Post> getRepost(ArrayList<Post> list) {
+		mapper = sqlSession.getMapper(Mapper.class);			
+		ArrayList<Post> repost = mapper.selectRepost(list);
+		return repost;
+	}
+
 	public int getUserAdminLevel(int id, int rep_id) {
 		mapper = sqlSession.getMapper(Mapper.class);
 		Map<String,Object> map = new HashMap<String,Object>();

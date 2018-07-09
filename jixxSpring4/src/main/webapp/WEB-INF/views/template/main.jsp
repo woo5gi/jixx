@@ -49,6 +49,7 @@
 														<c:set var="usernickname" value="${sessionScope.nickname}" />
 														<c:set var="writtennickname" value="${post.nickname}" />
 														<c:if test="${usernickname eq writtennickname}">
+														<a class="repost">댓글달기</a>
 														<a class="change"> 수정</a>
 															<a class="btn btn-danger btn-xs"
 																href="<%= request.getContextPath() %>/post/delete.do?post_id=${post.post_id}&cn=${ch.ch_id}" id="delete">Delete</a>
@@ -68,6 +69,19 @@
 													<a href="<%=request.getContextPath()%>/post/list.do?page=1&cn=${post.channel_id}">채널
 														</a>
 													</c:if>
+													<c:forEach items="${repost}" var="repost">
+													<c:if test="${repost.repost_id eq post.post_id }">
+														<div class="timeline-item">
+			
+															<span class="time"><i class="fa fa-clock-o"></i>${repost.logdate}</span>
+																<a href="#">${repost.nickname}</a>
+															<span class="timeline-body" id="${repost.post_id}">${repost.content}</span>
+															<a class="change"> 수정</a>
+															<a class="btn btn-danger btn-xs"
+																href="<%= request.getContextPath() %>/post/delete.do?post_id=${repost.post_id}&cn=${ch.ch_id}" id="delete">Delete</a>
+														</div>
+													</c:if>
+													</c:forEach>
 											</div></li><br>
 									</c:otherwise>
 								</c:choose>
