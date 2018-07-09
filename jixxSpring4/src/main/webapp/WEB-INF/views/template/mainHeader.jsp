@@ -206,6 +206,7 @@
 	<c:set var="user_name" value="${user_name}" />
 	<c:set var="rep_name" value="${rep_name}" />
 	<c:set var="ch" value="${ch}" />
+	<c:set var="alarmtypelist" value="${alarmtypelist}" />
 	<div class="wrapper">
 		<!-- Main Header -->
 		<header class="main-header"> <!-- Logo --> <a
@@ -438,14 +439,14 @@
 						href="<%=request.getContextPath()%>/post/list.do?page=1&cn=${aa.ch_id}"> <i
 							class="fa fa-asterisk i1"></i>${aa.ch_name}
 
-					</a><input type="hidden" name="ch_id" value="${aa.ch_id}"> <c:choose>
-							<c:when test="${um.alarm_type eq 1}">
-								<input name="alarmcb" type="checkbox" checked="checked" onclick="myFunction()">
-							</c:when>
-							<c:otherwise>
-								<input name="alarmcb" type="checkbox" onclick="myFunction()">
-							</c:otherwise>
-						</c:choose></li>
+					</a><input type="hidden" name="ch_id" value="${aa.ch_id}"> <input type="text"
+						value="${chidlist[status.index]}"> <c:if test="${alarmtypelist[status.index] eq 1}">
+							<input type="text" value="${chidlist[status.index]}">
+							<input name="alarmcb" type="checkbox" checked="checked" onclick="myFunction()">
+						</c:if> <c:if test="${chidlist[status.index] eq 0}">
+							<input type="text" value="${alarmtypelist[status.index]}">
+							<input name="alarmcb" type="checkbox" onclick="myFunction()">
+						</c:if></li>
 				</c:forEach>
 			</div>
 			<li class="header"><a href="index.html"> Direct Messages &nbsp; <i

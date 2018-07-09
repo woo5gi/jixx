@@ -183,16 +183,6 @@ public class ServiceImpl implements Service {
 		return t;
 	}
 
-	@Override
-	public UserMeta getUserMeta(int id, int rep_id, int chid) {
-		mapper = sqlSession.getMapper(Mapper.class);
-		Map<String,Object> map = new HashMap<String,Object>();
-		map.put("id", id);
-		map.put("rep_id",rep_id);
-		map.put("ch_id", chid);
-		UserMeta um = mapper.selectUserMeta(map);
-		return um;
-	}
 
 	@Override
 	public ArrayList<Integer> getMemberId(int cn,int id) {
@@ -210,6 +200,17 @@ public class ServiceImpl implements Service {
 		Map<String,Object> map = new HashMap<String,Object>();
 		map.put("idlist", idlist);
 		ArrayList<String> t = mapper.selectMemberEmail(map);
+		return t;
+	}
+
+	@Override
+	public ArrayList<Integer> getAlarmType(int id, int rep_id,  int[] chidlist) {
+		mapper = sqlSession.getMapper(Mapper.class);
+		Map<String,Object> map = new HashMap<String,Object>();
+		map.put("id", id);
+		map.put("rep_id", rep_id);
+		map.put("cn", chidlist);
+		ArrayList<Integer> t = mapper.selectAlarmType(map);
 		return t;
 	}
 }

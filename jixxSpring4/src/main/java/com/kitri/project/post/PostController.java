@@ -84,7 +84,7 @@ public class PostController implements ApplicationContextAware {
 			post.setFile_original("x");
 		}
 		String nickname = service.getNickname(id, rep_id);
-		ArrayList<Integer> idlist = service.getMemberId(cn,id);
+		ArrayList<Integer> idlist = service.getMemberId(cn, id);
 		ArrayList<String> emaillist = service.getMemberEmail(idlist);
 		try {
 			MailHandler sendMail = new MailHandler(mailSender);
@@ -119,7 +119,6 @@ public class PostController implements ApplicationContextAware {
 			return "redirect:/member/login";
 		}
 		session.setAttribute("rep_id", rep_id);
-
 		rda.addAttribute("cn", cn);
 		return "redirect:/post/list.do?page=1";
 
@@ -142,11 +141,20 @@ public class PostController implements ApplicationContextAware {
 		Repository r = service.getRepository(rep_id);
 		ModelAndView mav = new ModelAndView("/template/main");
 		Channel ch = service.getChannel(cn);
-		int chid = ch.getCh_id();
-		UserMeta um = service.getUserMeta(id, rep_id, chid);
+		int a = chlist.size();
+		int[] chidlist = new int[a];
+		for (int i = 0; i < chlist.size(); i++) {
+			chidlist[i] = chlist.get(i).getCh_id();
+			System.out.println("chidlist:" + chidlist[i]);
+		}		
+		ArrayList<Integer> alarmtypelist = service.getAlarmType(id, rep_id, chidlist);
+		for (int i = 0; i < alarmtypelist.size(); i++) {
+			System.out.println("alarmtypelist:"+alarmtypelist);			
+		}
+		System.out.println("alarasd22222:"+alarmtypelist);
 		System.out.println("chid:" + ch.getCh_id());
 		System.out.println(repost.size());
-		mav.addObject("um", um);
+		mav.addObject("alarmtypelist",alarmtypelist);
 		mav.addObject("repost", repost);
 		int adminlevel = service.getUserAdminLevel(id, rep_id);
 		mav.addObject("adminlevel", adminlevel);

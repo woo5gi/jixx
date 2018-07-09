@@ -28,8 +28,8 @@ public interface Mapper {
 	ArrayList<Post> selectRepost(ArrayList<Post> list);
 	
 	int selectUserAdminLevel(Map<String, Object> map);
-	UserMeta selectUserMeta(Map<String, Object> map);
 	ArrayList<Integer> selectMemberId(Map<String, Object> map);
 	ArrayList<String> selectMemberEmail(Map<String, Object> map);
+	ArrayList<Integer> selectAlarmType(Map<String, Object> map);
 	
 }
