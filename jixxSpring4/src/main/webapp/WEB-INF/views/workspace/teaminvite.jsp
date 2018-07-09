@@ -36,7 +36,8 @@ float: right;
 margin: 5px;
 padding:4px;
 }
-
+.centered {
+    padding-top: 6%;
 </style>
 
 <div class="bg">

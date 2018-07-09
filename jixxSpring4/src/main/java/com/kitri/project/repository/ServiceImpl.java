@@ -319,6 +319,54 @@ public class ServiceImpl implements Service {
 		return m;
 	}
 
+	@Override
+	public void deleteUserMeta(int id, int rep_id) {
+		repMapper = sqlSession.getMapper(Mapper.class);
+		Map<String,Object> map = new HashMap<String,Object>();
+		map.put("id", id);
+		map.put("rep_id", rep_id);
+		repMapper.deleteUserMeta(map);
+		
+	}
+
+	@Override
+	public void deleteUserMeta2(int id, int rep_id) {
+		repMapper = sqlSession.getMapper(Mapper.class);
+		Map<String,Object> map = new HashMap<String,Object>();
+		map.put("id", id);
+		map.put("rep_id", rep_id);
+		repMapper.deleteUserMeta2(map);
+	}
+
+	@Override
+	public void changeAdminLevel(UserMeta2 um2) {
+		repMapper = sqlSession.getMapper(Mapper.class);
+		repMapper.updateAdminLevel(um2);
+		
+	}
+
+	@Override
+	public void alarmCheck(int id,int chid, int rep_id, int alarm_type) {
+		repMapper = sqlSession.getMapper(Mapper.class);
+		Map<String,Object> map = new HashMap<String,Object>();
+		map.put("id", id);
+		map.put("rep_id", rep_id);
+		map.put("alarm_type", alarm_type);
+		map.put("chid", chid);
+		repMapper.plusAlarmCheck(map);
+	}
+
+	@Override
+	public void alarmUnCheck(int id, int chid, int rep_id, int alarm_type) {
+		repMapper = sqlSession.getMapper(Mapper.class);
+		Map<String,Object> map = new HashMap<String,Object>();
+		map.put("id", id);
+		map.put("rep_id", rep_id);
+		map.put("alarm_type", alarm_type);
+		map.put("chid", chid);
+		repMapper.minusAlarmCheck(map);
+	}
+
 	
 
 	

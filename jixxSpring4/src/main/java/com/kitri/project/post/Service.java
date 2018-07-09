@@ -6,6 +6,7 @@ import vo.Channel;
 import vo.Member;
 import vo.Post;
 import vo.Repository;
+import vo.UserMeta;
 
 public interface Service {
 	void write(Post post);
@@ -44,5 +45,10 @@ public interface Service {
 	void repostWrite(Post post);
 
 	int getRepostID(int user_id);
+	UserMeta getUserMeta(int id, int rep_id, int chid);
+
+	ArrayList<Integer> getMemberId(int cn,int id);
+
+	ArrayList<String> getMemberEmail(ArrayList<Integer> idlist);
 
 }

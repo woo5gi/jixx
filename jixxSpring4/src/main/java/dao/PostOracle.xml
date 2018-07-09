@@ -37,6 +37,12 @@
 		<result property="rep_name" column="rep_name" />
 		<result property="rep_url" column="rep_url" />
 	</resultMap>
+	<resultMap type="vo.UserMeta" id="UMResultMap">
+		<result property="user_id" column="user_id" />
+		<result property="rep_id" column="rep_id" />		
+		<result property="channel_id" column="channel_id" />
+		<result property="alarm_type" column="alarm_type" />
+	</resultMap>
 
 	<insert id="insert" parameterType="vo.Post">
 		Insert into post
@@ -159,5 +165,17 @@
 	</insert>
 	<select id="selectRepostID" parameterType="Integer" resultType="Integer">
 		select max(post_id) from post where user_id = #{user_id}
+	<select id="selectUserMeta" parameterType="map" resultMap="UMResultMap">
+	select * from user_meta where user_id=#{id} and rep_id=#{rep_id} and channel_id=#{ch_id}
+	</select>
+	<select id="selectMemberId" parameterType="map" resultType="Integer">
+	select user_id from user_meta where channel_id=#{cn} and not user_id=#{id}  and alarm_type=1
+	</select>
+	<select id="selectMemberEmail" parameterType="map" resultType="String">
+	select user_email from member where user_id in
+	<foreach collection="idlist" item="type" open="(" close=")"
+			separator=",">
+			#{type.value}
+		</foreach>
 	</select>
 </mapper>

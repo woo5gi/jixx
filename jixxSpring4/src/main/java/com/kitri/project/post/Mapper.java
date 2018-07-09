@@ -7,6 +7,7 @@ import vo.Channel;
 import vo.Member;
 import vo.Post;
 import vo.Repository;
+import vo.UserMeta;
 
 public interface Mapper {
 	void insert(Post post);
@@ -29,4 +30,8 @@ public interface Mapper {
 	int selectUserAdminLevel(Map<String, Object> map);
 	void repostInsert(Post post);
 	int selectRepostID(int user_id);
+	UserMeta selectUserMeta(Map<String, Object> map);
+	ArrayList<Integer> selectMemberId(Map<String, Object> map);
+	ArrayList<String> selectMemberEmail(Map<String, Object> map);
+	
 }
