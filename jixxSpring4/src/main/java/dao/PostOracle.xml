@@ -37,6 +37,12 @@
 		<result property="rep_name" column="rep_name" />
 		<result property="rep_url" column="rep_url" />
 	</resultMap>
+	<resultMap type="vo.UserMeta" id="UMResultMap">
+		<result property="user_id" column="user_id" />
+		<result property="rep_id" column="rep_id" />		
+		<result property="channel_id" column="channel_id" />
+		<result property="alarm_type" column="alarm_type" />
+	</resultMap>
 
 	<insert id="insert" parameterType="vo.Post">
 		Insert into post
@@ -148,5 +154,8 @@
 	</select>
 	<select id="selectUserAdminLevel" parameterType="map" resultType="Integer">
 	select admin_level from user_meta2 where user_id=#{id} and rep_id=#{rep_id}
+	</select>
+	<select id="selectUserMeta" parameterType="map" resultMap="UMResultMap">
+	select * from user_meta where user_id=#{id} and rep_id=#{rep_id} and channel_id=#{ch_id}
 	</select>
 </mapper>

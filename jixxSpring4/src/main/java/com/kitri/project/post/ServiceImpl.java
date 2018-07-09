@@ -13,6 +13,7 @@ import vo.Channel;
 import vo.Member;
 import vo.Post;
 import vo.Repository;
+import vo.UserMeta;
 
 @Component("postService")
 public class ServiceImpl implements Service {
@@ -180,5 +181,16 @@ public class ServiceImpl implements Service {
 		map.put("rep_id",rep_id);
 		int t = mapper.selectUserAdminLevel(map);
 		return t;
+	}
+
+	@Override
+	public UserMeta getUserMeta(int id, int rep_id, int chid) {
+		mapper = sqlSession.getMapper(Mapper.class);
+		Map<String,Object> map = new HashMap<String,Object>();
+		map.put("id", id);
+		map.put("rep_id",rep_id);
+		map.put("ch_id", chid);
+		UserMeta um = mapper.selectUserMeta(map);
+		return um;
 	}
 }

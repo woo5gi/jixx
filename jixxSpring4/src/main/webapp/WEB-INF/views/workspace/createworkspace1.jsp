@@ -15,7 +15,7 @@
           <div class="form-group">
             <label>Your email address</label> 
                     <c:set var="m" value="${m}"/>
-                      <input type="text" name="email" placeholder="" class="form-control" value="${m.email}">
+                      <input type="text" name="email" placeholder="" class="form-control" value="${m.email}" readonly>
                           <input type="hidden" name="requestfrom" value="createws">
           </div>
         </div>

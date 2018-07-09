@@ -4,17 +4,17 @@ public class UserMeta {
 	private int user_id;
 	private int rep_id;	
 	private int channel_id;
-	private int alram_type; //기본적으로 알람 default값은 1, 알람설정을 껐을 시 0
+	private int alarm_type; //기본적으로 알람 default값은 1, 알람설정을 껐을 시 0
 	public UserMeta() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-	public UserMeta(int user_id, int rep_id, int channel_id, int alram_type) {
+	public UserMeta(int user_id, int rep_id, int channel_id, int alarm_type) {
 		super();
 		this.user_id = user_id;
 		this.rep_id = rep_id;
 		this.channel_id = channel_id;
-		this.alram_type = alram_type;
+		this.alarm_type = alarm_type;
 	}
 	public int getUser_id() {
 		return user_id;
@@ -34,17 +34,18 @@ public class UserMeta {
 	public void setChannel_id(int channel_id) {
 		this.channel_id = channel_id;
 	}
-	public int getAlram_type() {
-		return alram_type;
+	public int getAlarm_type() {
+		return alarm_type;
 	}
-	public void setAlram_type(int alram_type) {
-		this.alram_type = alram_type;
+	public void setAlarm_type(int alarm_type) {
+		this.alarm_type = alarm_type;
 	}
 	@Override
 	public String toString() {
-		return "UserMeta [user_id=" + user_id + ", rep_id=" + rep_id + ", channel_id=" + channel_id + ", alram_type="
-				+ alram_type + "]";
+		return "UserMeta [user_id=" + user_id + ", rep_id=" + rep_id + ", channel_id=" + channel_id + ", alarm_type="
+				+ alarm_type + "]";
 	}
+
 	
 
 }
