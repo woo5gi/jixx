@@ -319,6 +319,25 @@ public class ServiceImpl implements Service {
 		return m;
 	}
 
+	@Override
+	public void deleteUserMeta(int id, int rep_id) {
+		repMapper = sqlSession.getMapper(Mapper.class);
+		Map<String,Object> map = new HashMap<String,Object>();
+		map.put("id", id);
+		map.put("rep_id", rep_id);
+		repMapper.deleteUserMeta(map);
+		
+	}
+
+	@Override
+	public void deleteUserMeta2(int id, int rep_id) {
+		repMapper = sqlSession.getMapper(Mapper.class);
+		Map<String,Object> map = new HashMap<String,Object>();
+		map.put("id", id);
+		map.put("rep_id", rep_id);
+		repMapper.deleteUserMeta2(map);
+	}
+
 	
 
 	

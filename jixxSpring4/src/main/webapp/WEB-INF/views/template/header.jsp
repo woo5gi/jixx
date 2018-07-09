@@ -146,7 +146,7 @@ border-top: 1px solid #dddddd;
 												<li class="user-body" id="user-body1">
 															<a href="${pageContext.request.contextPath}/findworkspaceform.do" class="hidden-xs text-center"
 																aria-expanded="false">Find Workspace</a>
-												<li class="user-body">
+												<%-- <li class="user-body">
 													<div class="row">
 														<div class="pull-left" style="border: 1px;">
 															<a href="${pageContext.request.contextPath}/findworkspaceform.do"
@@ -155,7 +155,7 @@ border-top: 1px solid #dddddd;
 															</a>
 														</div>
 													</div>
-												</li>
+												</li> --%>
 												<!-- Menu Footer-->
 												<li class="user-footer">
 													<div class="pull-left">

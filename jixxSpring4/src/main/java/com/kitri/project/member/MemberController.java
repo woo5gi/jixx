@@ -19,10 +19,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.kitri.project.repository.MailHandler;
 
+import vo.Channel;
 import vo.Member;
+import vo.UserMeta2;
 
 @Controller
 public class MemberController {
@@ -58,6 +61,7 @@ public class MemberController {
 	public String repDeleteVerifyForm() {
 		return "member/verifydelrep";
 	}
+
 	@RequestMapping(value = "memberoutverifyform.do")
 	public String memberOUtVeryForm() {
 		return "member/memberoutverifyform";
@@ -86,7 +90,7 @@ public class MemberController {
 			e.printStackTrace();
 			out.println("<script>alert('session값이 없습니다'); </script>");
 			out.flush();
-			mav = new ModelAndView("member/login");
+			mav = new ModelAndView("member/index");
 		}
 		return mav;
 	}
@@ -146,7 +150,7 @@ public class MemberController {
 	// 로그인기능
 	@RequestMapping(value = "/login.do")
 	public ModelAndView login(HttpServletRequest req, Member m, HttpServletResponse res) throws Exception {
-		ModelAndView mav = new ModelAndView();		
+		ModelAndView mav = new ModelAndView();
 		Member m2 = service.getMemberByEmail(m.getEmail());
 		if (m2 == null || !m2.getPwd().equals(m.getPwd())) {
 			System.out.println("로그인 실패");
@@ -185,8 +189,6 @@ public class MemberController {
 		session.invalidate();
 		return "member/login";
 	}
-
-	
 
 	// create workspace누르면 인증번호 메일전송하는 페이지로이동
 	@RequestMapping(value = "crw1.do")
@@ -243,7 +245,7 @@ public class MemberController {
 			sendMail.send();
 			service.setTempkey(ran2, email);
 			return "member/verifydelrep";
-		}else if (requestfrom.equals("memberout")) {
+		} else if (requestfrom.equals("memberout")) {
 			sendMail.setSubject("FILE CETACEA 회원탈퇴 이메일인증");
 			sendMail.setText(new StringBuffer().append("<h1>이메일인증</h1>")
 					.append("<a href='localhost:8080/project/memberoutverifyform.do")
@@ -262,22 +264,22 @@ public class MemberController {
 	public ModelAndView verify(HttpServletRequest req, @RequestParam(value = "verify") int tempKey,
 			HttpServletResponse res, @RequestParam(value = "requestfrom") String requestfrom) throws Exception {
 		ModelAndView mav = new ModelAndView();
-		HttpSession session = req.getSession(false);		
+		HttpSession session = req.getSession(false);
 		res.setContentType("text/html; charset=UTF-8");
 		PrintWriter out = res.getWriter();
-		String email = (String) session.getAttribute("email");		
+		String email = (String) session.getAttribute("email");
 		Member m = new Member();
 		m.setEmail(email);
-		
-		int tempKeydb = service.selectTempKey(email);		
+
+		int tempKeydb = service.selectTempKey(email);
 		if (tempKey == tempKeydb) {
 			service.verifyMember(m);
 			if (requestfrom.equals("createwsauth")) {
 				mav = new ModelAndView("workspace/createworkspace2");
 			} else if (requestfrom.equals("deleterepauth")) {
 				int rep_id = (int) session.getAttribute("rep_id");
-				service.delRepository(rep_id);				
-				
+				service.delRepository(rep_id);
+
 				int id = (int) session.getAttribute("id");
 				Member m2 = service.getMemberByEmail(email);
 				System.out.println("1111111" + m2.getName());
@@ -289,37 +291,39 @@ public class MemberController {
 				mav.addObject("rep_list", repnamelist);
 				out.println("<script>alert('저장소 삭제가 완료되었습니다.'); </script>");
 				out.flush();
-			}else if (requestfrom.equals("memberout")) {				
+			} else if (requestfrom.equals("memberout")) {
 				int id = (int) session.getAttribute("id");
-				System.out.println("id:"+id);
+				System.out.println("id:" + id);
 				mav = new ModelAndView("template/index");
 				service.delMember(id);
-				/*session.removeAttribute("id");
-				session.removeAttribute("email");
-				session.removeAttribute("rep_id");*/
-			/*	session.invalidate();*/
+				/*
+				 * session.removeAttribute("id"); session.removeAttribute("email");
+				 * session.removeAttribute("rep_id");
+				 */
+				/* session.invalidate(); */
 				out.println("<script>alert('+회원탈퇴완료+'); </script>");
 				out.flush();
-				
+
 				/*
-				Member m2 = service.getMemberByEmail(email);
-				System.out.println("1111111" + m2.getName());*/
-				
-				/*mav.addObject("user_name", m2.getName());
-				mav.addObject("id", id);
-				mav.addObject("email", email);
-				ArrayList<String> repnamelist = service.getRepNameListById(id);
-				mav.addObject("rep_list", repnamelist);*/
+				 * Member m2 = service.getMemberByEmail(email); System.out.println("1111111" +
+				 * m2.getName());
+				 */
+
+				/*
+				 * mav.addObject("user_name", m2.getName()); mav.addObject("id", id);
+				 * mav.addObject("email", email); ArrayList<String> repnamelist =
+				 * service.getRepNameListById(id); mav.addObject("rep_list", repnamelist);
+				 */
 			}
-		}else {			
-			if (isNumber(String.valueOf(tempKey))) {				
+		} else {
+			if (isNumber(String.valueOf(tempKey))) {
 				out.println("<script>alert('인증번호가 일치하지 않습니다'); </script>");
 				out.flush();
-			} else {				
+			} else {
 				out.println("<script>alert('숫자를 입력하세요'); </script>");
 				out.flush();
 			}
-		}		
+		}
 		return mav;
 	}
 
@@ -358,34 +362,15 @@ public class MemberController {
 		return "member/login";
 	}
 
-	@RequestMapping(value = "editprofileform.do")
-	public ModelAndView profileForm(HttpServletRequest req) {
-		ModelAndView mav = new ModelAndView("member/profileform");
-		HttpSession session = req.getSession(false);
-		/* String */
-		return mav;
-	}
-
-	// 회원정보수정Form으로 이동
-	@RequestMapping(value = "/member/editForm.do")
-	public ModelAndView editForm(HttpServletRequest req) {
-		ModelAndView mav = new ModelAndView("member/editForm");
-		HttpSession session = req.getSession(false);
-		String id = (String) session.getAttribute("id");
-		Member m = service.getMemberId(Integer.parseInt(id));
-		mav.addObject("m", m);
-		return mav;
-	}
-
 	// 회원정보수정기능
 	@RequestMapping(value = "/member/edit.do")
-	public ModelAndView edit(Member m,HttpServletRequest req, HttpServletResponse res) throws Exception{
+	public ModelAndView edit(Member m, HttpServletRequest req, HttpServletResponse res) throws Exception {
 		HttpSession session = req.getSession(false);
 		res.setContentType("text/html;charset=utf-8");
 		PrintWriter out = res.getWriter();
 		ModelAndView mav = new ModelAndView();
-		System.out.println("id:"+m.getId()+";;email:"+m.getEmail()+";;password:"+m.getPwd());
-		service.editMember(m);		
+		System.out.println("id:" + m.getId() + ";;email:" + m.getEmail() + ";;password:" + m.getPwd());
+		service.editMember(m);
 		out.println("<script>alert('정보수정이 완료되었습니다');</script>");
 		out.flush();
 		try {
@@ -404,7 +389,7 @@ public class MemberController {
 			e.printStackTrace();
 			out.println("<script>alert('session값이 없습니다'); </script>");
 			out.flush();
-			mav = new ModelAndView("member/login");			
+			mav = new ModelAndView("member/login");
 		}
 		return mav;
 	}
@@ -432,8 +417,49 @@ public class MemberController {
 	}
 
 	@RequestMapping(value = "profileform.do")
-	public String profileForm() {
-		return "member/profileform";
+	public ModelAndView profileForm(HttpServletRequest req) {
+		HttpSession session = req.getSession(false);
+		int id = (int) session.getAttribute("id");
+		int rep_id = (int) session.getAttribute("rep_id");
+		ModelAndView mav = new ModelAndView("member/mainprofileform");
+		Member m = service.getMember(id);
+		UserMeta2 um2 = service.getUserMeta2(id, rep_id);
+		mav.addObject("m", m);
+		mav.addObject("um2", um2);
+		return mav;
 	}
 
+	@RequestMapping(value = "member/editusermeta2.do")
+	public String editUM2(HttpServletRequest req, RedirectAttributes rda, Member m, UserMeta2 um2) {
+				HttpSession session = req.getSession(false);
+				int id = (int) session.getAttribute("id");
+		int rep_id = (int) session.getAttribute("rep_id");
+		System.out.println("email:"+m.getEmail()+"nickname:"+um2.getNickname());
+		service.editMember(m);
+		service.editUM2(um2);
+		UserMeta2 um22 = service.getUserMeta2(id, rep_id);
+		session.setAttribute("nickname", um22.getNickname());
+
+
+		Channel ch = service.getChannel(rep_id);
+		int cn = ch.getCh_id();
+		rda.addAttribute("cn", cn);
+		return "redirect:/post/list.do?page=1";
+	}
+
+	/*
+	 * @RequestMapping(value = "editprofileform.do") public ModelAndView
+	 * profileForm(HttpServletRequest req) { ModelAndView mav = new
+	 * ModelAndView("member/profileform"); HttpSession session =
+	 * req.getSession(false); String return mav; }
+	 * 
+	 * // 회원정보수정Form으로 이동
+	 * 
+	 * @RequestMapping(value = "/member/editForm.do") public ModelAndView
+	 * editForm(HttpServletRequest req) { ModelAndView mav = new
+	 * ModelAndView("member/editForm"); HttpSession session = req.getSession(false);
+	 * String id = (String) session.getAttribute("id"); Member m =
+	 * service.getMemberId(Integer.parseInt(id)); mav.addObject("m", m); return mav;
+	 * }
+	 */
 }

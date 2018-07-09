@@ -17,6 +17,19 @@
 		<result property="rep_name" column="rep_name" />
 		<result property="rep_url" column="rep_url" />
 	</resultMap>
+	<resultMap type="vo.UserMeta2" id="UM2ResultMap">
+		<result property="id" column="user_id" />
+		<result property="rep_id" column="rep_id" />
+		<result property="nickname" column="nickname" />
+		<result property="admin_level" column="admin_level" />
+	</resultMap>
+	<resultMap type="vo.Channel" id="ChResultMap">
+		<result property="ch_id" column="channel_id" />
+		<result property="ch_name" column="channel_name" />
+		<result property="ch_type" column="channel_type" />
+		<result property="ch_status" column="channel_status" />
+		<result property="rep_id" column="rep_id" />
+	</resultMap>
 
 	<select id="select" resultMap="MemberResultMap"
 		parameterType="int">
@@ -76,4 +89,19 @@
 	<select id="selectMemberAll" parameterType="Integer" resultMap="MemberResultMap">
 	select * from member where user_id=#{id}
 	</select>
+	<select id="selectUserMeta2" parameterType="map" resultMap="UM2ResultMap">
+	select * from user_meta2 where user_id=#{id} and rep_id=#{rep_id}
+	</select>
+	<update id="editUM2" parameterType="vo.UserMeta2">	
+	update user_meta2 set nickname=#{nickname} where user_id=#{id} and rep_id=#{rep_id}
+	</update>
+	<select id="selectChannel" parameterType="Integer"
+		resultMap="ChResultMap">
+		select *
+		from channel
+		where channel_id=(select min(channel_id)
+		from channel where
+		rep_id=#{rep_id})
+	</select>
+	
 </mapper>
