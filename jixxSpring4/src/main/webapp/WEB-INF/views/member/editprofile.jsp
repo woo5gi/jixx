@@ -37,12 +37,17 @@
 					<label class="form-text text-muted">This could be your first name, or a nickname -
 						however you'd like people to refer to you in FILE CETACEA</label>
 				</div>
-
 				<div class="box-footer">
-					<button type="submit" class="btn btn-primary">Save</button>
+					<button type="button" id="memberout" class="btn btn-primary" style="width: 50%">회원탈퇴</button>
+					<button id="submit" class="btn  btn-primary" style="width: 49%">Save</button>
 				</div>
+				
+
+<!-- 				<div class="box-footer">
+					<button type="submit" class="btn btn-primary">Save</button>
+				</div> -->
 			</form>
-			<input type="button" class="btn btn-primary" id="memberout" value="회원탈퇴">
+			<!-- <input type="button" class="btn btn-primary" id="memberout" value="회원탈퇴"> -->
 		</div>
 	</div>
 </div>
