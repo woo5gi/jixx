@@ -6,6 +6,7 @@ import vo.Channel;
 import vo.Member;
 import vo.Post;
 import vo.Repository;
+import vo.UserMeta;
 
 public interface Service {
 	void write(Post post);
@@ -40,5 +41,7 @@ public interface Service {
 
 	ArrayList<Post> getRepost(ArrayList<Post> list);
 	int getUserAdminLevel(int id, int rep_id);
+
+	UserMeta getUserMeta(int id, int rep_id, int chid);
 
 }

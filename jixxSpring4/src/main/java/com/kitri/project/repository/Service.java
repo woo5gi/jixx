@@ -85,6 +85,12 @@ public interface Service {
 
 	void deleteUserMeta2(int id, int rep_id);
 
+	void changeAdminLevel(UserMeta2 um2);
+
+	void alarmCheck(int id,int chid, int rep_id, int alarm_type);
+
+	void alarmUnCheck(int id, int chid, int rep_id, int alarm_type);
+
 	
 
 	

@@ -31,6 +31,7 @@ import vo.Channel;
 import vo.Member;
 import vo.Post;
 import vo.Repository;
+import vo.UserMeta;
 
 @Controller
 public class PostController implements ApplicationContextAware {
@@ -101,8 +102,11 @@ public class PostController implements ApplicationContextAware {
 		Repository r = service.getRepository(rep_id);
 		ModelAndView mav = new ModelAndView("/template/main");
 		Channel ch = service.getChannel(cn);
+		int chid= ch.getCh_id();
+		UserMeta um = service.getUserMeta(id,rep_id,chid);
 		System.out.println("chid:" + ch.getCh_id());
 		System.out.println(repost.size());
+		mav.addObject("um",um);
 		mav.addObject("repost", repost);
 		int adminlevel = service.getUserAdminLevel(id, rep_id);
 		mav.addObject("adminlevel", adminlevel);

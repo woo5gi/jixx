@@ -15,11 +15,6 @@
 				return;
 			}
 		});
-		// 	        $(THIS).PARENT('LI.ADDDEDEMAIL').NEXT().REMOVE(); // REMOVE THE <BR>
-		// 			$(THIS).PARENT('LI.ADDDEDEMAIL').REMOVE();
-		$('.changeadminlevel').on('click', function() {
-			alert('asdf');
-		})
 		$('#deleterep').click(function() {
 			var rep_id = $('input[name=rep_id]').val();
 			var conresult = confirm("저장소를 정말 삭제하시겠습니까.");
@@ -29,17 +24,24 @@
 				return;
 			}
 		})
-		$('changeadminlevel').on('click', function() {})
+		$('.changeadminlevel').on('click', function() {
+			var selectoption = $('#selectbox option:selected').val();
+			var id = $(this).prev().prev('input[name=id]').val();
+			var rep_id = $(this).prev('input[name=rep_id]').val();
+			$(location).attr('href', "${pageContext.request.contextPath}/changeadminlevel.do?admin_level="+selectoption+"&rep_id="+rep_id+"&id="+id);
+			
+
+		})
 		$('#repout').on('click', function() {
 			var conresult = confirm("저장소를 정말 탈퇴하시겠습니까.");
 			if (conresult == true) {
-				$(location).attr('href',"${pageContext.request.contextPath}/repout.do");
+				$(location).attr('href', "${pageContext.request.contextPath}/repout.do");
 			} else if (conresult == false) {
 				return;
 			}
-		
+
 		})
-		
+
 	});
 </script>
 
@@ -48,9 +50,9 @@
 <body>
 
 	<c:choose>
-	<c:when test="${adminlevel eq 1 }">
-	<input type="button" id="repout" value="저장소탈퇴">
-	</c:when>
+		<c:when test="${adminlevel eq 1 }">
+			<input type="button" id="repout" value="저장소탈퇴">
+		</c:when>
 		<c:when test="${adminlevel eq 2 }">
 			<form id="channelform" action="${pageContext.request.contextPath}/deletech.do">
 				<c:forEach var="aa" items="${chlist}" varStatus="status">
@@ -73,7 +75,8 @@
 				<c:forEach var="aa" items="${um2list}">
 					<c:choose>
 						<c:when test="${aa.admin_level eq 2}">
-							<li><label>${aa.nickname}</label> {aa.admin_level} <select><option value=1>일반사용자</option>
+							<li><label>${aa.nickname}</label> {aa.admin_level} <select id="selectbox"><option
+										value=1>일반사용자</option>
 									<option value=2 selected="selected">중간관리자</option>
 									<option value=3>저장소관리자</option>
 							</select><input type="hidden" name="id" value="${aa.id}"> <input type="hidden" name="rep_id"
@@ -86,10 +89,11 @@
 							</select></li>
 						</c:when>
 						<c:otherwise>
-							<li><label>${aa.nickname}</label><select><option value=1 selected="selected">일반사용자</option>
+							<li><label>${aa.nickname}</label><select id="selectbox"><option value=1 selected="selected">일반사용자</option>
 									<option value=2>중간관리자</option>
 									<option value=3>저장소관리자</option>
-							</select><input type="button" value="권한변경" class="changeadminlevel"><input type="button"
+							</select><input type="hidden" name="id" value="${aa.id}"> <input type="hidden" name="rep_id"
+								value="${aa.rep_id}"><input type="button" value="권한변경" class="changeadminlevel"><input type="button"
 								value="추방" class="deleteuser"></li>
 						</c:otherwise>
 					</c:choose>

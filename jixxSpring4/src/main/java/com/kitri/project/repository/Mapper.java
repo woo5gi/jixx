@@ -88,6 +88,12 @@ public interface Mapper {
 
 	void deleteUserMeta2(Map<String, Object> map);
 
+	void updateAdminLevel(UserMeta2 um2);
+
+	void plusAlarmCheck(Map<String, Object> map);
+
+	void minusAlarmCheck(Map<String, Object> map);
+
 
 
 

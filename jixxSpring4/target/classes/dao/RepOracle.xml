@@ -28,7 +28,7 @@
 		<result property="user_id" column="user_id" />
 		<result property="rep_id" column="rep_id" />		
 		<result property="channel_id" column="channel_id" />
-		<result property="alram_type" column="alram_type" />
+		<result property="alarm_type" column="alarm_type" />
 	</resultMap>
 	<resultMap type="vo.UserMeta2" id="UM2ResultMap">
 		<result property="id" column="user_id" />
@@ -224,4 +224,13 @@
 	<delete id="deleteUserMeta2" parameterType="map">
 	delete from user_meta2 where user_id=#{id} and rep_id=#{rep_id}	
 	</delete>
+	<update id="updateAdminLevel" parameterType="vo.UserMeta2">
+	update user_meta2 set admin_level=#{admin_level} where user_id=#{id} and rep_id=#{rep_id}
+	</update>
+	<update id="plusAlarmCheck" parameterType="map">
+	update user_meta set alarm_type=#{alarm_type} where user_id=#{id} and rep_id=#{rep_id} and channel_id=#{chid}
+	</update>
+	<update id="minusAlarmCheck" parameterType="map">
+	update user_meta set alarm_type=#{alarm_type} where user_id=#{id} and rep_id=#{rep_id} and channel_id=#{chid}
+	</update>
 </mapper>
