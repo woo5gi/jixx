@@ -16,7 +16,7 @@
 </script>
 <div class="bg">
 	<div class="centered">
-		<div class="box ">
+		<div class="box box-primary">
 			<div class="register-box-body">
 
 				<h2 class="headline text-yellow">
