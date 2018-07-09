@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 import javax.annotation.Resource;
+import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -16,6 +17,7 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -25,6 +27,8 @@ import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import com.kitri.project.repository.MailHandler;
 
 import net.coobird.thumbnailator.Thumbnails;
 import vo.Channel;
@@ -37,6 +41,8 @@ import vo.UserMeta;
 public class PostController implements ApplicationContextAware {
 	@Resource(name = "postService")
 	private Service service;
+	@Inject
+	private JavaMailSender mailSender;
 	private WebApplicationContext context = null;
 
 	@RequestMapping(value = "/post/write.do")
@@ -78,11 +84,45 @@ public class PostController implements ApplicationContextAware {
 			post.setFile_original("x");
 		}
 		String nickname = service.getNickname(id, rep_id);
+		ArrayList<Integer> idlist = service.getMemberId(cn,id);
+		ArrayList<String> emaillist = service.getMemberEmail(idlist);
+		try {
+			MailHandler sendMail = new MailHandler(mailSender);
+			Repository r = service.getRepository(rep_id);
+			for (String str : emaillist) {
+				sendMail.setSubject(r.getRep_name() + "저장소의 새 글 알림");
+				sendMail.setText(new StringBuffer().append("<h1>" + r.getRep_name() + "저장소의 새 글 알림</h1>")
+						.append("<a href='localhost:8080/project/postalarm.do?cn=" + cn + "&rep_id=" + rep_id)
+						.append("'target='_blenk'>글 확인</a>").toString());
+				sendMail.setFrom("gusdn4973@gmail.com", "CETACEA");
+				sendMail.setTo(str);
+				sendMail.send();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		post.setChannel_id(cn);
 		post.setNickname(nickname);
 		post.setUser_id(Integer.parseInt(session.getAttribute("id").toString()));
 		service.write(post);
 		return "redirect:/post/list.do?page=1";
+	}
+
+	@RequestMapping(value = "postalarm.do")
+	public String postalarm(@RequestParam("cn") int cn, @RequestParam("rep_id") int rep_id, RedirectAttributes rda,
+			HttpServletRequest req) {
+		HttpSession session = req.getSession(false);
+		try {
+			int id = (int) session.getAttribute("id");
+		} catch (Exception e) {
+			e.printStackTrace();
+			return "redirect:/member/login";
+		}
+		session.setAttribute("rep_id", rep_id);
+
+		rda.addAttribute("cn", cn);
+		return "redirect:/post/list.do?page=1";
+
 	}
 
 	@RequestMapping(value = "/post/list.do", method = RequestMethod.GET)
@@ -102,11 +142,11 @@ public class PostController implements ApplicationContextAware {
 		Repository r = service.getRepository(rep_id);
 		ModelAndView mav = new ModelAndView("/template/main");
 		Channel ch = service.getChannel(cn);
-		int chid= ch.getCh_id();
-		UserMeta um = service.getUserMeta(id,rep_id,chid);
+		int chid = ch.getCh_id();
+		UserMeta um = service.getUserMeta(id, rep_id, chid);
 		System.out.println("chid:" + ch.getCh_id());
 		System.out.println(repost.size());
-		mav.addObject("um",um);
+		mav.addObject("um", um);
 		mav.addObject("repost", repost);
 		int adminlevel = service.getUserAdminLevel(id, rep_id);
 		mav.addObject("adminlevel", adminlevel);

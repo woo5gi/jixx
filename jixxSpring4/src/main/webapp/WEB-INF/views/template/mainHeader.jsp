@@ -143,24 +143,48 @@
 }
 </style>
 <script type="text/javascript">
+/* $(function() {
+
+	$('input:checkbox[name="alarmcb"]').each(function() {
+
+		this.checked = true; //checked 처리
+
+		if (this.checked) { //checked 처리된 항목의 값
+
+			alert(this.value);
+
+		}
+
+	});
+
+});
+ */
+
+
+	출처: http: //openlife.tistory.com/381 [농사짓는 개발자]
 	function myFunction() {
-		alert('클릭됨');
-		var checkbox = $('input[name=alarmcb]').val();
-		var chid= $('input[name=alarmcb]').prev('input[name=ch_id]').val();
-		if (checkbox.checked == true) {
+		var checkbox = $('input:checkbox[name=alarmcb]');
+		var chid = checkbox.prev('input[name=ch_id]').val();
+		if (checkbox.is(":checked")) {
 			alert("체크활성")
 			$.ajax({
 				url : "${pageContext.request.contextPath}/alarmcheck.do",
-				data: {"alarm_type": 1 ,"chid":chid},
+				data : {
+					"alarm_type" : 1,
+					"chid" : chid
+				},
 				success : function(result) {
 					$("#div1").html(result);
 				}
 			});
-		} else {
+		} else if ($('input:checkbox[name="alarmcb"]').is(":checked") == false) {
 			alert("체크비활성");
 			$.ajax({
 				url : "${pageContext.request.contextPath}/alarmuncheck.do",
-				data: {"alarm_type": 0,"chid":chid},
+				data : {
+					"alarm_type" : 0,
+					"chid" : chid
+				},
 				success : function(result) {
 					$("#div1").html(result);
 				}
@@ -365,15 +389,10 @@
 											class="btn btn-default btn-flat">Sign out</a>
 									</div>
 								</li>
-			</ul>
-			</li>
-			</c:otherwise>
-
-			</c:choose>
-			</c:otherwise>
-			</c:choose>
-
-
+							</c:otherwise>
+						</c:choose>
+					</c:otherwise>
+				</c:choose>
 			</ul>
 		</div>
 		</nav> </header>

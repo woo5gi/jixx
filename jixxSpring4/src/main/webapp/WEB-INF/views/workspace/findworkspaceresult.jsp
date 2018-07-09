@@ -34,7 +34,7 @@
                 <tr>
                	<c:set var="represult" value="${rep_list}"/>
                 <td><c:forEach var="aa" items="${repidlist}">${aa}</c:forEach></td>
-                <td><c:forEach var="aa" items="${usernamelist}">${aa}</c:forEach></td>
+                <td><c:forEach var="aa" items="${usernamelist}">${aa}&nbsp;&nbsp;</c:forEach></td>
                 <c:forEach var="aa" items="${repnamelist}">
                 <td> ${aa}</td>
                 <td><input type="button" value="가입신청"></td>
