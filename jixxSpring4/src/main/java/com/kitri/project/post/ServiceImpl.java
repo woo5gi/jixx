@@ -181,4 +181,16 @@ public class ServiceImpl implements Service {
 		int t = mapper.selectUserAdminLevel(map);
 		return t;
 	}
+
+	@Override
+	public void repostWrite(Post post) {
+		mapper = sqlSession.getMapper(Mapper.class);
+		mapper.repostInsert(post);
+	}
+
+	@Override
+	public int getRepostID(int user_id) {
+		mapper = sqlSession.getMapper(Mapper.class);
+		return mapper.selectRepostID(user_id);
+	}
 }

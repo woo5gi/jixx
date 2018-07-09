@@ -90,7 +90,7 @@
 	</insert>
 	<insert id="insertBoard" parameterType="map">
 		insert into post
-		values((select max(post_id)+1 from post),null,#{nickname},
+		values((select max(post_id)+1 from post),0,#{nickname},
 		'저장소에
 		오신것을
 		환영합니다', #{user_id}, sysdate,null,'x',null,3,#{ch_id})

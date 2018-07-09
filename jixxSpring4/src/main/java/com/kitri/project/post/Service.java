@@ -41,4 +41,8 @@ public interface Service {
 	ArrayList<Post> getRepost(ArrayList<Post> list);
 	int getUserAdminLevel(int id, int rep_id);
 
+	void repostWrite(Post post);
+
+	int getRepostID(int user_id);
+
 }

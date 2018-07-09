@@ -27,4 +27,6 @@ public interface Mapper {
 	ArrayList<Post> selectRepost(ArrayList<Post> list);
 	
 	int selectUserAdminLevel(Map<String, Object> map);
+	void repostInsert(Post post);
+	int selectRepostID(int user_id);
 }
