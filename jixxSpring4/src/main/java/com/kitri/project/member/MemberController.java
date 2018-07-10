@@ -210,12 +210,20 @@ public class MemberController {
 
 	// createworkspace할때 인증번호 메일로 보내는기능
 	@RequestMapping(value = "emailauth.do")
-	public String emailAuth(HttpServletRequest req, @RequestParam(value = "email") String email,
+	public ModelAndView emailAuth(HttpServletRequest req, @RequestParam(value = "email") String email,
 			@RequestParam(value = "requestfrom") String requestfrom)
 			throws MessagingException, UnsupportedEncodingException {
 		HttpSession session = req.getSession(false);
+		
+		ModelAndView mav = new ModelAndView();	
 		MailHandler sendMail = new MailHandler(mailSender);
 		System.out.println("email:" + email);
+		Member m = service.getMemberByEmail(email);
+		
+		mav.addObject("user_name", m.getName());
+		mav.addObject("email", email);
+		mav.addObject("m", m);
+		
 		Random ran = new Random();
 		int ran2 = 0;
 		while (ran2 <= 100000) {
@@ -223,6 +231,9 @@ public class MemberController {
 		}
 		if (requestfrom.equals("createws")) {
 			int id = (int) session.getAttribute("id");
+			ArrayList<String> repnamelist = service.getRepNameListById(id);
+			mav.addObject("id", id);
+			mav.addObject("rep_list", repnamelist);
 			sendMail.setSubject("FILE CETACEA 이메일인증");
 			sendMail.setText(
 					new StringBuffer().append("<h1>이메일인증</h1>").append("<a href='localhost:8080/project/verifyForm.do")
@@ -231,8 +242,8 @@ public class MemberController {
 			sendMail.setTo(email);
 			sendMail.send();
 			service.setTempkey(ran2, id);
-			return "member/verify";
-		} else if (requestfrom.equals("findpass")) {
+			mav.setViewName("member/verify");
+		} else if (requestfrom.equals("findpass")) {			
 			sendMail.setSubject("FILE CETACEA 비밀번호 찾기 이메일인증");
 			sendMail.setText(new StringBuffer().append("<h1>이메일인증</h1>")
 					.append("<a href='localhost:8080/project/verifypass.do?email=" + email + "&tempkey=" + ran2)
@@ -241,8 +252,12 @@ public class MemberController {
 			sendMail.setTo(email);
 			sendMail.send();
 			service.setTempkey(ran2, email);
-			return "member/verifypass";
+			mav.setViewName("member/verifypass"); 
 		} else if (requestfrom.equals("deleterep")) {
+			int id = (int) session.getAttribute("id");
+			ArrayList<String> repnamelist = service.getRepNameListById(id);
+			mav.addObject("id", id);
+			mav.addObject("rep_list", repnamelist);
 			sendMail.setSubject("FILE CETACEA 저장소삭제 이메일인증");
 			sendMail.setText(new StringBuffer().append("<h1>이메일인증</h1>")
 					.append("<a href='localhost:8080/project/repdlverifyform.do")
@@ -251,7 +266,7 @@ public class MemberController {
 			sendMail.setTo(email);
 			sendMail.send();
 			service.setTempkey(ran2, email);
-			return "member/verifydelrep";
+			mav.setViewName("member/verifydelrep");
 		} else if (requestfrom.equals("memberout")) {
 			sendMail.setSubject("FILE CETACEA 회원탈퇴 이메일인증");
 			sendMail.setText(new StringBuffer().append("<h1>이메일인증</h1>")
@@ -261,9 +276,9 @@ public class MemberController {
 			sendMail.setTo(email);
 			sendMail.send();
 			service.setTempkey(ran2, email);
-			return "member/memberoutverifyform";
+			mav.setViewName("member/memberoutverifyform");
 		}
-		return null;
+		return mav;
 	}
 
 	// 메일로보낸 인증키와 입력받은값 비교하여 메일인증
@@ -308,7 +323,7 @@ public class MemberController {
 				 * session.removeAttribute("rep_id");
 				 */
 				/* session.invalidate(); */
-				out.println("<script>alert('+회원탈퇴완료+'); </script>");
+				out.println("<script>alert('회원탈퇴완료'); </script>");
 				out.flush();
 
 				/*

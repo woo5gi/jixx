@@ -398,6 +398,13 @@ public class ServiceImpl implements Service {
 		return t;
 	}
 
+	@Override
+	public Member getMemberByEmail(String email) {
+		repMapper = sqlSession.getMapper(Mapper.class);
+		Member m = repMapper.selectMemberByEmail(email);
+		return m;
+	}
+
 	
 
 	

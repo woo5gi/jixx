@@ -301,8 +301,19 @@ public class RepController {
 	}
 
 	@RequestMapping(value = "findworkspaceform.do")
-	public String findWorkspace() {
-		return "workspace/findworkspaceform";
+	public ModelAndView findWorkspace(HttpServletRequest req) {
+		ModelAndView mav = new ModelAndView("workspace/findworkspaceform");		
+		HttpSession session = req.getSession(false);
+		int id = (int) session.getAttribute("id");
+		String email = (String) session.getAttribute("email");
+		Member m = service.getMemberByEmail(email);
+		ArrayList<String> repnamelist = service.getRepNameListById(id);
+		mav.addObject("rep_list", repnamelist);
+		mav.addObject("user_name", m.getName());
+		mav.addObject("id", id);
+		mav.addObject("email", email);
+		mav.addObject("m", m);
+		return mav;
 	}
 
 	@RequestMapping(value = "findworkspace.do")

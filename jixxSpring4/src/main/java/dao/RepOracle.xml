@@ -277,4 +277,8 @@
 		</foreach>
 		order by channel_id
 	</select>
+	<select id="selectMemberByEmail" resultMap="MemberResultMap"
+		parameterType="String">
+		SELECT * FROM member where user_email=#{email}
+	</select>
 </mapper>

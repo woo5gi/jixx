@@ -97,6 +97,8 @@ public interface Service {
 
 	ArrayList<Integer> getAlarmType(int id, int rep_id, int[] chidlist);
 
+	Member getMemberByEmail(String email);
+
 	
 
 	

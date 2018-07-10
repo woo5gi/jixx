@@ -100,6 +100,8 @@ public interface Mapper {
 
 	ArrayList<Integer> selectAlarmType(Map<String, Object> map);
 
+	Member selectMemberByEmail(String email);
+
 
 
 
