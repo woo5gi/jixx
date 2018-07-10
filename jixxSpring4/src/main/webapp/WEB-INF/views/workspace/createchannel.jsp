@@ -97,7 +97,7 @@ input:checked+.slider:before {
 				<div class="box-body">
 					<div class="form-group">
 						<label>name</label> <input type="text" name="chtitle" placeholder="e.g.leads"
-							class="form-control">
+							class="form-control" required>
 					</div>
 					<div class="form-group">
 						<label id="invitelabel">Send invates to:(optional)<c:forEach var="r"

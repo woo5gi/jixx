@@ -59,7 +59,7 @@ padding:4px;
 						<div id="emailinput" class="col-5">
 							<ul id="input">
 								<li><input type="email" name="address" placeholder="name@example.com"
-									class="form-control"></li>
+									class="form-control" required></li>
 								<br>
 							</ul>
 						</div>
