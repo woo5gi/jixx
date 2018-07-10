@@ -127,7 +127,6 @@
 	<c:set var="rep_id" value="${rep_id}" />
 	<c:set var="ch_list" value="${ch_list}" />
 	<c:set var="user_list" value="${user_list}" />
-	<c:set var="user_id" value="${id }" />
 	<c:set var="email" value="${email}" />
 	<c:set var="replist" value="${rep_list}" />
 	<c:set var="user_name" value="${user_name}" />
@@ -322,7 +321,6 @@
 					</c:otherwise>
 				</c:choose>
 
-
 			</ul>
 		</div>
 		</nav> </header>
@@ -373,13 +371,16 @@
 			</a> </li>
 			<div class="liscroll">
 			<c:forEach var="aa" items="${nicknamelist}" varStatus="status">
-					<li class="listyle"><a href="<%=request.getContextPath()%>/post/list.do?page=1&cn=${status.count}&ch_list=${ch_list}&nicknamelist=${nicknamelist}">
+	<%-- 				<li class="listyle"><a href="<%=request.getContextPath()%>/post/list.do?page=1&cn=${status.count}&ch_list=${ch_list}&nicknamelist=${nicknamelist}"> --%>
+					<li class="listyle"><a href="<%=request.getContextPath()%>/privatechat.do" method="post">
 							<i class="fa fa fa-user i1"></i>${aa}</a>
 					</li>
 				</c:forEach> 
 			</div>
-				
-				<li class="header i1"><a href="${pageContext.request.contextPath }/moreteam.do?"> Invate
+				<li class="header i1"><a href="<%=request.getContextPath()%>/privatechat.do" method="post"> Chat Room
+        <i class="fa fa-plus-circle"></i></a>
+        </li>
+				<li class="header i1"><a href="${pageContext.request.contextPath }/moreteam.do?"> Invite
 					People &nbsp; <i class="fa fa-plus-circle"></i>
 			</a></li>
 			</ul>
