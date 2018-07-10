@@ -8,14 +8,14 @@
 		$('a.nicknamelist').on('click', function() {
 			var user = $(this).text().trim();
 			var checkbox = $('input[name=chtype]');
-			var nickname = $(this);
 			 $('input[name=chtype]').checked = true;
 			$("<li class='addnicknamelist'><input type='text' name='chinvitenicknameinput' placeholder='Search by name' class='form-control' value=" + user + "><input type='button' name='cancelinvite' class='cancelinvite' value='삭제'></li>").appendTo("#invitelabel");
-			nickname.hide();
+			$(this).hide();
 			$('.cancelinvite').on('click', function() {
-				 var li = $(this).parent($('li.addnicknamelist'));
+				var nickname = $(this).prev('.form-control').val()
+				$('#'+nickname).show();
+				var li = $(this).parent($('li.addnicknamelist'));
 				li.remove();
-				nickname.show();
 			});
 		});
 
@@ -109,7 +109,7 @@ input:checked+.slider:before {
 					<div class="form-group">
 						<label id="invitelabel">Send invates to:(optional)<c:forEach var="r"
 								items="${nicknamelist}" varStatus="status">
-								<a class="nicknamelist">${r}</a>
+								<a class="nicknamelist" id="${r}">${r}</a>
 							</c:forEach></label>
 					</div>
 				</div>
