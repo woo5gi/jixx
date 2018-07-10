@@ -327,7 +327,15 @@ public class RepController {
 		ArrayList<UserMeta2> um2list = service.getUserMeta2List(rep_id);
 		Repository r = service.getRepository(rep_id);
 		Member m = service.getMemberAll(id);
+		Member m2 = service.getMember(id);
+		ArrayList<String> repnamelist = service.getRepNameListById(id);
 		System.out.println("email" + m.getEmail());
+		mav.addObject("id",id);
+		mav.addObject("rep_id", rep_id);
+		mav.addObject("rep_name", r.getRep_name());
+		mav.addObject("user_name", m2.getName());
+		mav.addObject("rep_list", repnamelist);
+		mav.addObject("adminlevel", adminlevel);
 		mav.addObject("chlist", chlist);
 		mav.addObject("um2list", um2list);
 		mav.addObject("adminlevel", adminlevel);

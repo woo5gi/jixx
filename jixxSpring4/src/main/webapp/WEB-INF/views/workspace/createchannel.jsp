@@ -12,7 +12,7 @@
 			$("<li class='addnicknamelist'><input type='text' name='chinvitenicknameinput' placeholder='Search by name' class='form-control' value=" + user + "><input type='button' name='cancelinvite' class='cancelinvite' value='삭제'></li>").appendTo("#invitelabel");
 			this.remove();
 		});
-		$('.cancelinvite').on('click', function() {
+		$('input[type=button].cancelinvite').on('click', function() {
 			alert('a');
 			/* var li = $(this).parent($('li.addnicknamelist'));
 			var nickname = $(tihs).prev('input[name=chinvitenicknameinput]').val();

@@ -90,7 +90,7 @@ public class MemberController {
 			e.printStackTrace();
 			out.println("<script>alert('session값이 없습니다'); </script>");
 			out.flush();
-			mav = new ModelAndView("member/index");
+			mav = new ModelAndView("template/index");
 		}
 		return mav;
 	}
@@ -329,8 +329,24 @@ public class MemberController {
 
 	// 비번찾기누르면 인증번호 메일전송하는 페이지로이동
 	@RequestMapping(value = "member/forgotpass.do")
-	public String findPass() {
-		return "member/forgotpassword";
+	public ModelAndView findPass(HttpServletRequest req) throws Exception{
+		HttpSession session = req.getSession(false);		
+		ModelAndView mav = new ModelAndView("member/forgotpassword");
+		try {
+			int id = (int) session.getAttribute("id");
+			String email = (String) session.getAttribute("email");
+			Member m2 = service.getMemberByEmail(email);
+			System.out.println("1111111" + m2.getName());
+			mav.addObject("user_name", m2.getName());
+			mav.addObject("id", id);
+			mav.addObject("email", email);
+			ArrayList<String> repnamelist = service.getRepNameListById(id);
+			mav.addObject("rep_list", repnamelist);
+			System.out.println(repnamelist);
+		} catch (NullPointerException e) {
+			e.printStackTrace();
+		}
+		return mav;
 	}
 
 	@RequestMapping(value = "verifypass.do")
