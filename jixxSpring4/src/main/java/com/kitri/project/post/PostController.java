@@ -87,21 +87,24 @@ public class PostController implements ApplicationContextAware {
 		}
 		String nickname = service.getNickname(id, rep_id);
 		ArrayList<Integer> idlist = service.getMemberId(cn, id);
-		ArrayList<String> emaillist = service.getMemberEmail(idlist);
-		try {
-			MailHandler sendMail = new MailHandler(mailSender);
-			Repository r = service.getRepository(rep_id);
-			for (String str : emaillist) {
-				sendMail.setSubject(r.getRep_name() + "저장소의 새 글 알림");
-				sendMail.setText(new StringBuffer().append("<h1>" + r.getRep_name() + "저장소의 새 글 알림</h1>")
-						.append("<a href='localhost:8080/project/postalarm.do?cn=" + cn + "&rep_id=" + rep_id)
-						.append("'target='_blenk'>글 확인</a>").toString());
-				sendMail.setFrom("gusdn4973@gmail.com", "CETACEA");
-				sendMail.setTo(str);
-				sendMail.send();
+		ArrayList<String> emaillist = null;
+		if (!idlist.isEmpty()) {
+			emaillist = service.getMemberEmail(idlist);
+			try {
+				MailHandler sendMail = new MailHandler(mailSender);
+				Repository r = service.getRepository(rep_id);
+				for (String str : emaillist) {
+					sendMail.setSubject(r.getRep_name() + "저장소의 새 글 알림");
+					sendMail.setText(new StringBuffer().append("<h1>" + r.getRep_name() + "저장소의 새 글 알림</h1>")
+							.append("<a href='localhost:8080/project/postalarm.do?cn=" + cn + "&rep_id=" + rep_id)
+							.append("'target='_blenk'>글 확인</a>").toString());
+					sendMail.setFrom("gusdn4973@gmail.com", "CETACEA");
+					sendMail.setTo(str);
+					sendMail.send();
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
 		}
 		post.setChannel_id(cn);
 		post.setNickname(nickname);
