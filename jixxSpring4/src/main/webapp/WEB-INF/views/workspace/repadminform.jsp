@@ -4,108 +4,108 @@
 <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 <style type="text/css">
 .centered1 {
-	display: table;
-	margin-left: auto;
-	margin-right: auto;
-	width: 980px;
-	padding-top: 8%;
+   display: table;
+   margin-left: auto;
+   margin-right: auto;
+   width: 980px;
+   padding-top: 8%;
 }
 
 .listbox {
-	overflow-y: scroll;
-	height: 350px;
+   overflow-y: scroll;
+   height: 350px;
 }
 
 .callout {
-	background-color: #001f3f;
+   background-color: #001f3f;
 }
 
 .bg-navy {
-	margin: 0px;
+   margin: 0px;
 }
 </style>
 
 <script type="text/javascript">
-	$(function() {
-		$('input.deletech').on('click', function() {
-			var channelname = $(this).prev('label.ch_name').text().trim();
+   $(function() {
+      $('input.deletech').on('click', function() {
+         var channelname = $(this).prev('label.ch_name').text().trim();
 
-			var ch_id = $(this).prev('input[name=ch_id]').val();
-			var conresult = confirm("정말 삭제하시겠습니까.");
-			if (conresult == true) {
-				$(location).attr('href', "${pageContext.request.contextPath}/deletech.do?ch_id=" + ch_id);
-			} else if (conresult == false) {
-				return;
-			}
-		});
-		$('#deleterep').click(function() {
-			var rep_id = $('input[name=rep_id]').val();
-			var conresult = confirm("저장소를 정말 삭제하시겠습니까.");
-			if (conresult == true) {
-				$('#deleterepform').submit();
-			} else if (conresult == false) {
-				return;
-			}
-		})
-		$('.changeadminlevel').on('click', function() {
-			var selectoption = $('#selectbox option:selected').val();
-			var id = $(this).prev().prev('input[name=id]').val();
-			var rep_id = $(this).prev('input[name=rep_id]').val();
-			$(location).attr('href', "${pageContext.request.contextPath}/changeadminlevel.do?admin_level=" + selectoption + "&rep_id=" + rep_id + "&id=" + id);
+         var ch_id = $(this).prev('input[name=ch_id]').val();
+         var conresult = confirm("정말 삭제하시겠습니까.");
+         if (conresult == true) {
+            $(location).attr('href', "${pageContext.request.contextPath}/deletech.do?ch_id=" + ch_id);
+         } else if (conresult == false) {
+            return;
+         }
+      });
+      $('#deleterep').click(function() {
+         var rep_id = $('input[name=rep_id]').val();
+         var conresult = confirm("저장소를 정말 삭제하시겠습니까.");
+         if (conresult == true) {
+            $('#deleterepform').submit();
+         } else if (conresult == false) {
+            return;
+         }
+      })
+      $('.changeadminlevel').on('click', function() {
+         var selectoption = $('#selectbox option:selected').val();
+         var id = $(this).prev().prev('input[name=id]').val();
+         var rep_id = $(this).prev('input[name=rep_id]').val();
+         $(location).attr('href', "${pageContext.request.contextPath}/changeadminlevel.do?admin_level=" + selectoption + "&rep_id=" + rep_id + "&id=" + id);
 
 
-		})
-		$('#repout').on('click', function() {
-			var conresult = confirm("저장소를 정말 탈퇴하시겠습니까.");
-			if (conresult == true) {
-				$(location).attr('href', "${pageContext.request.contextPath}/repout.do");
-			} else if (conresult == false) {
-				return;
-			}
+      })
+      $('#repout').on('click', function() {
+         var conresult = confirm("저장소를 정말 탈퇴하시겠습니까.");
+         if (conresult == true) {
+            $(location).attr('href', "${pageContext.request.contextPath}/repout.do");
+         } else if (conresult == false) {
+            return;
+         }
 
-		})
+      })
 
-	});
+   });
 </script>
 <!-- Bootstrap 3.3.7 -->
 <link rel="stylesheet"
-	href="<%=request.getContextPath()%>/resources/bower_components/bootstrap/dist/css/bootstrap.min.css">
+   href="<%=request.getContextPath()%>/resources/bower_components/bootstrap/dist/css/bootstrap.min.css">
 <!-- Font Awesome -->
 <link rel="stylesheet"
-	href="<%=request.getContextPath()%>/resources/bower_components/font-awesome/css/font-awesome.min.css">
+   href="<%=request.getContextPath()%>/resources/bower_components/font-awesome/css/font-awesome.min.css">
 <!-- Ionicons -->
 <link rel="stylesheet"
-	href="<%=request.getContextPath()%>/resources/bower_components/Ionicons/css/ionicons.min.css">
+   href="<%=request.getContextPath()%>/resources/bower_components/Ionicons/css/ionicons.min.css">
 <!-- Theme style -->
 <link rel="stylesheet" href="<%=request.getContextPath()%>/resources/dist/css/AdminLTE.min.css">
 <!-- AdminLTE Skins. Choose a skin from the css/skins
    folder instead of downloading all of them to reduce the load. -->
 <link rel="stylesheet"
-	href="<%=request.getContextPath()%>/resources/dist/css/skins/_all-skins.min.css">
+   href="<%=request.getContextPath()%>/resources/dist/css/skins/_all-skins.min.css">
 <!-- Morris chart -->
 <link rel="stylesheet"
-	href="<%=request.getContextPath()%>/resources/bower_components/morris.js/morris.css">
+   href="<%=request.getContextPath()%>/resources/bower_components/morris.js/morris.css">
 <!-- jvectormap -->
 <link rel="stylesheet"
-	href="<%=request.getContextPath()%>/resources/bower_components/jvectormap/jquery-jvectormap.css">
+   href="<%=request.getContextPath()%>/resources/bower_components/jvectormap/jquery-jvectormap.css">
 <!-- Date Picker -->
 <link rel="stylesheet"
-	href="<%=request.getContextPath()%>/resources/bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css">
+   href="<%=request.getContextPath()%>/resources/bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css">
 <!-- Daterange picker -->
 <link rel="stylesheet"
-	href="<%=request.getContextPath()%>/resources/bower_components/bootstrap-daterangepicker/daterangepicker.css">
+   href="<%=request.getContextPath()%>/resources/bower_components/bootstrap-daterangepicker/daterangepicker.css">
 <!-- bootstrap wysihtml5 - text editor -->
 <link rel="stylesheet"
-	href="<%=request.getContextPath()%>/resources/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css">
+   href="<%=request.getContextPath()%>/resources/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css">
 
 <!-- jQuery 3 -->
 <script src="<%=request.getContextPath()%>/resources/bower_components/jquery/dist/jquery.min.js"></script>
 <!-- Bootstrap 3.3.7 -->
 <script
-	src="<%=request.getContextPath()%>/resources/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+   src="<%=request.getContextPath()%>/resources/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
 <!-- SlimScroll -->
 <script
-	src="<%=request.getContextPath()%>/resources/bower_components/jquery-slimscroll/jquery.slimscroll.min.js"></script>
+   src="<%=request.getContextPath()%>/resources/bower_components/jquery-slimscroll/jquery.slimscroll.min.js"></script>
 <!-- FastClick -->
 <script src="<%=request.getContextPath()%>/resources/bower_components/fastclick/lib/fastclick.js"></script>
 <!-- AdminLTE App -->
@@ -117,91 +117,91 @@
 <style type="text/css">
 
 /* .main-sidebar{
-	 position: fixed;
-	 } */
+    position: fixed;
+    } */
 .btnlist {
-	border-top-left-radius: 4px;
-	border-top-right-radius: 4px;
-	border-bottom-right-radius: 0;
-	border-bottom-left-radius: 0;
-	background-color: #ffffff;
-	padding: 7px 10px;
-	border-bottom: 1px solid #f4f4f4;
-	color: #444444;
-	font-size: 14px;
+   border-top-left-radius: 4px;
+   border-top-right-radius: 4px;
+   border-bottom-right-radius: 0;
+   border-bottom-left-radius: 0;
+   background-color: #ffffff;
+   padding: 7px 10px;
+   border-bottom: 1px solid #f4f4f4;
+   color: #444444;
+   font-size: 14px;
 }
 
 .timelinebtn {
-	display: inline;
-	float: right;
+   display: inline;
+   float: right;
 }
 
 .content-header {
-	background: #fff;
-	box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.15);
-	clear: both;
-	display: inline-block;
-	padding: 15px 20px 13px 20px;
-	width: 100%;
+   background: #fff;
+   box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.15);
+   clear: both;
+   display: inline-block;
+   padding: 15px 20px 13px 20px;
+   width: 100%;
 }
 
 .skin-blue .content-header {
-	background: #ffffff;
+   background: #ffffff;
 }
 
 .cname {
-	padding: 15px 15px;
-	float: left;
-	color: #fff;
-	font-size: 17px;
-	list-style: none;
+   padding: 15px 15px;
+   float: left;
+   color: #fff;
+   font-size: 17px;
+   list-style: none;
 }
 
 #user-body1 {
-	background: #e9e9e9;
+   background: #e9e9e9;
 }
 
 .dropdown-menu {
-	overflow-y: scroll;
-	max-height: 500px;
+   overflow-y: scroll;
+   max-height: 500px;
 }
 
 .listyle {
-	padding: 12px 5px 12px 15px;
-	display: block;
+   padding: 12px 5px 12px 15px;
+   display: block;
 }
 
 .liscroll {
-	overflow-y: auto;
-	min-height: 44px;
-	max-height: 132px;
+   overflow-y: auto;
+   min-height: 44px;
+   max-height: 132px;
 }
 
 ::-webkit-scrollbar {
-	width: 16px;
+   width: 16px;
 }
 
 ::-webkit-scrollbar-track {
-	background-color: #222d32;
+   background-color: #222d32;
 }
 
 ::-webkit-scrollbar-thumb {
-	background-color: #555;
+   background-color: #555;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-	background: #555;
+   background: #555;
 }
 
 ::-webkit-scrollbar-button:start:decrement, ::-webkit-scrollbar-button:end:increment
-	{
-	width: 0px;
-	height: 0px;
-	background: #222d32;
+   {
+   width: 0px;
+   height: 0px;
+   background: #222d32;
 }
 
 .i1 {
-	padding-right: 10px
+   padding-right: 10px
 }
 </style>
 <body class="hold-transition skin-blue sidebar-mini">
