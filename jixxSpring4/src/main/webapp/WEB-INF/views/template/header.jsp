@@ -77,13 +77,13 @@
    overflow-y: auto; 
    min-height:58px; 
    max-height: 180px;
-}
+}/* 
 ::-webkit-scrollbar{width: 16px;}
 ::-webkit-scrollbar-track {background-color:#222d32;}
 ::-webkit-scrollbar-thumb {background-color:#555;}
 ::-webkit-scrollbar-thumb:hover {background: #555;}
 ::-webkit-scrollbar-button:start:decrement,::-webkit-scrollbar-button:end:increment {
-width:0px;height:0px;background:#222d32;}
+width:0px;height:0px;background:#222d32;} */
 
 .listyle{
 padding: 15px;
@@ -146,7 +146,7 @@ border-top: 1px solid #dddddd;
 												<li class="user-body" id="user-body1">
 															<a href="${pageContext.request.contextPath}/findworkspaceform.do" class="hidden-xs text-center"
 																aria-expanded="false">Find Workspace</a>
-												<li class="user-body">
+												<%-- <li class="user-body">
 													<div class="row">
 														<div class="pull-left" style="border: 1px;">
 															<a href="${pageContext.request.contextPath}/findworkspaceform.do"
@@ -155,7 +155,7 @@ border-top: 1px solid #dddddd;
 															</a>
 														</div>
 													</div>
-												</li>
+												</li> --%>
 												<!-- Menu Footer-->
 												<li class="user-footer">
 													<div class="pull-left">

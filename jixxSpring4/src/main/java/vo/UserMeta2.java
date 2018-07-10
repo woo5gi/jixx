@@ -1,27 +1,27 @@
 package vo;
 
 public class UserMeta2 {
-	private int user_id;
+	private int id;
 	private int rep_id;
 	private String nickname;
 	private int admin_level;
 	
 	public UserMeta2() {}
 
-	public UserMeta2(int user_id, int rep_id, String nickname, int admin_level) {
+	public UserMeta2(int id, int rep_id, String nickname, int admin_level) {
 		super();
-		this.user_id = user_id;
+		this.id = id;
 		this.rep_id = rep_id;
 		this.nickname = nickname;
 		this.admin_level = admin_level;
 	}
 
-	public int getUser_id() {
-		return user_id;
+	public int getId() {
+		return id;
 	}
 
-	public void setUser_id(int user_id) {
-		this.user_id = user_id;
+	public void setId(int id) {
+		this.id = id;
 	}
 
 	public int getRep_id() {
@@ -50,9 +50,11 @@ public class UserMeta2 {
 
 	@Override
 	public String toString() {
-		return "UserMeta2 [user_id=" + user_id + ", rep_id=" + rep_id + ", nickname=" + nickname + ", admin_level="
-				+ admin_level + "]";
+		return "UserMeta2 [id=" + id + ", rep_id=" + rep_id + ", nickname=" + nickname + ", admin_level=" + admin_level
+				+ "]";
 	}
+
+	
 	
 	
 

@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import javax.annotation.Resource;
 import javax.inject.Inject;
 import javax.mail.MessagingException;
+import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -221,6 +222,8 @@ public class RepController {
 		String user_name = m2.getName();
 		Repository r = service.getRepository(rep_id);
 		Channel ch = service.getChannel(rep_id);
+		int adminlevel = service.getUserAdminLevel(id, rep_id);
+		mav.addObject("adminlevel", adminlevel);
 		mav.addObject("rep_name", r.getRep_name());
 		mav.addObject("user_name", user_name);
 		mav.addObject("id", id);
@@ -318,18 +321,18 @@ public class RepController {
 	public ModelAndView repadminform(HttpServletRequest req, @RequestParam(value = "adminlevel") int adminlevel) {
 		ModelAndView mav = new ModelAndView("workspace/repadminform");
 		HttpSession session = req.getSession(false);
-		int id= (int) session.getAttribute("id");
+		int id = (int) session.getAttribute("id");
 		int rep_id = (int) session.getAttribute("rep_id");
 		ArrayList<Channel> chlist = service.getChList(rep_id);
 		ArrayList<UserMeta2> um2list = service.getUserMeta2List(rep_id);
 		Repository r = service.getRepository(rep_id);
 		Member m = service.getMemberAll(id);
-		System.out.println("email"+m.getEmail());
+		System.out.println("email" + m.getEmail());
 		mav.addObject("chlist", chlist);
 		mav.addObject("um2list", um2list);
 		mav.addObject("adminlevel", adminlevel);
-		mav.addObject("r",r);
-		mav.addObject("m",m);
+		mav.addObject("r", r);
+		mav.addObject("m", m);
 		return mav;
 	}
 
@@ -339,12 +342,61 @@ public class RepController {
 		int rep_id = (int) session.getAttribute("rep_id");
 		System.out.println("ch_id:" + ch_id);
 		service.deleteChannel(ch_id);
-
 		Channel ch = service.getChannel(rep_id);
 		int cn = ch.getCh_id();
 		rda.addAttribute("cn", cn);
-
 		return "redirect:/post/list.do?page=1";
+	}
+
+	@RequestMapping(value = "repout.do")
+	public String repOut(HttpServletRequest req) {
+		HttpSession session = req.getSession(false);
+		int rep_id = (int) session.getAttribute("rep_id");
+		int id = (int) session.getAttribute("id");
+		service.deleteUserMeta(id, rep_id);
+		service.deleteUserMeta2(id, rep_id);
+		session.removeAttribute("rep_id");
+		session.removeAttribute("nickname");
+
+		return "redirect:/index.do";
+	}
+
+	@RequestMapping(value = "changeadminlevel.do")
+	public String changeAdminLevel(RedirectAttributes rda, HttpServletRequest req, UserMeta2 um2) {
+		service.changeAdminLevel(um2);
+		HttpSession session = req.getSession(false);
+		int rep_id = (int) session.getAttribute("rep_id");
+		Channel ch = service.getChannel(rep_id);
+		int cn = ch.getCh_id();
+		rda.addAttribute("cn", cn);
+		return "redirect:/post/list.do?page=1";
+
+	}
+
+	@RequestMapping(value = "alarmcheck.do")
+	public String alarmCheck(HttpServletRequest req, @RequestParam(value = "alarm_type") int alarm_type,
+			@RequestParam(value="chid") int chid) {
+		HttpSession session = req.getSession(false);
+		System.out.println("chid:chid:"+chid);
+		int id = (int) session.getAttribute("id");
+		int rep_id = (int) session.getAttribute("rep_id");
+		System.out.println("alarmtype:"+alarm_type+";;chid:"+chid+";;id,repid:"+id+rep_id);
+		service.alarmCheck(id,chid, rep_id, alarm_type);
+		
+
+		return null;
+
+	}
+	@RequestMapping(value = "alarmuncheck.do")
+	public String alarmUnCheck(HttpServletRequest req, @RequestParam(value = "alarm_type") int alarm_type,
+			@RequestParam(value="chid") int chid) {
+		HttpSession session = req.getSession(false);
+		int id = (int) session.getAttribute("id");
+		int rep_id = (int) session.getAttribute("rep_id");
+		service.alarmUnCheck(id,chid, rep_id, alarm_type);
+
+		return null;
+
 	}
 
 	@RequestMapping(value = "teaminvite.do")
@@ -356,7 +408,5 @@ public class RepController {
 	public String workspaceUrl() {
 		return "workspace/workspaceurl";
 	}
-
-	
 
 }

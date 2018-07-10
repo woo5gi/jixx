@@ -4,9 +4,12 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 import javax.annotation.Resource;
+import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -16,6 +19,7 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -26,16 +30,21 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.kitri.project.repository.MailHandler;
+
 import net.coobird.thumbnailator.Thumbnails;
 import vo.Channel;
 import vo.Member;
 import vo.Post;
 import vo.Repository;
+import vo.UserMeta;
 
 @Controller
 public class PostController implements ApplicationContextAware {
 	@Resource(name = "postService")
 	private Service service;
+	@Inject
+	private JavaMailSender mailSender;
 	private WebApplicationContext context = null;
 
 	@RequestMapping(value = "/post/write.do")
@@ -77,11 +86,44 @@ public class PostController implements ApplicationContextAware {
 			post.setFile_original("x");
 		}
 		String nickname = service.getNickname(id, rep_id);
+		ArrayList<Integer> idlist = service.getMemberId(cn, id);
+		ArrayList<String> emaillist = service.getMemberEmail(idlist);
+		try {
+			MailHandler sendMail = new MailHandler(mailSender);
+			Repository r = service.getRepository(rep_id);
+			for (String str : emaillist) {
+				sendMail.setSubject(r.getRep_name() + "저장소의 새 글 알림");
+				sendMail.setText(new StringBuffer().append("<h1>" + r.getRep_name() + "저장소의 새 글 알림</h1>")
+						.append("<a href='localhost:8080/project/postalarm.do?cn=" + cn + "&rep_id=" + rep_id)
+						.append("'target='_blenk'>글 확인</a>").toString());
+				sendMail.setFrom("gusdn4973@gmail.com", "CETACEA");
+				sendMail.setTo(str);
+				sendMail.send();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		post.setChannel_id(cn);
 		post.setNickname(nickname);
 		post.setUser_id(Integer.parseInt(session.getAttribute("id").toString()));
 		service.write(post);
 		return "redirect:/post/list.do?page=1";
+	}
+
+	@RequestMapping(value = "postalarm.do")
+	public String postalarm(@RequestParam("cn") int cn, @RequestParam("rep_id") int rep_id, RedirectAttributes rda,
+			HttpServletRequest req) {
+		HttpSession session = req.getSession(false);
+		try {
+			int id = (int) session.getAttribute("id");
+		} catch (Exception e) {
+			e.printStackTrace();
+			return "redirect:/member/login";
+		}
+		session.setAttribute("rep_id", rep_id);
+		rda.addAttribute("cn", cn);
+		return "redirect:/post/list.do?page=1";
+
 	}
 
 	@RequestMapping(value = "/post/list.do", method = RequestMethod.GET)
@@ -101,11 +143,23 @@ public class PostController implements ApplicationContextAware {
 		Repository r = service.getRepository(rep_id);
 		ModelAndView mav = new ModelAndView("/template/main");
 		Channel ch = service.getChannel(cn);
+		int a = chlist.size();
+		int[] chidlist = new int[a];
+		for (int i = 0; i < chlist.size(); i++) {
+			chidlist[i] = chlist.get(i).getCh_id();
+			System.out.println("chidlist:" + chidlist[i]);
+		}		
+		ArrayList<Integer> alarmtypelist = service.getAlarmType(id, rep_id, chidlist);
+		for (int i = 0; i < alarmtypelist.size(); i++) {
+			System.out.println("alarmtypelist:"+alarmtypelist);			
+		}
+		System.out.println("alarasd22222:"+alarmtypelist);
 		System.out.println("chid:" + ch.getCh_id());
 		System.out.println(repost.size());
+		mav.addObject("alarmtypelist",alarmtypelist);
 		mav.addObject("repost", repost);
-		int adminlevel=service.getUserAdminLevel(id,rep_id);
-		mav.addObject("adminlevel",adminlevel);
+		int adminlevel = service.getUserAdminLevel(id, rep_id);
+		mav.addObject("adminlevel", adminlevel);
 		mav.addObject("rep_list", repnamelist);
 		mav.addObject("rep_name", r.getRep_name());
 		mav.addObject("user_name", user_name);
@@ -115,7 +169,7 @@ public class PostController implements ApplicationContextAware {
 		mav.addObject("ch_list", chlist);
 		mav.addObject("nicknamelist", nicknamelist);
 		mav.addObject("list", list);
-			System.out.println(list);		
+		System.out.println(list);
 		return mav;
 	}
 
@@ -139,7 +193,6 @@ public class PostController implements ApplicationContextAware {
 		return "redirect:/post/list.do?page=1";
 	}
 
-
 	@RequestMapping(value = "searchboard.do")
 	public ModelAndView searchBoard(HttpServletResponse res, HttpServletRequest req,
 			@RequestParam(value = "search") String search) throws Exception {
@@ -154,6 +207,7 @@ public class PostController implements ApplicationContextAware {
 		res.setContentType("text/html; charset=UTF-8");
 		PrintWriter out = res.getWriter();
 		ArrayList<Post> list = service.getSearchBoard(page, rep_id, search);
+		ArrayList<Post> repost = service.getRepost(list);
 		if (list.isEmpty()) {
 			System.out.println("리스트가널이여");
 			out.println("<script>alert('일치하는 항목이 없습니다'); </script>");
@@ -166,6 +220,7 @@ public class PostController implements ApplicationContextAware {
 		Repository r = service.getRepository(rep_id);
 		Channel ch = service.getChannel(cn);
 		System.out.println("chid:" + ch.getCh_id());
+		mav.addObject("repost", repost);
 		mav.addObject("rep_name", r.getRep_name());
 		mav.addObject("user_name", user_name);
 		mav.addObject("ch", ch);
@@ -177,43 +232,85 @@ public class PostController implements ApplicationContextAware {
 		return mav;
 	}
 
-	
 	@RequestMapping(value = "/post/ajax.do", method = RequestMethod.GET, produces = "application/text; charset=utf8")
-	public @ResponseBody String ajax(@RequestParam(value = "page")int page, @RequestParam(value = "cn")int cn) {
+	public @ResponseBody String ajax(@RequestParam(value = "page") int page, @RequestParam(value = "cn") int cn) {
 		ArrayList<Post> list = service.showMore(page, cn);
+		ArrayList<Post> repost = service.getRepost(list);
 		postListChange(list);
-		for (int j = 0; j < list.size(); j++) {
-			System.out.println(list.get(j).getPost_id());			
-		}
+		Map<String, ArrayList<Post>> map = new HashMap<String, ArrayList<Post>>();
+		map.put("list", list);
+		map.put("repost", repost);
         String str = "";
         ObjectMapper mapper = new ObjectMapper();
         try {
-            str = mapper.writeValueAsString(list);
+            str = mapper.writeValueAsString(map);
+            System.out.println(str);
         } catch (Exception e) {
         	e.printStackTrace();
         }
         return str;
+		for (int j = 0; j < list.size(); j++) {
+			System.out.println(list.get(j).getPost_id());
+		}
+		String str = "";
+		ObjectMapper mapper = new ObjectMapper();
+		try {
+			str = mapper.writeValueAsString(list);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return str;
 	}
+
 	@RequestMapping(value = "/post/searchAjax.do", method = RequestMethod.GET, produces = "application/text; charset=utf8")
-	public @ResponseBody String searchAjax(@RequestParam(value = "page")int page, @RequestParam(value = "rep_id")int rep_id
-			,@RequestParam(value="search") String search) {
+	public @ResponseBody String searchAjax(@RequestParam(value = "page") int page,
+			@RequestParam(value = "rep_id") int rep_id, @RequestParam(value = "search") String search) {
 		ArrayList<Post> list = service.getSearchBoardMore(page, rep_id, search);
+		ArrayList<Post> repost = service.getRepost(list);
 		postListChange(list);
+		Map<String, ArrayList<Post>> map = new HashMap<String, ArrayList<Post>>();
+		map.put("list", list);
+		map.put("repost", repost);
 		 String str = "";
 	        ObjectMapper mapper = new ObjectMapper();
 	        try {
-	            str = mapper.writeValueAsString(list);
+	            str = mapper.writeValueAsString(map);
 	            System.out.println(str);
 	        } catch (Exception e) {
 	        	e.printStackTrace();
 	        }
 	        return str;
+		String str = "";
+		ObjectMapper mapper = new ObjectMapper();
+		try {
+			str = mapper.writeValueAsString(list);
+			System.out.println(str);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return str;
 	}
-	@RequestMapping(value ="/post/update.do", method = RequestMethod.GET)
-	public void update(@RequestParam(value="content")String content, @RequestParam(value="post_id")int post_id) {
+
+	@RequestMapping(value = "/post/update.do", method = RequestMethod.GET)
+	public void update(@RequestParam(value = "content") String content, @RequestParam(value = "post_id") int post_id) {
 		service.change(content, post_id);
 	}
 	
+	@RequestMapping(value="/post/repost.do", method = RequestMethod.POST)
+	public @ResponseBody String repost(HttpServletRequest req, Post post) {
+		HttpSession session = req.getSession(false);
+		int user_id = (int) session.getAttribute("id");
+		int rep_id = (int) session.getAttribute("rep_id");
+		String nickName = service.getNickname(user_id, rep_id);
+		post.setUser_id(user_id);
+		post.setNickname(nickName);
+		service.repostWrite(post);
+		int rePost = service.getRepostID(user_id);
+		String str = "{\"post_id\":\""+rePost+"\",\"nickName\":\""+nickName+"\"}";
+		return str;
+	}
+	
+
 	void postListChange(ArrayList<Post> list) {
 		for (int i = 0; i < list.size(); i++) {
 			if (list.get(i).getPost_status() == 0) {
