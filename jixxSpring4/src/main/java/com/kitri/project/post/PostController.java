@@ -135,7 +135,10 @@ public class PostController implements ApplicationContextAware {
 		ArrayList<String> nicknamelist = service.getNicknameList(rep_id);
 		ArrayList<Channel> chlist = service.getChList(rep_id);
 		ArrayList<Post> list = service.show(page, cn);
-		ArrayList<Post> repost = service.getRepost(list);
+		ArrayList<Post> repost = null;
+		if (!list.isEmpty()) {
+			repost = service.getRepost(list);
+		}
 		postListChange(list);
 		Member m2 = service.getMember(id);
 		ArrayList<String> repnamelist = service.getRepNameListById(id);
@@ -153,9 +156,6 @@ public class PostController implements ApplicationContextAware {
 		for (int i = 0; i < alarmtypelist.size(); i++) {
 			System.out.println("alarmtypelist:"+alarmtypelist);			
 		}
-		System.out.println("alarasd22222:"+alarmtypelist);
-		System.out.println("chid:" + ch.getCh_id());
-		System.out.println(repost.size());
 		mav.addObject("alarmtypelist",alarmtypelist);
 		mav.addObject("repost", repost);
 		int adminlevel = service.getUserAdminLevel(id, rep_id);

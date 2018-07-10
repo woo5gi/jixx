@@ -52,10 +52,12 @@
 												<h3 class="timeline-header">
 													<a href="#">${post.nickname}</a>
 													<div class="timelinebtn">
+													<c:if test="${post.post_status ne 0 }">
+														<a class="repost1">댓글달기</a>
+													</c:if>
 														<c:set var="usernickname" value="${sessionScope.nickname}" />
 														<c:set var="writtennickname" value="${post.nickname}" />
 														<c:if test="${usernickname eq writtennickname}">
-														<a class="repost1">댓글달기</a>
 														<a class="change"> 수정</a>
 															<a class="btn btn-danger btn-xs"
 																href="<%= request.getContextPath() %>/post/delete.do?post_id=${post.post_id}&cn=${ch.ch_id}" id="delete">Delete</a>
@@ -179,8 +181,10 @@
 						'<span class="time"><i class="fa fa-clock-o"></i>'+ list[i].logdate+'</span>'+
 						'<h3 class="timeline-header">'+
 						'<a href="#">'+ list[i].nickname+'</a>'+
-						'<div class="timelinebtn">'+
-						'<a class="repost'+page+'">댓글달기</a>';
+						'<div class="timelinebtn">';
+						if (list[i].post_status != 0) {
+							str += '<a class="repost'+page+'">댓글달기</a>';						
+						}
 						if ('${sessionScope.nickname}' == list[i].nickname) {
 							str += '<a class="change"> 수정</a>'+
 							'<a class="btn btn-danger btn-xs" href="${pageContext.request.contextPath}/post/delete.do?post_id='+list[i].post_id+'&cn=${ch.ch_id}">Delete</a>';
@@ -277,8 +281,10 @@
 						'<span class="time"><i class="fa fa-clock-o"></i>'+ list[i].logdate+'</span>'+
 						'<h3 class="timeline-header">'+
 						'<a href="#">'+ list[i].nickname+'</a>'+
-						'<div class="timelinebtn">'+
-						'<a class="repost'+page+'">댓글달기</a>';
+						'<div class="timelinebtn">';
+						if (list[i].post_status != 0) {
+							str += '<a class="repost'+page+'">댓글달기</a>';						
+						}
 						if ('${sessionScope.nickname}' == list[i].nickname) {
 							str += '<a class="change"> 수정</a>'+
 							'<a class="btn btn-danger btn-xs" href="${pageContext.request.contextPath}/post/delete.do?post_id='+list[i].post_id+'&cn=${ch.ch_id}">Delete</a>';
