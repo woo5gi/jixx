@@ -242,8 +242,8 @@ public class RepController {
 		HttpSession session = req.getSession(false);
 		int rep_id = (int) session.getAttribute("rep_id");
 		ArrayList<Integer> userlist = service.getUserList(rep_id);
-		ArrayList<String> usernamelist = service.getUserNameList(userlist);
-		mav.addObject("usernamelist", usernamelist);
+		ArrayList<String> nicknamelist = service.getUserNickNameList(rep_id,userlist);
+		mav.addObject("nicknamelist",nicknamelist);
 		return mav;
 	}
 
@@ -252,7 +252,7 @@ public class RepController {
 			@RequestParam(value = "chtitle") String chtitle) {
 		ModelAndView mav = new ModelAndView("template/main");
 		HttpSession session = req.getSession(false);
-		int id = (int) session.getAttribute("id");
+		int id = (int) session.getAttribute("id"); 
 		int rep_id = (int) session.getAttribute("rep_id");
 		String email = (String) session.getAttribute("email");
 		ArrayList<Integer> userlist = service.getUserList(rep_id);
@@ -396,7 +396,6 @@ public class RepController {
 		service.alarmUnCheck(id,chid, rep_id, alarm_type);
 
 		return null;
-
 	}
 
 	@RequestMapping(value = "teaminvite.do")

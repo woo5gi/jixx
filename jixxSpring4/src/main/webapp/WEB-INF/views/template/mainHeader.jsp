@@ -1,5 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -16,8 +15,7 @@
 <link rel="stylesheet"
 	href="<%=request.getContextPath()%>/resources/bower_components/Ionicons/css/ionicons.min.css">
 <!-- Theme style -->
-<link rel="stylesheet"
-	href="<%=request.getContextPath()%>/resources/dist/css/AdminLTE.min.css">
+<link rel="stylesheet" href="<%=request.getContextPath()%>/resources/dist/css/AdminLTE.min.css">
 <!-- AdminLTE Skins. Choose a skin from the css/skins
    folder instead of downloading all of them to reduce the load. -->
 <link rel="stylesheet"
@@ -39,8 +37,7 @@
 	href="<%=request.getContextPath()%>/resources/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css">
 
 <!-- jQuery 3 -->
-<script
-	src="<%=request.getContextPath()%>/resources/bower_components/jquery/dist/jquery.min.js"></script>
+<script src="<%=request.getContextPath()%>/resources/bower_components/jquery/dist/jquery.min.js"></script>
 <!-- Bootstrap 3.3.7 -->
 <script
 	src="<%=request.getContextPath()%>/resources/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
@@ -48,11 +45,9 @@
 <script
 	src="<%=request.getContextPath()%>/resources/bower_components/jquery-slimscroll/jquery.slimscroll.min.js"></script>
 <!-- FastClick -->
-<script
-	src="<%=request.getContextPath()%>/resources/bower_components/fastclick/lib/fastclick.js"></script>
+<script src="<%=request.getContextPath()%>/resources/bower_components/fastclick/lib/fastclick.js"></script>
 <!-- AdminLTE App -->
-<script
-	src="<%=request.getContextPath()%>/resources/dist/js/adminlte.min.js"></script>
+<script src="<%=request.getContextPath()%>/resources/dist/js/adminlte.min.js"></script>
 <!-- AdminLTE for demo purposes -->
 <script src="<%=request.getContextPath()%>/resources/dist/js/demo.js"></script>
 
@@ -148,61 +143,36 @@
 }
 </style>
 <script type="text/javascript">
-/* $(function() {
-
-	$('input:checkbox[name="alarmcb"]').each(function() {
-
-		this.checked = true; //checked 처리
-
-		if (this.checked) { //checked 처리된 항목의 값
-
-			alert(this.value);
-
-		}
-
+	$(function() {
+		$('input[name=alarmcb]').on('click', function() {
+			var chid = $(this).val();
+			if ($(this).is(':checked')) {
+				alert("채널 알림메일수신");
+				$.ajax({
+					url : "${pageContext.request.contextPath}/alarmcheck.do",
+					data : {
+						"alarm_type" : 1,
+						"chid" : chid
+					},
+					success : function() {
+						alert('알람활성화');
+					}
+				});
+			} else {
+				alert("채널 알림메일 거부");
+				$.ajax({
+					url : "${pageContext.request.contextPath}/alarmuncheck.do",
+					data : {
+						"alarm_type" : 0,
+						"chid" : chid
+					},
+					success : function() {
+						alert('알람비활성화');
+					}
+				});
+			}
+		})
 	});
-
-});
- */
- $(function(){
-	 var alarmtype =$('input[name=ch_id_forcheckbox]').val();
-	 if(alarmtype == 1){
-		 alarmtype.next('input[name=alarmcb]').checked = true;
-	 }
-	 
- })
-
-
-	function myFunction() {
-		var checkbox = $('input:checkbox[name=alarmcb]'); 
-		var chid = checkbox.val(); 
-		if (checkbox.is(":checked")) {
-			alert("체크활성" + chid)
-			$.ajax({
-				url : "${pageContext.request.contextPath}/alarmcheck.do",
-				data : {
-					"alarm_type" : 1,
-					"chid" : chid
-				},
-				success : function() {
-					alert('알람활성화');
-				}
-			});
-		} else {			
-			alert("체크비활성" + chid);
-			$.ajax({
-				url : "${pageContext.request.contextPath}/alarmuncheck.do",
-				data : {
-					"alarm_type" : 0,
-					"chid" : chid
-				},
-				success : function() {
-					alert('알람비활성화');
-				}
-			});
-
-		}
-	}
 </script>
 </head>
 
@@ -222,17 +192,15 @@
 		<!-- Main Header -->
 		<header class="main-header"> <!-- Logo --> <a
 			href="${pageContext.request.contextPath }/index.do" class="logo"><img
-			src="${pageContext.request.contextPath }/resources/images/logo.png"
-			alt="Logo"> </a> <!-- Header Navbar --> <nav
-			class="navbar navbar-static-top" role="navigation"> <!-- <div><a href="#">채널</a></div> -->
+			src="${pageContext.request.contextPath }/resources/images/logo.png" alt="Logo"> </a> <!-- Header Navbar -->
+		<nav class="navbar navbar-static-top" role="navigation"> <!-- <div><a href="#">채널</a></div> -->
 		<li class="cname">${ch.ch_name}#</li>
 		<div class="navbar-custom-menu">
 			<ul class="nav navbar-nav">
 				<!-- Messages: style can be found in dropdown.less-->
 				<li class="dropdown messages-menu">
-					<!-- Menu toggle button --> <a href="#" class="dropdown-toggle"
-					data-toggle="dropdown"> <i class="fa fa-envelope-o"></i> <span
-						class="label label-success">4</span>
+					<!-- Menu toggle button --> <a href="#" class="dropdown-toggle" data-toggle="dropdown"> <i
+						class="fa fa-envelope-o"></i> <span class="label label-success">4</span>
 				</a>
 					<ul class="dropdown-menu">
 						<li class="header">You have 4 messages</li>
@@ -243,12 +211,10 @@
 									<!-- start message --> <a href="#">
 										<div class="pull-left">
 											<!-- User Image -->
-											<img src="dist/img/user2-160x160.jpg" class="img-circle"
-												alt="User Image">
+											<img src="dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
 										</div> <!-- Message title and timestamp -->
 										<h4>
-											Support Team <small><i class="fa fa-clock-o"></i> 5
-												mins</small>
+											Support Team <small><i class="fa fa-clock-o"></i> 5 mins</small>
 										</h4> <!-- The message -->
 										<p>Why not buy a new awesome theme?</p>
 								</a>
@@ -263,9 +229,8 @@
 
 				<!-- Notifications Menu -->
 				<li class="dropdown notifications-menu">
-					<!-- Menu toggle button --> <a href="#" class="dropdown-toggle"
-					data-toggle="dropdown"> <i class="fa fa-bell-o"></i> <span
-						class="label label-warning">10</span>
+					<!-- Menu toggle button --> <a href="#" class="dropdown-toggle" data-toggle="dropdown"> <i
+						class="fa fa-bell-o"></i> <span class="label label-warning">10</span>
 				</a>
 					<ul class="dropdown-menu">
 						<li class="header">You have 10 notifications</li>
@@ -273,8 +238,8 @@
 							<!-- Inner Menu: contains the notifications -->
 							<ul class="menu">
 								<li>
-									<!-- start notification --> <a href="#"> <i
-										class="fa fa-users text-aqua"></i> 5 new members joined today
+									<!-- start notification --> <a href="#"> <i class="fa fa-users text-aqua"></i> 5 new
+										members joined today
 								</a>
 								</li>
 								<!-- end notification -->
@@ -285,9 +250,8 @@
 				</li>
 				<!-- Tasks Menu -->
 				<li class="dropdown tasks-menu">
-					<!-- Menu Toggle Button --> <a href="#" class="dropdown-toggle"
-					data-toggle="dropdown"> <i class="fa fa-flag-o"></i> <span
-						class="label label-danger">9</span>
+					<!-- Menu Toggle Button --> <a href="#" class="dropdown-toggle" data-toggle="dropdown"> <i
+						class="fa fa-flag-o"></i> <span class="label label-danger">9</span>
 				</a>
 					<ul class="dropdown-menu">
 						<li class="header">You have 9 tasks</li>
@@ -301,9 +265,8 @@
 										</h3> <!-- The progress bar -->
 										<div class="progress xs">
 											<!-- Change the css width attribute to simulate progress -->
-											<div class="progress-bar progress-bar-aqua"
-												style="width: 20%" role="progressbar" aria-valuenow="20"
-												aria-valuemin="0" aria-valuemax="100">
+											<div class="progress-bar progress-bar-aqua" style="width: 20%" role="progressbar"
+												aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">
 												<span class="sr-only">20% Complete</span>
 											</div>
 										</div>
@@ -318,10 +281,8 @@
 				<!-- User Account Menu -->
 				<c:choose>
 					<c:when test="${user_id eq null}">
-						<li class="dropdown user user-menu"><a
-							class="dropdown-toggle"
-							href="${pageContext.request.contextPath}/member/loginForm.do">
-								SIGN IN </a></li>
+						<li class="dropdown user user-menu"><a class="dropdown-toggle"
+							href="${pageContext.request.contextPath}/member/loginForm.do"> SIGN IN </a></li>
 					</c:when>
 
 					<c:otherwise>
@@ -331,33 +292,28 @@
 
 						<c:choose>
 							<c:when test="${empty replist}">
-								<li class="dropdown user user-menu"><a
-									class="dropdown-toggle" data-toggle="dropdown"
-									aria-expanded="false"> <span class="hidden-xs">Create
-											Workspace</span>
+								<li class="dropdown user user-menu"><a class="dropdown-toggle" data-toggle="dropdown"
+									aria-expanded="false"> <span class="hidden-xs">Create Workspace</span>
 								</a>
 									<ul class="dropdown-menu">
 										<li class="user-header">
 											<p>
-												<a href="${pageContext.request.contextPath}/crw1.do"> <span
-													class="hidden-xs" style="color: #fff;">Create New
-														Workspace</span>
+												<a href="${pageContext.request.contextPath}/crw1.do"> <span class="hidden-xs"
+													style="color: #fff;">Create New Workspace</span>
 												</a>
 											</p>
 										</li>
 
 										<li class="user-body" id="user-body1"><a
 											href="${pageContext.request.contextPath}/findworkspaceform.do"
-											class="hidden-xs text-center" aria-expanded="false">Find
-												Workspace</a></li>
+											class="hidden-xs text-center" aria-expanded="false">Find Workspace</a></li>
 										<!-- Menu Footer-->
 										<li class="user-footer">
 											<div class="pull-left">
 												<a href="#" class="btn btn-default btn-flat">Profile</a>
 											</div>
 											<div class="pull-right">
-												<a
-													href="${pageContext.request.contextPath}/member/logout.do"
+												<a href="${pageContext.request.contextPath}/member/logout.do"
 													class="btn btn-default btn-flat">Sign out</a>
 											</div>
 										</li>
@@ -366,17 +322,16 @@
 
 							<c:otherwise>
 								<li class="dropdown user user-menu" style=""><a
-									href="${pageContext.request.contextPath}/gomain.do"
-									class="dropdown-toggle" data-toggle="dropdown"
-									aria-expanded="false"> <span class="hidden-xs">My
+									href="${pageContext.request.contextPath}/gomain.do" class="dropdown-toggle"
+									data-toggle="dropdown" aria-expanded="false"> <span class="hidden-xs">My
 											Workspace</span>
 								</a>
 									<ul class="dropdown-menu">
 										<li class="user-header">
 											<p>WorkSpace List</p>
 										<li class="user-body" id="user-body1"><a
-											href="${pageContext.request.contextPath}/crw1.do"
-											class="hidden-xs text-center">Create new Workspace</a></li>
+											href="${pageContext.request.contextPath}/crw1.do" class="hidden-xs text-center">Create
+												new Workspace</a></li>
 										<c:forEach var="aa" items="${rep_list}">
 											<li class="user-body"><a
 												href="${pageContext.request.contextPath}/gomain.do?rep_id=${aa.rep_id}"
@@ -390,27 +345,23 @@
 								<!-- Menu Footer-->
 								<li class="user-footer">
 									<div class="pull-left">
-										<a href="${pageContext.request.contextPath}/profileform.do"
-											class="btn btn-default ">Profile</a>
+										<a href="${pageContext.request.contextPath}/profileform.do" class="btn btn-default ">Profile</a>
 									</div> <c:choose>
 										<c:when test="${adminlevel eq 1 }">
 											<div class="pull-left">
-												<a
-													href="${pageContext.request.contextPath}/repadminform.do?adminlevel=1"
+												<a href="${pageContext.request.contextPath}/repadminform.do?adminlevel=1"
 													class="btn btn-default btn-flat">저장소관리</a>
 											</div>
 										</c:when>
 										<c:when test="${adminlevel eq 2 }">
 											<div class="pull-left">
-												<a
-													href="${pageContext.request.contextPath}/repadminform.do?adminlevel=2"
+												<a href="${pageContext.request.contextPath}/repadminform.do?adminlevel=2"
 													class="btn btn-default btn-flat">저장소관리</a>
 											</div>
 										</c:when>
 										<c:otherwise>
 											<div class="pull-left">
-												<a
-													href="${pageContext.request.contextPath}/repadminform.do?adminlevel=3"
+												<a href="${pageContext.request.contextPath}/repadminform.do?adminlevel=3"
 													class="btn btn-default btn-flat">저장소관리</a>
 											</div>
 										</c:otherwise>
@@ -442,17 +393,16 @@
 		</div>
 
 		<ul class="sidebar-menu" data-widget="tree">
-			<li class="header"><a href="index.html"> <i
-					class="fa fa-sun-o"></i>All Threads
+			<li class="header"><a href="index.html"> <i class="fa fa-sun-o"></i>All Threads
 			</a></li>
 		</ul>
 
 		<!-- search form (Optional) -->
-		<form action="${pageContext.request.contextPath}/searchboard.do?"
-			method="get" class="sidebar-form">
+		<form action="${pageContext.request.contextPath}/searchboard.do?" method="get"
+			class="sidebar-form">
 			<div class="input-group">
-				<input type="text" name="search" class="form-control"
-					placeholder="Search..."> <span class="input-group-btn">
+				<input type="text" name="search" class="form-control" placeholder="Search..."> <span
+					class="input-group-btn">
 					<button type="submit" id="search-btn" class="btn btn-flat">
 						<i class="fa fa-search"></i>
 					</button>
@@ -461,30 +411,27 @@
 		</form>
 		<!-- /.search form --> <!-- Sidebar Menu -->
 		<ul class="sidebar-menu" data-widget="tree">
-			<li class="header"><a
-				href="${pageContext.request.contextPath}/addchannelform.do">Channels
+			<li class="header"><a href="${pageContext.request.contextPath}/addchannelform.do">Channels
 					&nbsp; &nbsp;<i class="fa fa-plus-circle"></i>
 			</a></li>
 			<div class="liscroll">
 				<c:forEach var="aa" items="${ch_list}" varStatus="status">
 					<li class="listyle"><a
-						href="<%=request.getContextPath()%>/post/list.do?page=1&cn=${aa.ch_id}">
-							<i class="fa fa-asterisk i1"></i>${aa.ch_name}
+						href="<%=request.getContextPath()%>/post/list.do?page=1&cn=${aa.ch_id}" class="chname"> <i
+							class="fa fa-asterisk i1"></i>${aa.ch_name}
 
-					</a><input type="text" name="ch_id_forcheckbox" value="${aa.ch_id}"> 
-
-
-						<input type="text" value="${alarmtypelist[status.index]}">
-						<input name="alarmcb" type="checkbox" onclick="myFunction()" value="${aa.ch_id}${status.index}">
-
-
-
-					</li>
-
+					</a> <input type="hidden" name="alarmtype" value="${alarmtypelist[status.index]}"> <c:choose>
+							<c:when test="${alarmtypelist[status.index] eq 1}">
+								<input name="alarmcb" type="checkbox" value="${aa.ch_id}" checked="checked">
+							</c:when>
+							<c:otherwise>
+								<input name="alarmcb" type="checkbox" value="${aa.ch_id}">
+							</c:otherwise>
+						</c:choose></li>
 				</c:forEach>
 			</div>
-			<li class="header"><a href="index.html"> Direct Messages
-					&nbsp; <i class="fa fa-plus-circle i1"></i>
+			<li class="header"><a href="index.html"> Direct Messages &nbsp; <i
+					class="fa fa-plus-circle i1"></i>
 			</a></li>
 			<div class="liscroll">
 				<c:forEach var="aa" items="${nicknamelist}" varStatus="status">
@@ -494,8 +441,7 @@
 				</c:forEach>
 			</div>
 
-			<li class="header i1"><a
-				href="${pageContext.request.contextPath }/moreteam.do?"> Invate
+			<li class="header i1"><a href="${pageContext.request.contextPath }/moreteam.do?"> Invate
 					People &nbsp; <i class="fa fa-plus-circle"></i>
 			</a></li>
 		</ul>

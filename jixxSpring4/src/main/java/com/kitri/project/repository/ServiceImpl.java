@@ -367,6 +367,16 @@ public class ServiceImpl implements Service {
 		repMapper.minusAlarmCheck(map);
 	}
 
+	@Override
+	public ArrayList<String> getUserNickNameList(int rep_id, ArrayList<Integer> userlist) {
+		repMapper = sqlSession.getMapper(Mapper.class);
+		Map<String, Object> map = new HashMap<String,Object>();
+		map.put("rep_id", rep_id);
+		map.put("userlist", userlist);
+		ArrayList<String> t = repMapper.selectNicknameListByUserList(map);
+		return t;
+	}
+
 	
 
 	
