@@ -8,16 +8,15 @@
 		$('a.nicknamelist').on('click', function() {
 			var user = $(this).text().trim();
 			var checkbox = $('input[name=chtype]');
+			var nickname = $(this);
 			 $('input[name=chtype]').checked = true;
 			$("<li class='addnicknamelist'><input type='text' name='chinvitenicknameinput' placeholder='Search by name' class='form-control' value=" + user + "><input type='button' name='cancelinvite' class='cancelinvite' value='삭제'></li>").appendTo("#invitelabel");
-			this.remove();
-		});
-		$('.cancelinvite').on('click', function() {
-			alert('a');
-			/* var li = $(this).parent($('li.addnicknamelist'));
-			var nickname = $(tihs).prev('input[name=chinvitenicknameinput]').val();
-			li.remove();
-			$("<a class='nicknamelist'>" + nickname + "</a>").appendTo('#invitelabel'); */
+			nickname.hide();
+			$('.cancelinvite').on('click', function() {
+				 var li = $(this).parent($('li.addnicknamelist'));
+				li.remove();
+				nickname.show();
+			});
 		});
 
 		var checkbox = $("input[name=chtype]");
