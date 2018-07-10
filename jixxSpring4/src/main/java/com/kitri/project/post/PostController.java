@@ -249,17 +249,6 @@ public class PostController implements ApplicationContextAware {
         	e.printStackTrace();
         }
         return str;
-		for (int j = 0; j < list.size(); j++) {
-			System.out.println(list.get(j).getPost_id());
-		}
-		String str = "";
-		ObjectMapper mapper = new ObjectMapper();
-		try {
-			str = mapper.writeValueAsString(list);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return str;
 	}
 
 	@RequestMapping(value = "/post/searchAjax.do", method = RequestMethod.GET, produces = "application/text; charset=utf8")
@@ -280,15 +269,6 @@ public class PostController implements ApplicationContextAware {
 	        	e.printStackTrace();
 	        }
 	        return str;
-		String str = "";
-		ObjectMapper mapper = new ObjectMapper();
-		try {
-			str = mapper.writeValueAsString(list);
-			System.out.println(str);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return str;
 	}
 
 	@RequestMapping(value = "/post/update.do", method = RequestMethod.GET)

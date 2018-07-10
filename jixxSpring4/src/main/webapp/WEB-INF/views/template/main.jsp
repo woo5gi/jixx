@@ -50,7 +50,7 @@
 														<c:set var="usernickname" value="${sessionScope.nickname}" />
 														<c:set var="writtennickname" value="${post.nickname}" />
 														<c:if test="${usernickname eq writtennickname}">
-														<a class="repost">댓글달기</a>
+														<a class="repost1">댓글달기</a>
 														<a class="change"> 수정</a>
 															<a class="btn btn-danger btn-xs"
 																href="<%= request.getContextPath() %>/post/delete.do?post_id=${post.post_id}&cn=${ch.ch_id}" id="delete">Delete</a>
@@ -105,7 +105,6 @@
 </body>
 
  <script type="text/javascript">
- var flag = true;
  var getParameters = function (paramName) {
 	    var returnValue;
 
@@ -125,80 +124,8 @@
  var page = 2;
 
  var isLoading = false;
-
- function loadNewPage() {
-	 console.log("무한스크롤 로드");
-     var temp = $(document).height();
-     page++;
-     $(document).scrollTop($(document).height()-temp);
-     isLoading = false;
- 	$('.change').on('click',function(){
-		var content = $(this).parent().parent().next('div.timeline-body').text().trim();
-		var thisA = $(this);
-		$(this).parent().parent().next('div.timeline-body').empty();
-		$(this).parent().parent().next('div.timeline-body').append('<input type="text" value="'+content+'"/>');
-		$(this).parent().parent().next('div.timeline-body').append('<button class="cencel">취소</button>');
-		$(this).parent().parent().next('div.timeline-body').append('<button class="ok">완료</button>');
-		$(this).hide();
-		$('.cencel').on('click',function(){	
-			thisA.show();
-			$(this).parent().text(content);
-		});
-		$('.ok').on('click',function(){
-			var updatecontent = $(this).prev().prev().val();
-			var postID = $(this).parent().attr("id");
-			 $.ajax({
-				type : "GET",
-		        url : "<%=request.getContextPath()%>/post/update.do",
-		        data : { content: updatecontent, post_id: postID},
-			});
-			thisA.show();
-			$(this).parent().text(updatecontent);
-		});
-	});
- 	$('.repost').on('click',function(){
-			var repostA = $(this);
-			var str = "<div class='repostdata'>";
-			str += "<hr><p>댓글</p>" +
-			'<input type="text" value=""/>' +
-			'<button class="repostCencel">취소</button>' +
-			'<button class="repostOk">완료</button>' +
-			'</div>';
-			$(this).parent().parent().next('div.timeline-body').after(str);
-			repostA.hide();
-		$('.repostCencel').on('click',function(){	
-		repostA.show();
-		$(this).parent('.repostdata').remove();
-	});
-	$('.repostOk').on('click',function(){
-		var repostOk = $(this);
-		var repostContent = $(this).prev().prev().val();
-		var postID = $(this).parent().prev(".timeline-body").attr("id");
-		var repostAppend = $(this).parent().parent();
-		 $.ajax({
-			type : "post",
-	        url : "<%=request.getContextPath()%>/post/repost.do",
-	        data : { content: repostContent, repost_id: postID, channel_id:'${ch.ch_id}'},
-	        dataType : "json",
-	           error : function(){
-	               alert('실패 ㅠ');
-	           },
-	        success : function(data){
-	        var str = '<div class="timeline-item">';
-	        str += '<span class="time"><i class="fa fa-clock-o"></i>'+ (new Date).yyyymmdd() +'</span>'+
-	        '<a href="#">'+data.nickName+'</a>'+
-	        '<span class="timeline-body" >'+repostContent+'</span>'+
-	        '<a class="btn btn-danger btn-xs"'+
-	        'href="${pageContext.request.contextPath}/post/delete.do?post_id='+data.post_id+'&cn=${ch.ch_id}" id="delete">Delete</a>'+
-	        '</div>';
-	        repostAppend.append(str);
-	        }
-		});
-		 $(this).parent('.repostdata').remove();
-		 repostA.show();
-		});
-	});
- }
+ 
+ 
  $( document ).ready(function() {
  $(document).scroll(function() {
 	 var searchitem = getParameters('search');
@@ -210,28 +137,20 @@
            data : { page: page, cn: "${ch.ch_id}" },
            dataType : "json",
            error : function(){
-               flag = false;
-			console.log("flag = " + flag);
            },
            success : function(data){
-        	   flag = true;
         	   var list = data.list;
         	   var repost = data.repost;
         	  if (list.length == '0') {
-        		  flag = false;
         		  alert('더이상 불러올 데이터가 없습니다.');
         	  } else {
         	  for (var i = 1; i < list.length; i++) {
 						var str = "";
-        		  
 					if (list[i].post_status == '3') {
-						if (data.length == i+1) {
-							var logdate1 = $('#'+list[i-1].logdate).val();
-							if (logdate1 == undefined) {								
-								str += '<li class="time-label" id="'+list[i-1].logdate+'"><span class="bg-red">'+ list[i-1].logdate+'</span></li>';
-							} else {
-								str += '<li class="time-label" id="'+list[i-1].logdate+'"><span class="bg-red">'+ list[i-1].logdate+'</span></li>';
-								$('#'+list[i-1].logdate).remove();
+						var logdate = $('#'+list[i-1].logdate).val();
+						if (logdate == undefined) {
+							if (list[i].logdate != list[i-1].logdate) {
+							str += '<li class="time-label" id="'+list[i-1].logdate+'"><span class="bg-red">'+ list[i-1].logdate+'</span></li>';
 							}
 						}
 						str +='<li>'+
@@ -242,22 +161,7 @@
 						'<a href="#">'+list[i].nickname+'님</a> ${rep_name}'+ list[i].content+
 						'</h3>'+
 						'</div></li>';
-						var logdate = $('#'+list[i-1].logdate).val();
-						if (logdate == undefined) {
-							if (list[i].logdate != list[i-1].logdate) {
-							str += '<li class="time-label" id="'+list[i-1].logdate+'"><span class="bg-red">'+ list[i-1].logdate+'</span></li>';
-							}
-						}
 					} else {
-						if (data.length == i+1) {
-							var logdate1 = $('#'+list[i-1].logdate).val();
-							if (logdate1 == undefined) {								
-								str += '<li class="time-label" id="'+list[i-1].logdate+'"><span class="bg-red">'+ list[i-1].logdate+'</span></li>';
-							} else {
-								str += '<li class="time-label" id="'+list[i-1].logdate+'"><span class="bg-red">'+ list[i-1].logdate+'</span></li>';
-								$('#'+list[i-1].logdate).remove();
-							}
-						}
 						str +='<li>';
 						if (list[i].file_thumbnail != 'x') {
 							str +='<i class="fa fa-camera bg-purple"></i>';
@@ -269,7 +173,7 @@
 						'<h3 class="timeline-header">'+
 						'<a href="#">'+ list[i].nickname+'</a>'+
 						'<div class="timelinebtn">'+
-						'<a class="repost">댓글달기</a>';
+						'<a class="repost'+page+'">댓글달기</a>';
 						if ('${sessionScope.nickname}' == list[i].nickname) {
 							str += '<a class="change"> 수정</a>'+
 							'<a class="btn btn-danger btn-xs" href="${pageContext.request.contextPath}/post/delete.do?post_id='+list[i].post_id+'&cn=${ch.ch_id}">Delete</a>';
@@ -304,23 +208,25 @@
 								if (list[i].logdate != list[i-1].logdate) {
 								str += '<li class="time-label" id="'+list[i-1].logdate+'"><span class="bg-red">'+ list[i-1].logdate+'</span></li>';
 								}
+							} else {
+								$('#'+list[i-1].logdate).remove();
+								$('#div').prepend('<li class="time-label" id="'+list[i-1].logdate+'"><span class="bg-red">'+ list[i-1].logdate+'</span></li>');						
 							}
 						}
 						$("#div").prepend(str);
-			 		} 
-					if (logdate != undefined) {
-						console.log(logdate);
-						$('#'+list[i-1].logdate).remove();	
+			 		}
+					if (logdate == undefined) {
 						$('#div').prepend('<li class="time-label" id="'+list[i-1].logdate+'"><span class="bg-red">'+ list[i-1].logdate+'</span></li>');
+					} else {
+						$('#'+list[i-1].logdate).remove();
+						$('#div').prepend('<li class="time-label" id="'+list[i-1].logdate+'"><span class="bg-red">'+ list[i-1].logdate+'</span></li>');						
 					}
 			$("#div").trigger("create");
 				}
-           }            
+           }        
        });
-	   if (flag == true) {
      isLoading = true;
      setTimeout(loadNewPage, 100);		
-	}
    } else {
 	   $.ajax({
            type : "GET",
@@ -328,29 +234,21 @@
            data : { page: page, search: searchitem, rep_id: '${sessionScope.rep_id}' },
            dataType : "json",
            error : function(){
-               flag = false;
                alert('실패염');
            },
            success : function(data){
-       		   flag = true;
         	   var list = data.list;
         	   var repost = data.repost;
-        	   if (data.length == '0') {
+        	   if (list.length == '0') {
         		  alert('더이상 불러올 데이터가 없습니다.');
-        		  flag = false;
         	  } else {
-        		  console.log(data);
         	  for (var i = 1; i < list.length; i++) {
 						var str = "";
-        		  
 					if (list[i].post_status == '3') {
-						if (data.length == i+1) {
-							var logdate1 = $('#'+list[i-1].logdate).val();
-							if (logdate1 == undefined) {								
-								str += '<li class="time-label" id="'+list[i-1].logdate+'"><span class="bg-red">'+ list[i-1].logdate+'</span></li>';
-							} else {
-								str += '<li class="time-label" id="'+list[i-1].logdate+'"><span class="bg-red">'+ list[i-1].logdate+'</span></li>';
-								$('#'+list[i-1].logdate).remove();
+						var logdate = $('#'+list[i-1].logdate).val();
+						if (logdate == undefined) {
+							if (list[i].logdate != list[i-1].logdate) {
+							str += '<li class="time-label" id="'+list[i-1].logdate+'"><span class="bg-red">'+ list[i-1].logdate+'</span></li>';
 							}
 						}
 						str +='<li>'+
@@ -361,25 +259,7 @@
 						'<a href="#">'+list[i].nickname+'님</a> ${rep_name}'+ list[i].content+
 						'</h3>'+
 						'</div></li>';
-						if (list[i].logdate != list[i-1].logdate) {
-							var logdate = $('#'+list[i-1].logdate).val();
-							if (logdate == undefined) {								
-								str += '<li class="time-label" id="'+list[i-1].logdate+'"><span class="bg-red">'+ list[i-1].logdate+'</span></li>';
-							} else {
-								str += '<li class="time-label" id="'+list[i-1].logdate+'"><span class="bg-red">'+ list[i-1].logdate+'</span></li>';
-								$('#'+list[i-1].logdate).remove();
-							}
-		        		  }
 					} else {
-						if (data.length == i+1) {
-							var logdate1 = $('#'+list[i-1].logdate).val();
-							if (logdate1 == undefined) {								
-								str += '<li class="time-label" id="'+list[i-1].logdate+'"><span class="bg-red">'+ list[i-1].logdate+'</span></li>';
-							} else {
-								str += '<li class="time-label" id="'+list[i-1].logdate+'"><span class="bg-red">'+ list[i-1].logdate+'</span></li>';
-								$('#'+list[i-1].logdate).remove();
-							}
-						}
 						str +='<li>';
 						if (list[i].file_thumbnail != 'x') {
 							str +='<i class="fa fa-camera bg-purple"></i>';
@@ -391,7 +271,7 @@
 						'<h3 class="timeline-header">'+
 						'<a href="#">'+ list[i].nickname+'</a>'+
 						'<div class="timelinebtn">'+
-						'<a class="repost">댓글달기</a>';
+						'<a class="repost'+page+'">댓글달기</a>';
 						if ('${sessionScope.nickname}' == list[i].nickname) {
 							str += '<a class="change"> 수정</a>'+
 							'<a class="btn btn-danger btn-xs" href="${pageContext.request.contextPath}/post/delete.do?post_id='+list[i].post_id+'&cn=${ch.ch_id}">Delete</a>';
@@ -423,28 +303,29 @@
 						str += '<a href="${pageContext.request.contextPath}/post/list.do?page=1&cn='+list[i].channel_id+'"> <iclass="fa fa-asterisk">채널</i></a>';
 						str += '</div></li>';
 						var logdate = $('#'+list[i-1].logdate).val();
-						if (logdate == undefined) {
-							if (list[i].logdate != list[i-1].logdate) {
-							str += '<li class="time-label" id="'+list[i-1].logdate+'"><span class="bg-red">'+ list[i-1].logdate+'</span></li>';
+							if (logdate == undefined) {
+								if (list[i].logdate != list[i-1].logdate) {
+								str += '<li class="time-label" id="'+list[i-1].logdate+'"><span class="bg-red">'+ list[i-1].logdate+'</span></li>';
+								}
+							} else {
+								$('#'+list[i-1].logdate).remove();
+								$('#div').prepend('<li class="time-label" id="'+list[i-1].logdate+'"><span class="bg-red">'+ list[i-1].logdate+'</span></li>');						
 							}
 						}
-					}
 						$("#div").prepend(str);
-			 	}
-        	  if (logdate != undefined) {
-					console.log(logdate);
-					$('#'+list[i-1].logdate).remove();	
-					$('#div').prepend('<li class="time-label" id="'+list[i-1].logdate+'"><span class="bg-red">'+ list[i-1].logdate+'</span></li>');
-				}
+			 		}
+					if (logdate == undefined) {
+						$('#div').prepend('<li class="time-label" id="'+list[i-1].logdate+'"><span class="bg-red">'+ list[i-1].logdate+'</span></li>');
+					} else {
+						$('#'+list[i-1].logdate).remove();
+						$('#div').prepend('<li class="time-label" id="'+list[i-1].logdate+'"><span class="bg-red">'+ list[i-1].logdate+'</span></li>');						
+					}
 			$("#div").trigger("create");
 			}
            }
        });
-	   if (flag == true) {
-		   console.log(flag);
 		     isLoading = true;
 		     setTimeout(loadNewPage, 100);		
-		}
    }
 	 
  }
@@ -478,7 +359,7 @@
 </script>
 <script>
 	$(function(){
- 		$('.repost').on('click',function(){
+ 		$('.repost1').on('click',function(){
  			var repostA = $(this);
  			var str = "<div class='repostdata'>";
  			str += "<hr><p>댓글</p>" +
@@ -519,13 +400,86 @@
 			 repostA.show();
 			});
  		});
- 	});
+ 	}); 
  Date.prototype.yyyymmdd = function(){
     var yyyy = this.getFullYear().toString();
     var mm = (this.getMonth() + 1).toString();
     var dd = this.getDate().toString();
     return yyyy +"-"+(mm[1] ? mm : '0'+mm[0])+"-"+(dd[1] ? dd : '0'+dd[0]);
-}; 
+};
+var repostok = 2;
+function loadNewPage() {
+    var temp = $(document).height();
+    page++;
+    $(document).scrollTop($(document).height()-temp);
+    isLoading = false;
+	$('.change').on('click',function(){
+		var content = $(this).parent().parent().next('div.timeline-body').text().trim();
+		var thisA = $(this);
+		$(this).parent().parent().next('div.timeline-body').empty();
+		$(this).parent().parent().next('div.timeline-body').append('<input type="text" value="'+content+'"/>');
+		$(this).parent().parent().next('div.timeline-body').append('<button class="cencel">취소</button>');
+		$(this).parent().parent().next('div.timeline-body').append('<button class="ok">완료</button>');
+		$(this).hide();
+		$('.cencel').on('click',function(){	
+			thisA.show();
+			$(this).parent().text(content);
+		});
+		$('.ok').on('click',function(){
+			var updatecontent = $(this).prev().prev().val();
+			var postID = $(this).parent().attr("id");
+			 $.ajax({
+				type : "GET",
+		        url : "<%=request.getContextPath()%>/post/update.do",
+		        data : { content: updatecontent, post_id: postID},
+			});
+			thisA.show();
+			$(this).parent().text(updatecontent);
+		});
+	});
+	$('.repost'+''+(page-1)).on('click',function(){
+			var repostA = $(this);
+			var str = "<div class='repostdata'>";
+			str += "<hr><p>댓글</p>" +
+			'<input type="text" value=""/>' +
+			'<button class="repostCencel">취소</button>' +
+			'<button class="repostOk">완료</button>' +
+			'</div>';
+			$(this).parent().parent().next('div.timeline-body').after(str);
+			repostA.hide();
+		$('.repostCencel').on('click',function(){	
+		repostA.show();
+		$(this).parent('.repostdata').remove();
+		});
+	$('.repostOk').on('click',function(){
+		var repostOk = $(this);
+		var repostContent = $(this).prev().prev().val();
+		var postID = $(this).parent().prev(".timeline-body").attr("id");
+		var repostAppend = $(this).parent().parent();
+		 $.ajax({
+			type : "post",
+	        url : "<%=request.getContextPath()%>/post/repost.do",
+	        data : { content: repostContent, repost_id: postID, channel_id:'${ch.ch_id}'},
+	        dataType : "json",
+	           error : function(){
+	               alert('실패 ㅠ');
+	           },
+	        success : function(data){
+	        var str = '<div class="timeline-item">';
+	        str += '<span class="time"><i class="fa fa-clock-o"></i>'+ (new Date).yyyymmdd() +'</span>'+
+	        '<a href="#">'+data.nickName+'</a>'+
+	        '<span class="timeline-body" >'+repostContent+'</span>'+
+	        '<a class="btn btn-danger btn-xs"'+
+	        'href="${pageContext.request.contextPath}/post/delete.do?post_id='+data.post_id+'&cn=${ch.ch_id}" id="delete">Delete</a>'+
+	        '</div>';
+	        repostAppend.append(str);
+	        }
+		});
+		 $(this).parent('.repostdata').remove();
+		 repostA.show();
+		});
+	});
+}
 </script>
 </div>
 						</html>
