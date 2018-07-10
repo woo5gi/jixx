@@ -225,18 +225,37 @@ public class MemberController {
 			int id = (int) session.getAttribute("id");
 			sendMail.setSubject("FILE CETACEA 이메일인증");
 			sendMail.setText(
-					new StringBuffer().append("<h1>이메일인증</h1>").append("<a href='localhost:8080/project/verifyForm.do")
+/*					new StringBuffer().append("<h1>이메일인증</h1>").append("<a href='localhost:8080/project/verifyForm.do")
 							.append("'target='_blenk'>이메일 인증 확인</a>").append(ran2).toString());
+			*/
+
+			new StringBuffer().append("	<div text='#c6d4df' style='font-family:Helvetica,Arial,sans-serif;font-size:14px;color:#c6d4df;text-align:center;'><table style='width:538px;background-color:#393836' align='center' cellspacing='0' cellpadding='0'>\r\n" + 
+							" <tbody><tr><td style='height:65px;background-color:#171a21;border-bottom:1px solid #4d4b48;padding:0px'><h2 style='text-align: center;color: #fff;' height='65' >FILE CETACEA</h2></td></tr><tr><td bgcolor='#17212e'><table width='500' border='0' align='center' cellpadding='0' cellspacing='0' style='padding-left:5px;padding-right:5px;padding-bottom:10px'><tbody><tr bgcolor='#17212e'><td style='padding-top:32px;padding-bottom:16px'>")
+					.append("<span style='font-size:24px;color:#66c0f4;font-family:Arial,Helvetica,sans-serif;font-weight:bold'>이메일 인증</span></td></tr>")
+					.append("<tr bgcolor='#121a25'><td style='padding:20px;font-size:12px;line-height:17px;color:#c6d4df;font-family:Arial,Helvetica,sans-serif'><p style='font-weight:bold;font-size: 20px;color: #f00;'>")
+					.append(ran2)
+					.append("</p><br><p><a style='color:#c6d4df' href='localhost:8080/project/verifyForm.do' target='_blank'>이메일 인증 확인</a></p></td></tr></tbody></table></td></tr></tbody></table></div>")
+					.toString());
 			sendMail.setFrom("gusdn4973@gmail.com", "CETACEA");
 			sendMail.setTo(email);
 			sendMail.send();
 			service.setTempkey(ran2, id);
 			return "member/verify";
+			
 		} else if (requestfrom.equals("findpass")) {
 			sendMail.setSubject("FILE CETACEA 비밀번호 찾기 이메일인증");
-			sendMail.setText(new StringBuffer().append("<h1>이메일인증</h1>")
+			
+			sendMail.setText(
+/*					new StringBuffer().append("<h1>이메일인증</h1>")
 					.append("<a href='localhost:8080/project/verifypass.do?email=" + email + "&tempkey=" + ran2)
 					.append("'target='_blenk'>새 비밀번호 설정</a>").toString());
+*/			
+			new StringBuffer().append("	<div text='#c6d4df' style='font-family:Helvetica,Arial,sans-serif;font-size:14px;color:#c6d4df;text-align:center;'><table style='width:538px;background-color:#393836' align='center' cellspacing='0' cellpadding='0'>\r\n" + 
+					" <tbody><tr><td style='height:65px;background-color:#171a21;border-bottom:1px solid #4d4b48;padding:0px'><h2 style='text-align: center;color: #fff;' height='65' >FILE CETACEA</h2></td></tr><tr><td bgcolor='#17212e' style='height:170px'><table width='500' border='0' align='center' cellpadding='0' cellspacing='0' style='padding-left:5px;padding-right:5px;padding-bottom:10px'><tbody><tr bgcolor='#17212e'><td style='padding-top:32px;padding-bottom:16px'>")
+			.append("<span style='font-size:24px;color:#66c0f4;font-family:Arial,Helvetica,sans-serif;font-weight:bold'>비밀번호 찾기 메일 인증</span></td></tr></tbody></table>")
+			.append("<a style='color:#c6d4df' 'target='_blenk' href='localhost:8080/project/verifypass.do?email=" + email + "&tempkey=" + ran2+"'>새 비밀번호 설정</a>")
+			.append("</td></tr></tbody></table></div>")
+			.toString());
 			sendMail.setFrom("gusdn4973@gmail.com", "CETACEA");
 			sendMail.setTo(email);
 			sendMail.send();
@@ -244,24 +263,52 @@ public class MemberController {
 			return "member/verifypass";
 		} else if (requestfrom.equals("deleterep")) {
 			sendMail.setSubject("FILE CETACEA 저장소삭제 이메일인증");
-			sendMail.setText(new StringBuffer().append("<h1>이메일인증</h1>")
+			sendMail.setText(
+			
+/*					new StringBuffer().append("<h1>이메일인증</h1>")
 					.append("<a href='localhost:8080/project/repdlverifyform.do")
 					.append("'target='_blenk'>이메일 인증 확인</a>").append(ran2).toString());
+			
+*/			
+			 new StringBuffer().append("<div text='#c6d4df' style='font-family:Helvetica,Arial,sans-serif;font-size:14px;color:#c6d4df;text-align:center;'><table style='width:538px;background-color:#393836' align='center' cellspacing='0' cellpadding='0'>\r\n" + 
+						" <tbody><tr><td style='height:65px;background-color:#171a21;border-bottom:1px solid #4d4b48;padding:0px'><h2 style='text-align: center;color: #fff;' height='65' >FILE CETACEA</h2></td></tr><tr><td bgcolor='#17212e'><table width='500' border='0' align='center' cellpadding='0' cellspacing='0' style='padding-left:5px;padding-right:5px;padding-bottom:10px'><tbody><tr bgcolor='#17212e'><td style='padding-top:32px;padding-bottom:16px'>")
+				.append("<span style='font-size:24px;color:#66c0f4;font-family:Arial,Helvetica,sans-serif;font-weight:bold'>저장소삭제 이메일인증</span></td></tr>")
+				.append("<tr bgcolor='#121a25'><td style='padding:20px;font-size:12px;line-height:17px;color:#c6d4df;font-family:Arial,Helvetica,sans-serif'><p style='font-weight:bold;font-size: 20px;color: #f00;'>")
+				.append(ran2)
+				.append("</p><br><p><a style='color:#c6d4df' href='localhost:8080/project/repdlverifyform.do' target='_blank'>이메일 인증 확인</a></p></td></tr></tbody></table></td></tr></tbody></table></div>")
+				.toString());
+			
+			
 			sendMail.setFrom("gusdn4973@gmail.com", "CETACEA");
 			sendMail.setTo(email);
 			sendMail.send();
 			service.setTempkey(ran2, email);
 			return "member/verifydelrep";
+			
 		} else if (requestfrom.equals("memberout")) {
 			sendMail.setSubject("FILE CETACEA 회원탈퇴 이메일인증");
-			sendMail.setText(new StringBuffer().append("<h1>이메일인증</h1>")
+			sendMail.setText(new StringBuffer()
+					/*
+					.append("<h1>이메일인증</h1>")
 					.append("<a href='localhost:8080/project/memberoutverifyform.do")
-					.append("'target='_blenk'>이메일 인증 확인</a>").append(ran2).toString());
+					.append("'target='_blenk'>이메일 인증 확인</a>").append(ran2).toString());*/
+			
+			.append("<div text='#c6d4df' style='font-family:Helvetica,Arial,sans-serif;font-size:14px;color:#c6d4df;text-align:center;'><table style='width:538px;background-color:#393836' align='center' cellspacing='0' cellpadding='0'>\r\n" + 
+					" <tbody><tr><td style='height:65px;background-color:#171a21;border-bottom:1px solid #4d4b48;padding:0px'><h2 style='text-align: center;color: #fff;' height='65' >FILE CETACEA</h2></td></tr><tr><td bgcolor='#17212e'><table width='500' border='0' align='center' cellpadding='0' cellspacing='0' style='padding-left:5px;padding-right:5px;padding-bottom:10px'><tbody><tr bgcolor='#17212e'><td style='padding-top:32px;padding-bottom:16px'>")
+			.append("<span style='font-size:24px;color:#66c0f4;font-family:Arial,Helvetica,sans-serif;font-weight:bold'>회원 탈퇴 이메일 인증</span></td></tr>")
+			.append("<tr bgcolor='#121a25'><td style='padding:20px;font-size:12px;line-height:17px;color:#c6d4df;font-family:Arial,Helvetica,sans-serif'><p style='font-weight:bold;font-size: 20px;color: #f00;'>")
+			.append(ran2)
+			.append("</p><br><p><a style='color:#c6d4df' href='localhost:8080/project/memberoutverifyform.do' target='_blank'>이메일 인증 확인</a></p></td></tr></tbody></table></td></tr></tbody></table></div>")
+			.toString());
+			
+			
 			sendMail.setFrom("gusdn4973@gmail.com", "CETACEA");
 			sendMail.setTo(email);
 			sendMail.send();
 			service.setTempkey(ran2, email);
 			return "member/memberoutverifyform";
+			
+			/*랜덤ㅇ*/
 		}
 		return null;
 	}
@@ -336,8 +383,8 @@ public class MemberController {
 
 	// 비번찾기누르면 인증번호 메일전송하는 페이지로이동
 	@RequestMapping(value = "member/forgotpass.do")
-	public ModelAndView findPass(HttpServletRequest req) throws Exception{
-		HttpSession session = req.getSession(false);		
+	public ModelAndView findPass(HttpServletRequest req) throws Exception {
+		HttpSession session = req.getSession(false);
 		ModelAndView mav = new ModelAndView("member/forgotpassword");
 		try {
 			int id = (int) session.getAttribute("id");
@@ -420,7 +467,7 @@ public class MemberController {
 	public ModelAndView editProfile(HttpServletRequest req) {
 		HttpSession session = req.getSession(false);
 		int id = (int) session.getAttribute("id");
-		String email=(String) session.getAttribute("email");
+		String email = (String) session.getAttribute("email");
 		ModelAndView mav = new ModelAndView("member/editprofile");
 		Member m = service.getMember(id);
 		ArrayList<String> repnamelist = service.getRepNameListById(id);
@@ -436,7 +483,7 @@ public class MemberController {
 	public ModelAndView profile(HttpServletRequest req) {
 		HttpSession session = req.getSession(false);
 		int id = (int) session.getAttribute("id");
-		String email =(String) session.getAttribute("email");
+		String email = (String) session.getAttribute("email");
 		ModelAndView mav = new ModelAndView("member/profile");
 		Member m = service.getMember(id);
 		ArrayList<String> repnamelist = service.getRepNameListById(id);
@@ -459,7 +506,7 @@ public class MemberController {
 		Repository r = service.getRepository(rep_id);
 		ArrayList<String> repnamelist = service.getRepNameListById(id);
 		Member m2 = service.getMember(id);
-		mav.addObject("id",id);
+		mav.addObject("id", id);
 		mav.addObject("rep_id", rep_id);
 		mav.addObject("rep_name", r.getRep_name());
 		mav.addObject("user_name", m2.getName());
@@ -471,15 +518,14 @@ public class MemberController {
 
 	@RequestMapping(value = "member/editusermeta2.do")
 	public String editUM2(HttpServletRequest req, RedirectAttributes rda, Member m, UserMeta2 um2) {
-				HttpSession session = req.getSession(false);
-				int id = (int) session.getAttribute("id");
+		HttpSession session = req.getSession(false);
+		int id = (int) session.getAttribute("id");
 		int rep_id = (int) session.getAttribute("rep_id");
-		System.out.println("email:"+m.getEmail()+"nickname:"+um2.getNickname());
+		System.out.println("email:" + m.getEmail() + "nickname:" + um2.getNickname());
 		service.editMember(m);
 		service.editUM2(um2);
 		UserMeta2 um22 = service.getUserMeta2(id, rep_id);
 		session.setAttribute("nickname", um22.getNickname());
-
 
 		Channel ch = service.getChannel(rep_id);
 		int cn = ch.getCh_id();
