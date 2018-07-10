@@ -128,6 +128,12 @@ public class RepController {
 		out.flush();
 		// 채널리스트
 		ArrayList<Channel> chlist = service.getChList(rep_id);
+		int a = chlist.size();
+		int[] chidlist = new int[a];
+		for (int i = 0; i < chlist.size(); i++) {
+			chidlist[i] = chlist.get(i).getCh_id();
+			System.out.println("chidlist:" + chidlist[i]);
+		}
 		// 저장소에참여한사람리스트
 		ArrayList<Integer> userlist = service.getUserList(rep_id);
 		ArrayList<String> usernamelist = service.getUserNameList(userlist);
@@ -135,6 +141,10 @@ public class RepController {
 		ArrayList<String> repnamelist = service.getRepNameListById(id);
 		Repository r = service.getRepository(rep_id);
 		Channel ch = service.getChannel(rep_id);
+		ArrayList<Integer> alarmtypelist = service.getAlarmType(id, rep_id, chidlist);
+		int adminlevel = service.getUserAdminLevel(id, rep_id);
+		mav.addObject("alarmtypelist", alarmtypelist);
+		mav.addObject("adminlevel", adminlevel);
 		mav.addObject("ch", ch);
 		mav.addObject("rep_name", r.getRep_name());
 		mav.addObject("user_name", user_name);
@@ -242,17 +252,17 @@ public class RepController {
 		HttpSession session = req.getSession(false);
 		int rep_id = (int) session.getAttribute("rep_id");
 		ArrayList<Integer> userlist = service.getUserList(rep_id);
-		ArrayList<String> nicknamelist = service.getUserNickNameList(rep_id,userlist);
-		mav.addObject("nicknamelist",nicknamelist);
+		ArrayList<String> nicknamelist = service.getUserNickNameList(rep_id, userlist);
+		mav.addObject("nicknamelist", nicknamelist);
 		return mav;
 	}
 
 	@RequestMapping(value = "addchannel.do")
 	public ModelAndView createChannel(HttpServletRequest req, Repository r,
-			@RequestParam(value = "chtitle") String chtitle) {
+			@RequestParam(value = "chtitle") String chtitle, String[] nickname) throws Exception {
 		ModelAndView mav = new ModelAndView("template/main");
 		HttpSession session = req.getSession(false);
-		int id = (int) session.getAttribute("id"); 
+		int id = (int) session.getAttribute("id");
 		int rep_id = (int) session.getAttribute("rep_id");
 		String email = (String) session.getAttribute("email");
 		ArrayList<Integer> userlist = service.getUserList(rep_id);
@@ -266,12 +276,16 @@ public class RepController {
 		service.createCh(chtitle, rep_id);
 		Channel ch = service.getMaxChannel(rep_id);
 		int chid = ch.getCh_id();
-		ArrayList<Integer> useridlist = service.getUserList(rep_id);
+		ArrayList<Integer> useridlist = null;
+		if (nickname == null) {
+			useridlist = service.getUserList(rep_id);
+		} else {
+			useridlist = service.getUserIdList(rep_id, nickname);
+		}
 		ArrayList<String> nicknamelist = service.getNicknameList(rep_id);
-		System.out.println("repid:" + rep_id + ";;chid:" + chid);
 		for (int i = 0; i < useridlist.size(); i++) {
 			int user_id = useridlist.get(i);
-			System.out.println(user_id);
+			System.out.println("user_id=" + user_id);
 			service.createUserMetaCreateChannel1(user_id, rep_id, chid);
 		}
 		mav.addObject("nicknamelist", nicknamelist);
@@ -287,8 +301,19 @@ public class RepController {
 	}
 
 	@RequestMapping(value = "findworkspaceform.do")
-	public String findWorkspace() {
-		return "workspace/findworkspaceform";
+	public ModelAndView findWorkspace(HttpServletRequest req) {
+		ModelAndView mav = new ModelAndView("workspace/findworkspaceform");		
+		HttpSession session = req.getSession(false);
+		int id = (int) session.getAttribute("id");
+		String email = (String) session.getAttribute("email");
+		Member m = service.getMemberByEmail(email);
+		ArrayList<String> repnamelist = service.getRepNameListById(id);
+		mav.addObject("rep_list", repnamelist);
+		mav.addObject("user_name", m.getName());
+		mav.addObject("id", id);
+		mav.addObject("email", email);
+		mav.addObject("m", m);
+		return mav;
 	}
 
 	@RequestMapping(value = "findworkspace.do")
@@ -330,7 +355,7 @@ public class RepController {
 		Member m2 = service.getMember(id);
 		ArrayList<String> repnamelist = service.getRepNameListById(id);
 		System.out.println("email" + m.getEmail());
-		mav.addObject("id",id);
+		mav.addObject("id", id);
 		mav.addObject("rep_id", rep_id);
 		mav.addObject("rep_name", r.getRep_name());
 		mav.addObject("user_name", m2.getName());
@@ -382,25 +407,25 @@ public class RepController {
 
 	@RequestMapping(value = "alarmcheck.do")
 	public String alarmCheck(HttpServletRequest req, @RequestParam(value = "alarm_type") int alarm_type,
-			@RequestParam(value="chid") int chid) {
+			@RequestParam(value = "chid") int chid) {
 		HttpSession session = req.getSession(false);
-		System.out.println("chid:chid:"+chid);
+		System.out.println("chid:chid:" + chid);
 		int id = (int) session.getAttribute("id");
 		int rep_id = (int) session.getAttribute("rep_id");
-		System.out.println("alarmtype:"+alarm_type+";;chid:"+chid+";;id,repid:"+id+rep_id);
-		service.alarmCheck(id,chid, rep_id, alarm_type);
-		
+		System.out.println("alarmtype:" + alarm_type + ";;chid:" + chid + ";;id,repid:" + id + rep_id);
+		service.alarmCheck(id, chid, rep_id, alarm_type);
 
 		return null;
 
 	}
+
 	@RequestMapping(value = "alarmuncheck.do")
 	public String alarmUnCheck(HttpServletRequest req, @RequestParam(value = "alarm_type") int alarm_type,
-			@RequestParam(value="chid") int chid) {
+			@RequestParam(value = "chid") int chid) {
 		HttpSession session = req.getSession(false);
 		int id = (int) session.getAttribute("id");
 		int rep_id = (int) session.getAttribute("rep_id");
-		service.alarmUnCheck(id,chid, rep_id, alarm_type);
+		service.alarmUnCheck(id, chid, rep_id, alarm_type);
 
 		return null;
 	}

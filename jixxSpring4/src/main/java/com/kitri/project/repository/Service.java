@@ -93,6 +93,12 @@ public interface Service {
 
 	ArrayList<String> getUserNickNameList(int rep_id, ArrayList<Integer> userlist);
 
+	ArrayList<Integer> getUserIdList(int rep_id, String[] nickname);
+
+	ArrayList<Integer> getAlarmType(int id, int rep_id, int[] chidlist);
+
+	Member getMemberByEmail(String email);
+
 	
 
 	

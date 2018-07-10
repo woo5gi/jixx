@@ -158,7 +158,8 @@
 		user_meta2 values(#{user_id},#{rep_id},#{nickname},1)
 	</insert>
 	<insert id="insertUserMeta2Create" parameterType="map">
-		insert into user_meta2 values(#{user_id},#{rep_id},#{nickname},3)
+		insert into
+		user_meta2 values(#{user_id},#{rep_id},#{nickname},3)
 	</insert>
 	<select id="selectNickname" parameterType="map"
 		resultType="String">
@@ -210,36 +211,45 @@
 	</select>
 	<select id="selectAdminLevel" parameterType="map"
 		resultType="Integer">
-		select admin_level from user_meta2 where user_id=#{id} and rep_id=#{rep_id}
+		select admin_level from user_meta2 where user_id=#{id} and
+		rep_id=#{rep_id}
 	</select>
 	<select id="selectUserMeta2" parameterType="Integer"
 		resultMap="UM2ResultMap">
 		select * from user_meta2 where rep_id=#{rep_id}
 	</select>
 	<delete id="deleteCh" parameterType="Integer">
-		delete from channel where channel_id=#{ch_id}
+		delete from channel where
+		channel_id=#{ch_id}
 	</delete>
 	<select id="selectMember" parameterType="Integer"
 		resultMap="MemberResultMap">
 		select * from member where user_id=#{id}
 	</select>
 	<delete id="deleteUserMeta" parameterType="map">
-		delete from user_meta where user_id=#{id} and rep_id=#{rep_id}
+		delete from user_meta
+		where user_id=#{id} and rep_id=#{rep_id}
 	</delete>
 	<delete id="deleteUserMeta2" parameterType="map">
-		delete from user_meta2 where user_id=#{id} and rep_id=#{rep_id}
+		delete from
+		user_meta2 where user_id=#{id} and rep_id=#{rep_id}
 	</delete>
 	<update id="updateAdminLevel" parameterType="vo.UserMeta2">
-		update user_meta2 set admin_level=#{admin_level} where user_id=#{id} and
+		update user_meta2
+		set admin_level=#{admin_level} where user_id=#{id} and
 		rep_id=#{rep_id}
 	</update>
 	<update id="plusAlarmCheck" parameterType="map">
-		update user_meta set alarm_type=#{alarm_type} where user_id=#{id} and
-		rep_id=#{rep_id} and channel_id=#{chid}
+		update user_meta set
+		alarm_type=#{alarm_type} where user_id=#{id} and
+		rep_id=#{rep_id} and
+		channel_id=#{chid}
 	</update>
 	<update id="minusAlarmCheck" parameterType="map">
-		update user_meta set alarm_type=#{alarm_type} where user_id=#{id} and
-		rep_id=#{rep_id} and channel_id=#{chid}
+		update user_meta set
+		alarm_type=#{alarm_type} where user_id=#{id} and
+		rep_id=#{rep_id} and
+		channel_id=#{chid}
 	</update>
 	<select id="selectNicknameListByUserList" parameterType="map"
 		resultType="String">
@@ -248,5 +258,27 @@
 			separator=",">
 			#{type.value}
 		</foreach>
+	</select>
+	<select id="selectIdListByNickName" parameterType="map"
+		resultType="Integer">
+		select user_id from user_meta2 where rep_id=#{rep_id} and nickname in
+		<foreach collection="nickname" item="type" open="(" close=")"
+			separator=",">
+			#{type}
+		</foreach>
+	</select>
+	<select id="selectAlarmType" parameterType="map"
+		resultType="Integer">
+		select alarm_type from user_meta where rep_id=#{rep_id} and
+		user_id=#{id} and channel_id in
+		<foreach collection="cn" item="type" open="(" close=")"
+			separator=",">
+			#{type.value}
+		</foreach>
+		order by channel_id
+	</select>
+	<select id="selectMemberByEmail" resultMap="MemberResultMap"
+		parameterType="String">
+		SELECT * FROM member where user_email=#{email}
 	</select>
 </mapper>
