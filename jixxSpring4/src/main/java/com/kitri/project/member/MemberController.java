@@ -25,6 +25,7 @@ import com.kitri.project.repository.MailHandler;
 
 import vo.Channel;
 import vo.Member;
+import vo.Repository;
 import vo.UserMeta2;
 
 @Controller
@@ -195,8 +196,14 @@ public class MemberController {
 	public ModelAndView crw1(HttpServletRequest req) {
 		ModelAndView mav = new ModelAndView("workspace/createworkspace1");
 		HttpSession session = req.getSession(false);
+		int id = (int) session.getAttribute("id");
 		String email = (String) session.getAttribute("email");
 		Member m = service.getMemberByEmail(email);
+		ArrayList<String> repnamelist = service.getRepNameListById(id);
+		mav.addObject("rep_list", repnamelist);
+		mav.addObject("user_name", m.getName());
+		mav.addObject("id", id);
+		mav.addObject("email", email);
 		mav.addObject("m", m);
 		return mav;
 	}
@@ -384,7 +391,7 @@ public class MemberController {
 		HttpSession session = req.getSession(false);
 		res.setContentType("text/html;charset=utf-8");
 		PrintWriter out = res.getWriter();
-		ModelAndView mav = new ModelAndView();
+		ModelAndView mav = new ModelAndView("template/index");
 		System.out.println("id:" + m.getId() + ";;email:" + m.getEmail() + ";;password:" + m.getPwd());
 		service.editMember(m);
 		out.println("<script>alert('정보수정이 완료되었습니다');</script>");
@@ -394,7 +401,6 @@ public class MemberController {
 			String email = (String) session.getAttribute("email");
 			Member m2 = service.getMemberByEmail(email);
 			System.out.println("1111111" + m2.getName());
-			mav = new ModelAndView("template/index");
 			mav.addObject("user_name", m2.getName());
 			mav.addObject("id", id);
 			mav.addObject("email", email);
@@ -405,7 +411,7 @@ public class MemberController {
 			e.printStackTrace();
 			out.println("<script>alert('session값이 없습니다'); </script>");
 			out.flush();
-			mav = new ModelAndView("member/login");
+			mav = new ModelAndView("template/index");
 		}
 		return mav;
 	}
@@ -414,9 +420,14 @@ public class MemberController {
 	public ModelAndView editProfile(HttpServletRequest req) {
 		HttpSession session = req.getSession(false);
 		int id = (int) session.getAttribute("id");
+		String email=(String) session.getAttribute("email");
 		ModelAndView mav = new ModelAndView("member/editprofile");
 		Member m = service.getMember(id);
-
+		ArrayList<String> repnamelist = service.getRepNameListById(id);
+		mav.addObject("rep_list", repnamelist);
+		mav.addObject("user_name", m.getName());
+		mav.addObject("id", id);
+		mav.addObject("email", email);
 		mav.addObject("m", m);
 		return mav;
 	}
@@ -425,9 +436,14 @@ public class MemberController {
 	public ModelAndView profile(HttpServletRequest req) {
 		HttpSession session = req.getSession(false);
 		int id = (int) session.getAttribute("id");
+		String email =(String) session.getAttribute("email");
 		ModelAndView mav = new ModelAndView("member/profile");
 		Member m = service.getMember(id);
-
+		ArrayList<String> repnamelist = service.getRepNameListById(id);
+		mav.addObject("rep_list", repnamelist);
+		mav.addObject("user_name", m.getName());
+		mav.addObject("id", id);
+		mav.addObject("email", email);
 		mav.addObject("m", m);
 		return mav;
 	}
@@ -440,6 +456,14 @@ public class MemberController {
 		ModelAndView mav = new ModelAndView("member/mainprofileform");
 		Member m = service.getMember(id);
 		UserMeta2 um2 = service.getUserMeta2(id, rep_id);
+		Repository r = service.getRepository(rep_id);
+		ArrayList<String> repnamelist = service.getRepNameListById(id);
+		Member m2 = service.getMember(id);
+		mav.addObject("id",id);
+		mav.addObject("rep_id", rep_id);
+		mav.addObject("rep_name", r.getRep_name());
+		mav.addObject("user_name", m2.getName());
+		mav.addObject("rep_list", repnamelist);
 		mav.addObject("m", m);
 		mav.addObject("um2", um2);
 		return mav;

@@ -335,7 +335,6 @@ public class RepController {
 		mav.addObject("rep_name", r.getRep_name());
 		mav.addObject("user_name", m2.getName());
 		mav.addObject("rep_list", repnamelist);
-		mav.addObject("adminlevel", adminlevel);
 		mav.addObject("chlist", chlist);
 		mav.addObject("um2list", um2list);
 		mav.addObject("adminlevel", adminlevel);

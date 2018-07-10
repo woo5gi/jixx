@@ -196,7 +196,7 @@ public class PostController implements ApplicationContextAware {
 	@RequestMapping(value = "searchboard.do")
 	public ModelAndView searchBoard(HttpServletResponse res, HttpServletRequest req,
 			@RequestParam(value = "search") String search) throws Exception {
-		ModelAndView mav = new ModelAndView("template/main");
+		ModelAndView mav = new ModelAndView();
 		HttpSession session = req.getSession(false);
 		int id = (int) session.getAttribute("id");
 		int rep_id = (int) session.getAttribute("rep_id");
@@ -204,15 +204,18 @@ public class PostController implements ApplicationContextAware {
 		int page = 1;
 		ArrayList<String> nicknamelist = service.getNicknameList(rep_id);
 		ArrayList<Channel> chlist = service.getChList(rep_id);
-		res.setContentType("text/html; charset=UTF-8");
-		PrintWriter out = res.getWriter();
-		ArrayList<Post> list = service.getSearchBoard(page, rep_id, search);
-		ArrayList<Post> repost = service.getRepost(list);
+		
+		ArrayList<Post> list = service.getSearchBoard(page, rep_id, search);	
+		ArrayList<Post> repost = null;
 		if (list.isEmpty()) {
-			System.out.println("리스트가널이여");
+			mav.setViewName("redirect:/post/list.do?page=1&cn="+cn); 
+			/*res.setContentType("text/html; charset=UTF-8");
+			PrintWriter out = res.getWriter();
 			out.println("<script>alert('일치하는 항목이 없습니다'); </script>");
-			out.flush();
+			out.flush();*/
 		} else {
+			mav.setViewName("template/main"); 
+			repost = service.getRepost(list);
 			postListChange(list);
 		}
 		Member m2 = service.getMember(id);

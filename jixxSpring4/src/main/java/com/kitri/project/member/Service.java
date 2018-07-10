@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import vo.Channel;
 import vo.Member;
+import vo.Repository;
 import vo.UserMeta2;
 
 public interface Service {
@@ -39,6 +40,8 @@ public interface Service {
 
 	void editUM2(UserMeta2 um2);
 
-	Channel getChannel(int rep_id);	
+	Channel getChannel(int rep_id);
+
+	Repository getRepository(int rep_id);	
 
 }
