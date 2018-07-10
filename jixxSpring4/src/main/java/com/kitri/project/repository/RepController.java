@@ -377,6 +377,7 @@ public class RepController {
 	public String alarmCheck(HttpServletRequest req, @RequestParam(value = "alarm_type") int alarm_type,
 			@RequestParam(value="chid") int chid) {
 		HttpSession session = req.getSession(false);
+		System.out.println("chid:chid:"+chid);
 		int id = (int) session.getAttribute("id");
 		int rep_id = (int) session.getAttribute("rep_id");
 		System.out.println("alarmtype:"+alarm_type+";;chid:"+chid+";;id,repid:"+id+rep_id);

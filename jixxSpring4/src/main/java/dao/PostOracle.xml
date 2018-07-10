@@ -39,7 +39,7 @@
 	</resultMap>
 	<resultMap type="vo.UserMeta" id="UMResultMap">
 		<result property="user_id" column="user_id" />
-		<result property="rep_id" column="rep_id" />		
+		<result property="rep_id" column="rep_id" />
 		<result property="channel_id" column="channel_id" />
 		<result property="alarm_type" column="alarm_type" />
 	</resultMap>
@@ -76,25 +76,37 @@
 	<select id="selectSearchResult" parameterType="map"
 		resultMap="PostResultMap">
 		select * from (select rownum a, a.*
-		from (select p.*, c.channel_name from post p,channel c,repository r
-		where p.channel_id=c.channel_id and r.rep_id=c.rep_id and r.rep_id=#{rep_id} and repost_id = 0
-		and content like '%' || #{search} || '%'
+		from (select p.*, c.channel_name
+		from post p,channel c,repository r
+		where p.channel_id=c.channel_id and
+		r.rep_id=c.rep_id and r.rep_id=#{rep_id} and repost_id = 0
+		and content
+		like '%' || #{search} || '%'
 		and p.post_status != 0
-		order by post_id desc) a
-		where rownum <![CDATA[<=]]> ${endPage})b
-		where b.a <![CDATA[>=]]> ${startpage}
+		order by post_id
+		desc) a
+		where rownum <![CDATA[<=]]>
+		${endPage})b
+		where b.a <![CDATA[>=]]>
+		${startpage}
 		order by post_logdate
 	</select>
 	<select id="selectSearchResultMore" parameterType="map"
 		resultMap="PostResultMap">
 		select * from (select rownum a, a.*
-		from (select p.*, c.channel_name from post p,channel c,repository r
-		where p.channel_id=c.channel_id and r.rep_id=c.rep_id and r.rep_id=#{rep_id} and repost_id = 0
-		and content like '%' || #{search} || '%'
+		from (select p.*, c.channel_name
+		from post p,channel c,repository r
+		where p.channel_id=c.channel_id and
+		r.rep_id=c.rep_id and r.rep_id=#{rep_id} and repost_id = 0
+		and content
+		like '%' || #{search} || '%'
 		and p.post_status != 0
-		order by post_id desc) a
-		where rownum <![CDATA[<=]]> ${endPage})b
-		where b.a <![CDATA[>=]]> ${startpage}
+		order by post_id
+		desc) a
+		where rownum <![CDATA[<=]]>
+		${endPage})b
+		where b.a <![CDATA[>=]]>
+		${startpage}
 		order by post_logdate desc
 	</select>
 	<update id="delete">
@@ -129,11 +141,13 @@
 		resultMap="RepResultMap">
 		select * from repository where rep_id=#{rep_id}
 	</select>
-	<select id="selectFirstChannelId" parameterType="Integer" resultType="Integer">
-	select min(channel_id) from channel where rep_id=#{rep_id}
+	<select id="selectFirstChannelId" parameterType="Integer"
+		resultType="Integer">
+		select min(channel_id) from channel where rep_id=#{rep_id}
 	</select>
 	<update id="update" parameterType="map">
-	update post set content = #{content}, post_update = sysdate  where post_id = #{post_id}
+		update post set content = #{content}, post_update = sysdate where post_id =
+		#{post_id}
 	</update>
 	<select id="selectRepList" parameterType="Integer"
 		resultMap="RepResultMap">
@@ -143,18 +157,20 @@
 		r.rep_id=um.rep_id and
 		um.user_id=m.user_id and m.user_id=#{id}
 	</select>
-	<select id="selectRepost" parameterType="list" resultMap="PostResultMap">
-	select *
-	from post
-	where repost_id in 
-	<foreach collection="list" item="item" open="(" close=")"
+	<select id="selectRepost" parameterType="list"
+		resultMap="PostResultMap">
+		select *
+		from post
+		where repost_id in
+		<foreach collection="list" item="item" open="(" close=")"
 			separator=",">
 			#{item.post_id}
 		</foreach>
-	order by post_logdate
+		order by post_logdate
 	</select>
-	<select id="selectUserAdminLevel" parameterType="map" resultType="Integer">
-	select admin_level from user_meta2 where user_id=#{id} and rep_id=#{rep_id}
+	<select id="selectUserAdminLevel" parameterType="map"
+		resultType="Integer">
+		select admin_level from user_meta2 where user_id=#{id} and rep_id=#{rep_id}
 	</select>
 	<insert id="repostInsert" parameterType="map">
 		Insert into post
@@ -163,26 +179,37 @@
 		#{content},#{user_id},
 		sysdate,null,'x','x',1,#{channel_id})
 	</insert>
-	<select id="selectRepostID" parameterType="Integer" resultType="Integer">
+	<select id="selectRepostID" parameterType="Integer"
+		resultType="Integer">
 		select max(post_id) from post where user_id = #{user_id}
-	<select id="selectUserMeta" parameterType="map" resultMap="UMResultMap">
-	select * from user_meta where user_id=#{id} and rep_id=#{rep_id} and channel_id=#{ch_id}
 	</select>
-	<select id="selectMemberId" parameterType="map" resultType="Integer">
-	select user_id from user_meta where channel_id=#{cn} and not user_id=#{id}  and alarm_type=1
+	<select id="selectUserMeta" parameterType="map"
+		resultMap="UMResultMap">
+		select * from user_meta where user_id=#{id} and rep_id=#{rep_id} and
+		channel_id=#{ch_id}
 	</select>
-	<select id="selectMemberEmail" parameterType="map" resultType="String">
-	select user_email from member where user_id in
-	<foreach collection="idlist" item="type" open="(" close=")"
+	<select id="selectMemberId" parameterType="map"
+		resultType="Integer">
+		select user_id from user_meta where channel_id=#{cn} and not user_id=#{id}
+		and alarm_type=1
+	</select>
+	<select id="selectMemberEmail" parameterType="map"
+		resultType="String">
+		select user_email from member where user_id in
+		<foreach collection="idlist" item="type" open="(" close=")"
 			separator=",">
 			#{type.value}
 		</foreach>
 	</select>
-	<select id="selectAlarmType" parameterType="map" resultType="Integer">
-	select alarm_type from user_meta where rep_id=#{rep_id} and user_id=#{id} and channel_id in
-	<foreach collection="cn" item="type" open="(" close=")"
+	<select id="selectAlarmType" parameterType="map"
+		resultType="Integer">
+		select alarm_type from user_meta where rep_id=#{rep_id} and
+		user_id=#{id} and channel_id in
+		<foreach collection="cn" item="type" open="(" close=")"
 			separator=",">
 			#{type.value}
 		</foreach>
+		order by channel_id
 	</select>
+
 </mapper>
