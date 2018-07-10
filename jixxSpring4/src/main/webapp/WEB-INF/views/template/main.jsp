@@ -17,6 +17,11 @@
 				<div class="row">
 					<div class="col-md-12">
 						<!-- The time line -->
+							<c:choose>
+								<c:when test="${empty list}">
+								<h1>검색결과가 없습니다!</h1>
+								</c:when>
+								<c:otherwise>
 						<ul class="timeline" id="div">
 							<c:forEach items="${list}" var="post" varStatus="status">
 								<fmt:formatDate value="${post.logdate}" var="logdate" pattern="yyyy.MM.dd" />
@@ -94,6 +99,8 @@
 							</c:forEach>
 							<li><i class="fa fa-clock-o bg-gray"></i></li>
 						</ul>
+								</c:otherwise>
+							</c:choose>
 					</div>
 				</div>
 			</section>

@@ -1,27 +1,22 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <jsp:include page="../template/header.jsp" flush="false" />
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %> 
 
 <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 <script type="text/javascript">
 	$(function() {
-		$('a.nicknamelist').on('click', function() {
+		var cnt = 0;
+		$('a.nicknamelist').click(function() {
 			var user = $(this).text().trim();
-			var checkbox = $('input[name=chtype]');
-			 $('input[name=chtype]').checked = true;
 			$("<li class='addnicknamelist'><input type='text' name='chinvitenicknameinput' placeholder='Search by name' class='form-control' value=" + user + "><input type='button' name='cancelinvite' class='cancelinvite' value='삭제'></li>").appendTo("#invitelabel");
 			$(this).hide();
-			$('.cancelinvite').on('click', function() {
-				var nickname = $(this).prev('.form-control').val()
-				$('#'+nickname).show();
-				var li = $(this).parent($('li.addnicknamelist'));
-				li.remove();
-			});
-		});
-
-		var checkbox = $("input[name=chtype]");
-		checkbox.click(function() {
-			$("p").toggle();
+				$('.cancelinvite').on('click', function() {
+					var nickname = $(this).prev('.form-control').val()
+					$('#'+nickname).show();
+					var li = $(this).parent($('li.addnicknamelist'));
+					li.remove();
+				});
 		});
 	});
 </script>
@@ -100,8 +95,6 @@ input:checked+.slider:before {
 			<form role="form" action="${pageContext.request.contextPath}/addchannel.do" method="post"
 				class="form-horizontal" id="form">
 				<div class="box-body">
-					<label class="switch switch-3d switch-warning mr-3"> <input type="checkbox"
-						name="chtype"><span class="slider round"></span></label> <label class="text-muted">private</label>
 					<div class="form-group">
 						<label>name</label> <input type="text" name="chtitle" placeholder="e.g.leads"
 							class="form-control">
