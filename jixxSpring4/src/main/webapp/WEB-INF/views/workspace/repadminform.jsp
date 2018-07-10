@@ -4,108 +4,108 @@
 <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 <style type="text/css">
 .centered1 {
-   display: table;
-   margin-left: auto;
-   margin-right: auto;
-   width: 980px;
-   padding-top: 8%;
+	display: table;
+	margin-left: auto;
+	margin-right: auto;
+	width: 980px;
+	padding-top: 8%;
 }
 
 .listbox {
-   overflow-y: scroll;
-   height: 350px;
+	overflow-y: scroll;
+	height: 350px;
 }
 
 .callout {
-   background-color: #001f3f;
+	background-color: #001f3f;
 }
 
 .bg-navy {
-   margin: 0px;
+	margin: 0px;
 }
 </style>
 
 <script type="text/javascript">
-   $(function() {
-      $('input.deletech').on('click', function() {
-         var channelname = $(this).prev('label.ch_name').text().trim();
+	$(function() {
+		$('input.deletech').on('click', function() {
+			var channelname = $(this).prev('label.ch_name').text().trim();
 
-         var ch_id = $(this).prev('input[name=ch_id]').val();
-         var conresult = confirm("정말 삭제하시겠습니까.");
-         if (conresult == true) {
-            $(location).attr('href', "${pageContext.request.contextPath}/deletech.do?ch_id=" + ch_id);
-         } else if (conresult == false) {
-            return;
-         }
-      });
-      $('#deleterep').click(function() {
-         var rep_id = $('input[name=rep_id]').val();
-         var conresult = confirm("저장소를 정말 삭제하시겠습니까.");
-         if (conresult == true) {
-            $('#deleterepform').submit();
-         } else if (conresult == false) {
-            return;
-         }
-      })
-      $('.changeadminlevel').on('click', function() {
-         var selectoption = $('#selectbox option:selected').val();
-         var id = $(this).prev().prev('input[name=id]').val();
-         var rep_id = $(this).prev('input[name=rep_id]').val();
-         $(location).attr('href', "${pageContext.request.contextPath}/changeadminlevel.do?admin_level=" + selectoption + "&rep_id=" + rep_id + "&id=" + id);
+			var ch_id = $(this).prev('input[name=ch_id]').val();
+			var conresult = confirm("정말 삭제하시겠습니까.");
+			if (conresult == true) {
+				$(location).attr('href', "${pageContext.request.contextPath}/deletech.do?ch_id=" + ch_id);
+			} else if (conresult == false) {
+				return;
+			}
+		});
+		$('#deleterep').click(function() {
+			var rep_id = $('input[name=rep_id]').val();
+			var conresult = confirm("저장소를 정말 삭제하시겠습니까.");
+			if (conresult == true) {
+				$('#deleterepform').submit();
+			} else if (conresult == false) {
+				return;
+			}
+		})
+		$('.changeadminlevel').on('click', function() {
+			var selectoption = $('#selectbox option:selected').val();
+			var id = $(this).prev().prev('input[name=id]').val();
+			var rep_id = $(this).prev('input[name=rep_id]').val();
+			$(location).attr('href', "${pageContext.request.contextPath}/changeadminlevel.do?admin_level=" + selectoption + "&rep_id=" + rep_id + "&id=" + id);
 
 
-      })
-      $('#repout').on('click', function() {
-         var conresult = confirm("저장소를 정말 탈퇴하시겠습니까.");
-         if (conresult == true) {
-            $(location).attr('href', "${pageContext.request.contextPath}/repout.do");
-         } else if (conresult == false) {
-            return;
-         }
+		})
+		$('#repout').on('click', function() {
+			var conresult = confirm("저장소를 정말 탈퇴하시겠습니까.");
+			if (conresult == true) {
+				$(location).attr('href', "${pageContext.request.contextPath}/repout.do");
+			} else if (conresult == false) {
+				return;
+			}
 
-      })
+		})
 
-   });
+	});
 </script>
 <!-- Bootstrap 3.3.7 -->
 <link rel="stylesheet"
-   href="<%=request.getContextPath()%>/resources/bower_components/bootstrap/dist/css/bootstrap.min.css">
+	href="<%=request.getContextPath()%>/resources/bower_components/bootstrap/dist/css/bootstrap.min.css">
 <!-- Font Awesome -->
 <link rel="stylesheet"
-   href="<%=request.getContextPath()%>/resources/bower_components/font-awesome/css/font-awesome.min.css">
+	href="<%=request.getContextPath()%>/resources/bower_components/font-awesome/css/font-awesome.min.css">
 <!-- Ionicons -->
 <link rel="stylesheet"
-   href="<%=request.getContextPath()%>/resources/bower_components/Ionicons/css/ionicons.min.css">
+	href="<%=request.getContextPath()%>/resources/bower_components/Ionicons/css/ionicons.min.css">
 <!-- Theme style -->
 <link rel="stylesheet" href="<%=request.getContextPath()%>/resources/dist/css/AdminLTE.min.css">
 <!-- AdminLTE Skins. Choose a skin from the css/skins
    folder instead of downloading all of them to reduce the load. -->
 <link rel="stylesheet"
-   href="<%=request.getContextPath()%>/resources/dist/css/skins/_all-skins.min.css">
+	href="<%=request.getContextPath()%>/resources/dist/css/skins/_all-skins.min.css">
 <!-- Morris chart -->
 <link rel="stylesheet"
-   href="<%=request.getContextPath()%>/resources/bower_components/morris.js/morris.css">
+	href="<%=request.getContextPath()%>/resources/bower_components/morris.js/morris.css">
 <!-- jvectormap -->
 <link rel="stylesheet"
-   href="<%=request.getContextPath()%>/resources/bower_components/jvectormap/jquery-jvectormap.css">
+	href="<%=request.getContextPath()%>/resources/bower_components/jvectormap/jquery-jvectormap.css">
 <!-- Date Picker -->
 <link rel="stylesheet"
-   href="<%=request.getContextPath()%>/resources/bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css">
+	href="<%=request.getContextPath()%>/resources/bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css">
 <!-- Daterange picker -->
 <link rel="stylesheet"
-   href="<%=request.getContextPath()%>/resources/bower_components/bootstrap-daterangepicker/daterangepicker.css">
+	href="<%=request.getContextPath()%>/resources/bower_components/bootstrap-daterangepicker/daterangepicker.css">
 <!-- bootstrap wysihtml5 - text editor -->
 <link rel="stylesheet"
-   href="<%=request.getContextPath()%>/resources/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css">
+	href="<%=request.getContextPath()%>/resources/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css">
 
 <!-- jQuery 3 -->
 <script src="<%=request.getContextPath()%>/resources/bower_components/jquery/dist/jquery.min.js"></script>
 <!-- Bootstrap 3.3.7 -->
 <script
-   src="<%=request.getContextPath()%>/resources/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+	src="<%=request.getContextPath()%>/resources/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
 <!-- SlimScroll -->
 <script
-   src="<%=request.getContextPath()%>/resources/bower_components/jquery-slimscroll/jquery.slimscroll.min.js"></script>
+	src="<%=request.getContextPath()%>/resources/bower_components/jquery-slimscroll/jquery.slimscroll.min.js"></script>
 <!-- FastClick -->
 <script src="<%=request.getContextPath()%>/resources/bower_components/fastclick/lib/fastclick.js"></script>
 <!-- AdminLTE App -->
@@ -120,88 +120,88 @@
     position: fixed;
     } */
 .btnlist {
-   border-top-left-radius: 4px;
-   border-top-right-radius: 4px;
-   border-bottom-right-radius: 0;
-   border-bottom-left-radius: 0;
-   background-color: #ffffff;
-   padding: 7px 10px;
-   border-bottom: 1px solid #f4f4f4;
-   color: #444444;
-   font-size: 14px;
+	border-top-left-radius: 4px;
+	border-top-right-radius: 4px;
+	border-bottom-right-radius: 0;
+	border-bottom-left-radius: 0;
+	background-color: #ffffff;
+	padding: 7px 10px;
+	border-bottom: 1px solid #f4f4f4;
+	color: #444444;
+	font-size: 14px;
 }
 
 .timelinebtn {
-   display: inline;
-   float: right;
+	display: inline;
+	float: right;
 }
 
 .content-header {
-   background: #fff;
-   box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.15);
-   clear: both;
-   display: inline-block;
-   padding: 15px 20px 13px 20px;
-   width: 100%;
+	background: #fff;
+	box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.15);
+	clear: both;
+	display: inline-block;
+	padding: 15px 20px 13px 20px;
+	width: 100%;
 }
 
 .skin-blue .content-header {
-   background: #ffffff;
+	background: #ffffff;
 }
 
 .cname {
-   padding: 15px 15px;
-   float: left;
-   color: #fff;
-   font-size: 17px;
-   list-style: none;
+	padding: 15px 15px;
+	float: left;
+	color: #fff;
+	font-size: 17px;
+	list-style: none;
 }
 
 #user-body1 {
-   background: #e9e9e9;
+	background: #e9e9e9;
 }
 
 .dropdown-menu {
-   overflow-y: scroll;
-   max-height: 500px;
+	overflow-y: scroll;
+	max-height: 500px;
 }
 
 .listyle {
-   padding: 12px 5px 12px 15px;
-   display: block;
+	padding: 12px 5px 12px 15px;
+	display: block;
 }
 
 .liscroll {
-   overflow-y: auto;
-   min-height: 44px;
-   max-height: 132px;
+	overflow-y: auto;
+	min-height: 44px;
+	max-height: 132px;
 }
 
 ::-webkit-scrollbar {
-   width: 16px;
+	width: 16px;
 }
 
 ::-webkit-scrollbar-track {
-   background-color: #222d32;
+	background-color: #222d32;
 }
 
 ::-webkit-scrollbar-thumb {
-   background-color: #555;
+	background-color: #555;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-   background: #555;
+	background: #555;
 }
 
 ::-webkit-scrollbar-button:start:decrement, ::-webkit-scrollbar-button:end:increment
-   {
-   width: 0px;
-   height: 0px;
-   background: #222d32;
+	{
+	width: 0px;
+	height: 0px;
+	background: #222d32;
 }
 
 .i1 {
-   padding-right: 10px
+	padding-right: 10px
 }
 </style>
 <body class="hold-transition skin-blue sidebar-mini">
@@ -405,141 +405,156 @@
 		</ul>
 	</div>
 	</nav> </header>
-
-
 	<div class="bg">
 		<div class="centered1">
-
-			<div class="callout ">				
-					<h2 id="rep_name_lb" style="text-align: center; color: #fff">${r.rep_name}저장소</h2>				
+			<div class="callout ">
+				<h2 id="rep_name_lb" style="text-align: center; color: #fff">${r.rep_name}저장소</h2>
 			</div>
+			<c:choose>
+				<c:when test="${adminlevel eq 1 }">
+					<input type="button" id="repout" class="btn  btn-danger btn-lg" value="저장소탈퇴">
+				</c:when>
+				<c:when test="${adminlevel eq 2 }">
+					<div class="row">
+						<div class="col-md-6">
+							<c:forEach var="aa" items="${chlist}" varStatus="status">
+								<div class="box listbox">
+									<div class="box-header">
+										<h3 class="box-title">채널 관리</h3>
+									</div>
 
-			<div class="row">
-				<div class="col-md-6">
-					<div class="box listbox">
-						<div class="box-header">
-							<h3 class="box-title">채널 관리</h3>
-						</div>
+									<div class="box-body table-responsive no-padding">
+										<table class="table table-hover">
+											<tbody>
+												<tr>
+													<th>Channel</th>
+													<th>Delete</th>
 
-						<div class="box-body table-responsive no-padding">
-							<table class="table table-hover">
-								<tbody>
-									<tr>
-										<th>Channel</th>
-										<th>Delete</th>
-
-									</tr>
-									<tr>
-										<td>183</td>
-										<td><button type="button" class="btn bg-navy margin">.btn.bg-navy</button></td>
-									</tr>
-								</tbody>
-							</table>
+												</tr>
+												<tr>
+													<td>${aa.ch_name}</td>
+													<td><input type="hidden" name="ch_id" value="${aa.ch_id}"
+														class="ch_id ${status.count}"> <input type="button" value="삭제"
+														class="deletech ${status.count}"></td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
+								</div>
+							</c:forEach>
 						</div>
 					</div>
-				</div>
 
-				<div class="row">
-					<div class="col-md-6">
-						<div class="box listbox">
-							<div class="box-header">
-								<h3 class="box-title">멤버 관리</h3>
+					<input type="button" id="repout" class="btn  btn-danger btn-lg" value="저장소탈퇴">
+
+				</c:when>
+				<c:otherwise>
+					<div class="row">
+						<div class="col-md-6">
+
+							<div class="box listbox">
+								<div class="box-header">
+									<h3 class="box-title">채널 관리</h3>
+								</div>
+
+								<div class="box-body table-responsive no-padding">
+									<table class="table table-hover">
+										<tbody>
+											<tr>
+												<th>Channel</th>
+												<th>Delete</th>
+											</tr>
+											<c:forEach var="aa" items="${chlist}" varStatus="status">
+												<tr>
+													<td>${aa.ch_name}</td>
+													<td><input type="hidden" name="ch_id" value="${aa.ch_id}"
+														class="ch_id ${status.count}"> <input type="button" value="삭제"
+														class="deletech ${status.count}"></td>
+												</tr>
+											</c:forEach>
+										</tbody>
+									</table>
+								</div>
 							</div>
-							<!-- /.box-header -->
-							<div class="box-body table-responsive no-padding">
-								<table class="table table-hover">
-									<tbody>
-										<tr>
 
-											<th>User</th>
-											<th>Rol</th>
-										</tr>
-										<tr>
-											<td>11-7-2014</td>
-											<td><select class="form-control select2 select2-hidden-accessible"
-												style="width: 100%;" tabindex="-1" aria-hidden="true">
-													<option selected="selected">Alabama</option>
-													<option>Alaska</option>
-													<option>California</option>
-													<option>Delaware</option>
-													<option>Tennessee</option>
-													<option>Texas</option>
-													<option>Washington</option>
-											</select></td>
-										</tr>
-									</tbody>
-								</table>
+						</div>
+
+						<div class="row">
+							<div class="col-md-6">
+								<div class="box listbox">
+									<div class="box-header">
+										<h3 class="box-title">멤버 관리</h3>
+									</div>
+									<!-- /.box-header -->
+									<div class="box-body table-responsive no-padding">
+										<form id="usermodform">
+											<table class="table table-hover">
+
+												<tbody>
+													<tr>
+
+														<th>User</th>
+														<th>Role</th>
+														<th>change</th>
+													</tr>
+													<c:forEach var="aa" items="${um2list}">
+
+
+														<tr>
+															<c:choose>
+																<c:when test="${aa.admin_level eq 2}">
+																	<td>${aa.nickname}</td>
+																	<td><select class="form-control select2 select2-hidden-accessible"
+																		style="width: 100%;" tabindex="-1" aria-hidden="true" id="selectbox">
+																			<option value=1>일반사용자</option>
+																			<option value=2 selected="selected">중간관리자</option>
+																			<option value=3>저장소관리자</option>
+																	</select></td>
+																	<td><input type="hidden" name="id" value="${aa.id}"> <input
+																		type="hidden" name="rep_id" value="${aa.rep_id}"> <input type="button"
+																		value="권한변경" class="changeadminlevel"></td>
+																</c:when>
+																<c:when test="${aa.admin_level eq 3}">
+																	<td>${aa.nickname}</td>
+																	<td><select class="form-control select2 select2-hidden-accessible"
+																		style="width: 100%;" tabindex="-1" aria-hidden="true" id="selectbox">
+																			<option value=3 selected="selected">저장소관리자</option>
+																	</select></td>
+																	<td><input type="hidden" name="id" value="${aa.id}"> <input
+																		type="hidden" name="rep_id" value="${aa.rep_id}"> <input type="hidden"
+																		value="권한변경" class="changeadminlevel"></td>
+																</c:when>
+																<c:otherwise>
+																	<td>${aa.nickname}</td>
+																	<td><select class="form-control select2 select2-hidden-accessible"
+																		style="width: 100%;" tabindex="-1" aria-hidden="true" id="selectbox">
+																			<option value=1 selected="selected">일반사용자</option>
+																			<option value=2>중간관리자</option>
+																			<option value=3>저장소관리자</option>
+																	</select></td>
+																	<td><input type="hidden" name="id" value="${aa.id}"> <input
+																		type="hidden" name="rep_id" value="${aa.rep_id}"> <input type="hidden"
+																		value="권한변경" class="changeadminlevel"></td>
+																</c:otherwise>
+															</c:choose>
+														</tr>
+													</c:forEach>
+												</tbody>
+											</table>
+										</form>
+									</div>
+								</div>
 							</div>
 						</div>
+						<form id="deleterepform" action="${pageContext.request.contextPath}/emailauth.do">
+							<label id="rep_name_lb"></label><input type="hidden" name="rep_id"
+								value="${r.rep_id}"> <input type="hidden" name="requestfrom" value="deleterep">
+							<input type="hidden" name="email" value="${m.email}"> <input type="button"
+								id="deleterep" value="저장소삭제" class="btn btn-danger btn-lg">
+						</form>
 					</div>
-				</div>
-			</div>
-			<form id="deleterepform" action="${pageContext.request.contextPath}/emailauth.do">
-				<input type="hidden" name="rep_id" value="${r.rep_id}"> <input type="hidden"
-					name="requestfrom" value="deleterep"> <input type="hidden" name="email"
-					value="${m.email}"> <input type="button" id="deleterep" value="저장소삭제"
-					class="btn  btn-danger btn-lg" style="float: right;">
-			</form>
+				</c:otherwise>
+			</c:choose>
 		</div>
-
-		<c:choose>
-			<c:when test="${adminlevel eq 1 }">
-				<input type="button" id="repout" value="저장소탈퇴">
-			</c:when>
-			<c:when test="${adminlevel eq 2 }">
-				<form id="channelform" action="${pageContext.request.contextPath}/deletech.do">
-					<c:forEach var="aa" items="${chlist}" varStatus="status">
-						<li><label class="ch_name">${aa.ch_name}</label> <input type="hidden" name="ch_id"
-							value="${aa.ch_id}" class="ch_id ${status.count}"> <input type="button" value="삭제"
-							class="deletech ${status.count}"></li>
-					</c:forEach>
-					<input type="button" id="repout" value="저장소탈퇴">
-				</form>
-			</c:when>
-			<c:otherwise>
-				<form id="channelform" action="${pageContext.request.contextPath}/deletech.do">
-					<c:forEach var="aa" items="${chlist}">
-						<li><label class="ch_name">${aa.ch_name}</label><input type="hidden" name="ch_id"
-							value="${aa.ch_id}" class="ch_id ${status.count}"> <input type="button" value="삭제"
-							class="deletech ${status.count}"></li>
-					</c:forEach>
-				</form>
-				<form id="usermodform">
-					<c:forEach var="aa" items="${um2list}">
-						<c:choose>
-							<c:when test="${aa.admin_level eq 2}">
-								<li><label>${aa.nickname}</label> {aa.admin_level} <select id="selectbox"><option
-											value=1>일반사용자</option>
-										<option value=2 selected="selected">중간관리자</option>
-										<option value=3>저장소관리자</option>
-								</select><input type="hidden" name="id" value="${aa.id}"> <input type="hidden" name="rep_id"
-									value="${aa.rep_id}"> <input type="button" value="권한변경" class="changeadminlevel"><input
-									type="button" value="추방" class="deleteuser"></li>
-							</c:when>
-							<c:when test="${aa.admin_level eq 3}">
-								<li><label>${aa.nickname}</label><select>
-										<option value=3 selected="selected">저장소관리자</option>
-								</select></li>
-							</c:when>
-							<c:otherwise>
-								<li><label>${aa.nickname}</label><select id="selectbox"><option value=1
-											selected="selected">일반사용자</option>
-										<option value=2>중간관리자</option>
-										<option value=3>저장소관리자</option>
-								</select><input type="hidden" name="id" value="${aa.id}"> <input type="hidden" name="rep_id"
-									value="${aa.rep_id}"><input type="button" value="권한변경" class="changeadminlevel"><input
-									type="button" value="추방" class="deleteuser"></li>
-							</c:otherwise>
-						</c:choose>
-					</c:forEach>
-				</form>
-				<form id="deleterepform" action="${pageContext.request.contextPath}/emailauth.do">
-					<label id="rep_name_lb">${r.rep_name}저장소</label><input type="hidden" name="rep_id"
-						value="${r.rep_id}"> <input type="hidden" name="requestfrom" value="deleterep">
-					<input type="hidden" name="email" value="${m.email}"> <input type="button"
-						id="deleterep" value="저장소삭제">
-				</form>
-			</c:otherwise>
-		</c:choose>
-
 	</div>
+</body>
