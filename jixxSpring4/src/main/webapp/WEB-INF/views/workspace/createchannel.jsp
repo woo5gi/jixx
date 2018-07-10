@@ -9,7 +9,7 @@
 		var cnt = 0;
 		$('a.nicknamelist').click(function() {
 			var user = $(this).text().trim();
-			$("<li class='addnicknamelist'><input type='text' name='chinvitenicknameinput' placeholder='Search by name' class='form-control' value=" + user + "><input type='button' name='cancelinvite' class='cancelinvite' value='삭제'></li>").appendTo("#invitelabel");
+			$("<li class='addnicknamelist' style='display: inline;'><input style='float: left; width: 80%;' type='text' name='chinvitenicknameinput' placeholder='Search by name' class='form-control' value=" + user + "><input type='button' name='cancelinvite' class='cancelinvite btn btn-primary' value='삭제' style='float: right;'></li>").appendTo("#invitelabel");
 			$(this).hide();
 				$('.cancelinvite').on('click', function() {
 					var nickname = $(this).prev('.form-control').val()
@@ -80,6 +80,10 @@ input:checked+.slider:before {
 
 .slider.round:before {
 	border-radius: 50%;
+}
+li{
+
+      list-style: none;
 }
 </style>
 

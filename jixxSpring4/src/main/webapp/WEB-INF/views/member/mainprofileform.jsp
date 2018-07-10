@@ -53,6 +53,19 @@
 /* .main-sidebar{
 	 position: fixed;
 	 } */
+	 .centered {
+	display: table;
+	margin-left: auto;
+	margin-right: auto;
+	width: 450px;
+	padding-top: 13%;
+}
+
+.bg {
+	min-height: 100%;
+	background-color: #ecf0f5;
+}
+	 
 .btnlist {
 	border-top-left-radius: 4px;
 	border-top-right-radius: 4px;

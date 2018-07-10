@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta http-equiv="X-UA-Compatible" content="text/html; charset=UTF-8">
-<title>JIXX</title>
+<title>FILE CETACEA </title>
 <!-- Bootstrap 3.3.7 -->
 <link rel="stylesheet" href="<%=request.getContextPath()%>/resources/bower_components/bootstrap/dist/css/bootstrap.min.css">
 <!-- Font Awesome -->
@@ -101,7 +101,7 @@
 .liscroll {
 	overflow-y: auto;
 	min-height: 44px;
-	max-height: 132px;
+	max-height: 220px;
 }
 
 ::-webkit-scrollbar {
@@ -367,7 +367,8 @@
 				</c:choose>
 			</ul>
 		</div>
-		</nav> </header>
+		</nav> 
+		</header>
 		<!-- Left side column. contains the logo and sidebar -->
 		<aside class="main-sidebar" style=" overflow-y: auto;"> <!-- sidebar: style can be found in sidebar.less -->
 		<section class="sidebar"> <!-- Sidebar user panel (optional) -->

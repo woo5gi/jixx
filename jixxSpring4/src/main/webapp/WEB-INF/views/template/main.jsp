@@ -19,7 +19,9 @@
 						<!-- The time line -->
 							<c:choose>
 								<c:when test="${empty list}">
-								<h1>검색결과가 없습니다!</h1>
+								<div class="error-content">
+          							<h3><i class="fa fa-warning text-red"></i> 검색결과가 없습니다!</h3>
+        						</div>
 								</c:when>
 								<c:otherwise>
 						<ul class="timeline" id="div">
