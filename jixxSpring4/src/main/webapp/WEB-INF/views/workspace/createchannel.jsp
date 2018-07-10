@@ -9,7 +9,7 @@
 			var user = $(this).text().trim();
 			var checkbox = $('input[name=chtype]');
 			 $('input[name=chtype]').checked = true;
-			$("<li class='addnicknamelist'><input type='text' name='chinvitenicknameinput' placeholder='Search by name' class='form-control' value=" + user + "><input type='button' name='cancelinvite' class='cancelinvite' value='삭제'></li>").appendTo("#invitelabel");
+			$("<li class='addnicknamelist'><input type='text' name='nickname' placeholder='Search by name' class='form-control' value=" + user + "><input type='button' name='cancelinvite' class='cancelinvite' value='삭제'></li>").appendTo("#invitelabel");
 			$(this).hide();
 			$('.cancelinvite').on('click', function() {
 				var nickname = $(this).prev('.form-control').val()

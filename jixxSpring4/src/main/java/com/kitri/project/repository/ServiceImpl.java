@@ -377,6 +377,27 @@ public class ServiceImpl implements Service {
 		return t;
 	}
 
+	@Override
+	public ArrayList<Integer> getUserIdList(int rep_id, String[] nickname) {
+		repMapper = sqlSession.getMapper(Mapper.class);
+		Map<String, Object> map = new HashMap<String,Object>();
+		map.put("rep_id", rep_id);
+		map.put("nickname", nickname);
+		ArrayList<Integer> t = repMapper.selectIdListByNickName(map);
+		return t;
+	}
+
+	@Override
+	public ArrayList<Integer> getAlarmType(int id, int rep_id, int[] chidlist) {
+		repMapper = sqlSession.getMapper(Mapper.class);
+		Map<String, Object> map = new HashMap<String,Object>();
+		map.put("id", id);
+		map.put("rep_id", rep_id);
+		map.put("cn", chidlist);
+		ArrayList<Integer> t = repMapper.selectAlarmType(map);
+		return t;
+	}
+
 	
 
 	

@@ -410,10 +410,8 @@
 	<div class="bg">
 		<div class="centered1">
 
-			<div class="callout ">
-				<form id="deleterepform" action="${pageContext.request.contextPath}/emailauth.do">
-					<h2 id="rep_name_lb" style="text-align: center; color: #fff">${r.rep_name}저장소</h2>
-				</form>
+			<div class="callout ">				
+					<h2 id="rep_name_lb" style="text-align: center; color: #fff">${r.rep_name}저장소</h2>				
 			</div>
 
 			<div class="row">

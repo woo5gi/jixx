@@ -96,6 +96,10 @@ public interface Mapper {
 
 	ArrayList<String> selectNicknameListByUserList(Map<String, Object> map);
 
+	ArrayList<Integer> selectIdListByNickName(Map<String, Object> map);
+
+	ArrayList<Integer> selectAlarmType(Map<String, Object> map);
+
 
 
 
