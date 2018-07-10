@@ -13,6 +13,7 @@ import com.kitri.project.member.Mapper;
 
 import vo.Channel;
 import vo.Member;
+import vo.Repository;
 import vo.UserMeta2;
 
 @Component("memService")
@@ -131,6 +132,12 @@ public class ServiceImpl implements Service{
 		memberMapper = sqlSession.getMapper(Mapper.class);
 		Channel c = memberMapper.selectChannel(rep_id);
 		return c;
+	}
+	@Override
+	public Repository getRepository(int rep_id) {
+		memberMapper = sqlSession.getMapper(Mapper.class);
+		Repository r = memberMapper.selectRepository(rep_id);
+		return r;
 	}
 }
 

@@ -5,6 +5,7 @@ import java.util.Map;
 
 import vo.Channel;
 import vo.Member;
+import vo.Repository;
 import vo.UserMeta2;
 
 public interface Mapper {
@@ -41,6 +42,8 @@ public interface Mapper {
 	void editUM2(UserMeta2 um2);
 
 	Channel selectChannel(int rep_id);
+
+	Repository selectRepository(int rep_id);
 
 	
 

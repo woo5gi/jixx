@@ -94,6 +94,8 @@ public interface Mapper {
 
 	void minusAlarmCheck(Map<String, Object> map);
 
+	ArrayList<String> selectNicknameListByUserList(Map<String, Object> map);
+
 
 
 

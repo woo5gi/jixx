@@ -1,6 +1,5 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <jsp:include page="../template/header.jsp" flush="false" />
 <script type="text/javascript">
 	function isSame() {
@@ -12,7 +11,7 @@
 			document.getElementById('same').innerHTML = '비밀번호는 6글자 이상, 16글자 이하만 이용 가능합니다.';
 		} else {
 			if (pwd != "" && pwd2 != "") {
-				if (pwd==pwd2) {
+				if (pwd == pwd2) {
 					same.innerHTML = "비밀번호가 일치합니다";
 					same.style.color = 'blue';
 				} else {
@@ -22,12 +21,12 @@
 			}
 		}
 	}
-	$(function(){
-		$('#setpw').click(function(){
+	$(function() {
+		$('#setpw').click(function() {
 			var pwsame = $('#same').text().trim();
-			if(pwsame=='비밀번호가 일치합니다'){
-				$('#setpwform').submit();				
-			}else{
+			if (pwsame == '비밀번호가 일치합니다') {
+				$('#setpwform').submit();
+			} else {
 				alert("비밀번호가 일치하지 않습니다");
 			}
 			return;
@@ -76,44 +75,45 @@
 				</section>
 			</div>
 		</div> --%>
-		
- <div class="bg">
-  <div class="centered">
-    <div class="box box-primary">
-      <div class="box-header with-border">
-        <h3 class="box-title">Set your New password</h3>
-      </div>
 
-      <form role="form" action="<%=request.getContextPath()%>/setnewpass.do"
-									method="post" class="" id="setpwform">
-        <div class="box-body">
-          <div class="form-group">
-            <label for="exampleInputEmail1">Password</label> 
-            <div class="input-group">
-			<div class="input-group-addon">Password</div>
-			<input type="password" id="pwd" name="pwd"
-				class="form-control" onchange="isSame()">
+<div class="bg">
+	<div class="centered">
+		<div class="box box-primary">
+			<div class="box-header with-border">
+				<h3 class="box-title">Set your New password</h3>
 			</div>
-          </div>
-          
-          <div class="form-group">
-          <label for="exampleInputEmail1">Password Check</label> 
-			<div class="input-group">
-				<div class="input-group-addon">Password Check</div>
-				<input type="password" id="pwdcheck" name="password2"
-					class="form-control" onchange="isSame()">
-			</div>
-          </div>
-          <span id="same"></span>
 
+			<form role="form" action="<%=request.getContextPath()%>/setnewpass.do" method="post" class=""
+				id="setpwform">
+				<c:set var="email" value="${email}" />
+				<input type="hidden" name="email" value="${email}">
+				<div class="box-body">
+					<div class="form-group">
+						<label for="exampleInputEmail1">Password</label>
+						<div class="input-group">
+							<div class="input-group-addon">Password</div>
+							<input type="password" id="pwd" name="pwd" class="form-control" onchange="isSame()">
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label for="exampleInputEmail1">Password Check</label>
+						<div class="input-group">
+							<div class="input-group-addon">Password Check</div>
+							<input type="password" id="pwdcheck" name="password2" class="form-control"
+								onchange="isSame()">
+						</div>
+					</div>
+					<span id="same"></span>
+
+				</div>
+				<div class="box-footer">
+					<button type="button" class="btn btn-primary btn-block" id="setpw">New Password
+						Setting Done</button>
+				</div>
+			</form>
 		</div>
-        <div class="box-footer">
-          <button type="button" class="btn btn-primary btn-block" id="setpw">
-          New Password Setting Done</button>
-        </div>
-      </form>
-    </div>
-  </div>
+	</div>
 </div>
 
 </body>

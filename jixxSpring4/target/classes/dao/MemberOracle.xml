@@ -103,5 +103,7 @@
 		from channel where
 		rep_id=#{rep_id})
 	</select>
-	
+	<select id="selectRepository" parameterType="Integer" resultMap="RepResultMap">
+	select * from repository where rep_id=#{rep_id}
+	</select>
 </mapper>

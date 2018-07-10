@@ -91,6 +91,8 @@ public interface Service {
 
 	void alarmUnCheck(int id, int chid, int rep_id, int alarm_type);
 
+	ArrayList<String> getUserNickNameList(int rep_id, ArrayList<Integer> userlist);
+
 	
 
 	

@@ -242,8 +242,8 @@ public class RepController {
 		HttpSession session = req.getSession(false);
 		int rep_id = (int) session.getAttribute("rep_id");
 		ArrayList<Integer> userlist = service.getUserList(rep_id);
-		ArrayList<String> usernamelist = service.getUserNameList(userlist);
-		mav.addObject("usernamelist", usernamelist);
+		ArrayList<String> nicknamelist = service.getUserNickNameList(rep_id,userlist);
+		mav.addObject("nicknamelist",nicknamelist);
 		return mav;
 	}
 
@@ -252,7 +252,7 @@ public class RepController {
 			@RequestParam(value = "chtitle") String chtitle) {
 		ModelAndView mav = new ModelAndView("template/main");
 		HttpSession session = req.getSession(false);
-		int id = (int) session.getAttribute("id");
+		int id = (int) session.getAttribute("id"); 
 		int rep_id = (int) session.getAttribute("rep_id");
 		String email = (String) session.getAttribute("email");
 		ArrayList<Integer> userlist = service.getUserList(rep_id);
@@ -327,7 +327,14 @@ public class RepController {
 		ArrayList<UserMeta2> um2list = service.getUserMeta2List(rep_id);
 		Repository r = service.getRepository(rep_id);
 		Member m = service.getMemberAll(id);
+		Member m2 = service.getMember(id);
+		ArrayList<String> repnamelist = service.getRepNameListById(id);
 		System.out.println("email" + m.getEmail());
+		mav.addObject("id",id);
+		mav.addObject("rep_id", rep_id);
+		mav.addObject("rep_name", r.getRep_name());
+		mav.addObject("user_name", m2.getName());
+		mav.addObject("rep_list", repnamelist);
 		mav.addObject("chlist", chlist);
 		mav.addObject("um2list", um2list);
 		mav.addObject("adminlevel", adminlevel);
@@ -396,7 +403,6 @@ public class RepController {
 		service.alarmUnCheck(id,chid, rep_id, alarm_type);
 
 		return null;
-
 	}
 
 	@RequestMapping(value = "teaminvite.do")
