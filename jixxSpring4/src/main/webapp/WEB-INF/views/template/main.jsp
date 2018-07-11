@@ -7,6 +7,25 @@
 	background-color: #ecf0f5;
 	margin-left:230px;
 }
+.btn-danger{
+float: right;
+margin: 0 4;
+}
+.timeline-content{
+	min-height: 100px;
+    background-color: #f7f7f7;
+    padding: 20px;
+}
+
+@media (max-width: 767px) {
+
+  .bg{  
+   margin-left: 0px;}
+   }
+
+.repostdata{
+margin: 15px;
+}
 
 </style>
 <jsp:include page="mainHeader.jsp" flush="false" />
@@ -55,19 +74,19 @@
 													<a href="#">${post.nickname}</a>
 													<div class="timelinebtn">
 													<c:if test="${post.post_status ne 0 }">
-														<a class="repost1">댓글달기</a>
+														<a class="repost1 btn btn-primary btn-xs">댓글달기</a>
 													</c:if>
 														<c:set var="usernickname" value="${sessionScope.nickname}" />
 														<c:set var="writtennickname" value="${post.nickname}" />
 														<c:if test="${usernickname eq writtennickname}">
-														<a class="change"> 수정</a>
+														<a class="change btn btn-primary btn-xs btn-warning"> 수정</a>
 															<a class="btn btn-danger btn-xs"
 																href="<%= request.getContextPath() %>/post/delete.do?post_id=${post.post_id}&cn=${ch.ch_id}" id="delete">Delete</a>
 														</c:if>
 													</div>
 												</h3>
 
-												<div class="timeline-body" id="${post.post_id}">${post.content}</div>
+												<div class="timeline-body timeline-content" id="${post.post_id}">${post.content}</div>
 												<c:if test="${post.file_thumbnail ne 'x'}">
 													<img src="<%= request.getContextPath() %>/resources/img/${post.file_thumbnail}"
 														class="margin">
@@ -80,13 +99,14 @@
 														</a>
 													</c:if>
 													<c:forEach items="${repost}" var="repost">
+													<div class="repostdata">
 													<c:if test="${repost.repost_id eq post.post_id }">
 													<c:choose>
 													<c:when test="${repost.post_status eq 0 }">
-														<div> 삭제된 댓글입니다. </div>
+														<div class="timeline-body"> 삭제된 댓글입니다. </div>
 													</c:when>
 													<c:otherwise>
-														<div class="timeline-item">
+														<div class="timeline-body">
 															<span class="time"><i class="fa fa-clock-o"></i>${repost.logdate}</span>
 																<a href="#">${repost.nickname}</a>
 															<span class="timeline-body" id="${repost.post_id}">${repost.content}</span>
@@ -96,6 +116,7 @@
 													</c:otherwise>
 													</c:choose>
 													</c:if>
+													</div>
 													</c:forEach>
 													</div></li><br>
 									</c:otherwise>
@@ -166,7 +187,7 @@
 						}
 						str +='<li>'+
 						'<li><i class="fa fa-user bg-aqua"></i>'+
-						'<div class="timeline-item">'+
+						'<div class="timeline-body">'+
 						'<span class="time"><i class="fa fa-clock-o"></i> '+list[i].logdate+'</span>'+
 						'<h3 class="timeline-header no-border">'+
 						'<a href="#">'+list[i].nickname+'님</a> ${rep_name}'+ list[i].content+
@@ -179,7 +200,7 @@
 						} else{
 							str += '<li><i class="fa fa-envelope bg-blue"></i>';
 						}
-						str += '<div class="timeline-item">'+
+						str += '<div class="timeline-body">'+
 						'<span class="time"><i class="fa fa-clock-o"></i>'+ list[i].logdate+'</span>'+
 						'<h3 class="timeline-header">'+
 						'<a href="#">'+ list[i].nickname+'</a>'+
@@ -203,9 +224,9 @@
 						for (var j = 0; j < repost.length; j++) {
 							if (list[i].post_id == repost[j].repost_id) {
 								if (repost[j].post_status == 0) {
-									str += '<div> 삭제된 댓글입니다. </div>';
+									str += '<div class="timeline-body"> 삭제된 댓글입니다. </div>';
 								} else {
-									str += '<div class="timeline-item">'+
+									str += '<div class="timeline-body">'+
 								    '<span class="time"><i class="fa fa-clock-o"></i>'+ (new Date).yyyymmdd() +'</span>'+
 								    '<a href="#">'+repost[j].nickname+'</a>'+
 								    '<span class="timeline-body" >'+repost[j].centent+'</span>'+
@@ -266,7 +287,7 @@
 						}
 						str +='<li>'+
 						'<li><i class="fa fa-user bg-aqua"></i>'+
-						'<div class="timeline-item">'+
+						'<div class="timeline-body">'+
 						'<span class="time"><i class="fa fa-clock-o"></i> '+list[i].logdate+'</span>'+
 						'<h3 class="timeline-header no-border">'+
 						'<a href="#">'+list[i].nickname+'님</a> ${rep_name}'+ list[i].content+
@@ -279,7 +300,7 @@
 						} else{
 							str += '<li><i class="fa fa-envelope bg-blue"></i>';
 						}
-						str += '<div class="timeline-item">'+
+						str += '<div class="timeline-body">'+
 						'<span class="time"><i class="fa fa-clock-o"></i>'+ list[i].logdate+'</span>'+
 						'<h3 class="timeline-header">'+
 						'<a href="#">'+ list[i].nickname+'</a>'+
@@ -303,9 +324,9 @@
 						for (var j = 0; j < repost.length; j++) {
 							if (list[i].post_id == repost[j].repost_id) {
 								if (repost[j].post_status == 0) {
-									str += '<div> 삭제된 댓글입니다. </div>';
+									str += '<div class="timeline-body"> 삭제된 댓글입니다. </div>';
 								} else {
-									str += '<div class="timeline-item">'+
+									str += '<div class="timeline-body">'+
 								    '<span class="time"><i class="fa fa-clock-o"></i>'+ (new Date).yyyymmdd() +'</span>'+
 								    '<a href="#">'+repost[j].nickname+'</a>'+
 								    '<span class="timeline-body" >'+repost[j].centent+'</span>'+
@@ -350,9 +371,9 @@
 		var content = $(this).parent().parent().next('div.timeline-body').text().trim();
 		var thisA = $(this);
 		$(this).parent().parent().next('div.timeline-body').empty();
-		$(this).parent().parent().next('div.timeline-body').append('<input type="text" value="'+content+'"/>');
-		$(this).parent().parent().next('div.timeline-body').append('<button class="cencel">취소</button>');
-		$(this).parent().parent().next('div.timeline-body').append('<button class="ok">완료</button>');
+		$(this).parent().parent().next('div.timeline-body').append("<textarea class='form-control' rows='3'>"+content+"</textarea>");
+		$(this).parent().parent().next('div.timeline-body').append('<button class="cencel btn btn-default">취소</button>');
+		$(this).parent().parent().next('div.timeline-body').append('<button class="ok btn btn-default">완료</button>');
 		$(this).hide();
 		$('.cencel').on('click',function(){	
 			thisA.show();
@@ -376,17 +397,20 @@
 	$(function(){
  		$('.repost1').on('click',function(){
  			var repostA = $(this);
+
+ 			
  			var str = "<div class='repostdata'>";
- 			str += "<hr><p>댓글</p>" +
- 			'<input type="text" value=""/>' +
- 			'<button class="repostCencel">취소</button>' +
- 			'<button class="repostOk">완료</button>' +
- 			'</div>';
+ 			str += "<div class='input-group'>" +
+ 			"<span class='input-group-addon'>댓글</span>"+
+ 			'<input type="text" class="form-control" style="width: 75%;" value="" />' +
+ 			'<button class="repostCencel btn btn-default">취소</button>' +
+ 			'<button class="repostOk btn btn-default">완료</button>' +
+ 			'</div></div>';
  			$(this).parent().parent().next('div.timeline-body').after(str);
  			repostA.hide();
  		$('.repostCencel').on('click',function(){	
 			repostA.show();
-			$(this).parent('.repostdata').remove();
+			 $(this).parent('.input-group').remove();
 		});
 		$('.repostOk').on('click',function(){
 			var repostOk = $(this);
@@ -401,7 +425,7 @@
 		           error : function(){
 		           },
 		        success : function(data){
-		        var str = '<div class="timeline-item">';
+		        var str = '<div class="timeline-body">';
 		        str += '<span class="time"><i class="fa fa-clock-o"></i>'+ (new Date).yyyymmdd() +'</span>'+
 		        '<a href="#">'+data.nickName+'</a>'+
 		        '<span class="timeline-body" >'+repostContent+'</span>'+
@@ -411,7 +435,7 @@
 		        repostAppend.append(str);
 		        }
 			});
-			 $(this).parent('.repostdata').remove();
+			 $(this).parent('.input-group').remove();
 			 repostA.show();
 			});
  		});
@@ -433,8 +457,8 @@ function loadNewPage() {
 		var thisA = $(this);
 		$(this).parent().parent().next('div.timeline-body').empty();
 		$(this).parent().parent().next('div.timeline-body').append('<input type="text" value="'+content+'"/>');
-		$(this).parent().parent().next('div.timeline-body').append('<button class="cencel">취소</button>');
-		$(this).parent().parent().next('div.timeline-body').append('<button class="ok">완료</button>');
+		$(this).parent().parent().next('div.timeline-body').append('<button class="cencel btn btn-default margin">취소</button>');
+		$(this).parent().parent().next('div.timeline-body').append('<button class="ok btn btn-default">완료</button>');
 		$(this).hide();
 		$('.cencel').on('click',function(){	
 			thisA.show();
@@ -457,8 +481,8 @@ function loadNewPage() {
 			var str = "<div class='repostdata'>";
 			str += "<hr><p>댓글</p>" +
 			'<input type="text" value=""/>' +
-			'<button class="repostCencel">취소</button>' +
-			'<button class="repostOk">완료</button>' +
+			'<button class="repostCencel btn btn-default" >취소</button>' +
+			'<button class="repostOk btn btn-default">완료</button>' +
 			'</div>';
 			$(this).parent().parent().next('div.timeline-body').after(str);
 			repostA.hide();
@@ -480,7 +504,7 @@ function loadNewPage() {
 	               alert('실패 ㅠ');
 	           },
 	        success : function(data){
-	        var str = '<div class="timeline-item">';
+	        var str = '<div class="timeline-body">';
 	        str += '<span class="time"><i class="fa fa-clock-o"></i>'+ (new Date).yyyymmdd() +'</span>'+
 	        '<a href="#">'+data.nickName+'</a>'+
 	        '<span class="timeline-body" >'+repostContent+'</span>'+
