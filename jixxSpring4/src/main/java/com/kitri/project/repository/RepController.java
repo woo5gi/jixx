@@ -115,9 +115,17 @@ public class RepController {
 		MailHandler sendMail = new MailHandler(mailSender);
 		for (String str : address) {
 			sendMail.setSubject(user_name + "님의 CETACEA저장소 초대");
-			sendMail.setText(new StringBuffer().append("<h1>" + user_name + "님의 CETACEA저장소 초대</h1>").append(
-					"<a href='localhost:8080/project/invitesignup.do?rep_name=" + rep_name + "&rep_id=" + rep_id)
-					.append("'target='_blenk'>초대 수락</a>").toString());
+			sendMail.setText(
+			
+			new StringBuffer()
+		/*	.append("<h1>" + user_name + "님의 CETACEA저장소 초대</h1>")
+			.append("<a href='localhost:8080/project/invitesignup.do?rep_name=" + rep_name + "&rep_id=" + rep_id)
+			.append("'target='_blenk'>초대 수락</a>").toString());*/
+			
+			.append("<div text='#c6d4df' style='font-family:Helvetica,Arial,sans-serif;font-size:14px;color:#c6d4df;text-align:center;'><table style='width:538px;background-color:#393836' align='center' cellspacing='0' cellpadding='0'><tbody><tr><td style='height:65px;background-color:#171a21;border-bottom:1px solid #4d4b48;padding:0px'><h2 style='text-align: center;color: #fff;' height='65' >FILE CETACEA</h2></td></tr><tr><td bgcolor='#17212e'><table width='500' border='0' align='center' cellpadding='0' cellspacing='0' style='padding-left:5px;padding-right:5px;padding-bottom:10px'><tbody><tr bgcolor='#17212e'><td style='padding-top:32px;padding-bottom:16px'>")
+			.append("<span style='font-size:24px;color:#66c0f4;font-family:Arial,Helvetica,sans-serif;font-weight:bold'>"+user_name+"님의 CETACEA저장소 초대</span></td></tr>")
+			.append("<tr bgcolor='#121a25'><td style='padding:20px;font-size:12px;line-height:17px;color:#c6d4df;font-family:Arial,Helvetica,sans-serif'><p>"
+					+ "<a style='color:#c6d4df' href='localhost:8080/project/invitesignup.do?rep_name=" + rep_name + "&rep_id=" + rep_id+" target='_blank'>초대 수락</a></p></td></tr></tbody></table></td></tr></tbody></table></div>").toString());
 			sendMail.setFrom("gusdn4973@gmail.com", "CETACEA");
 			sendMail.setTo(str);
 			sendMail.send();
