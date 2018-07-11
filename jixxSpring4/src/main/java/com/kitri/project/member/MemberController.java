@@ -170,10 +170,6 @@ public class MemberController {
 			String user_name = m2.getName();
 
 			ArrayList<String> repnamelist = service.getRepNameListById(id);
-			/*
-			 * for (int i = 0; i < repnamelist.size(); i++) {
-			 * System.out.println(repnamelist); }
-			 */
 			mav.addObject("user_name", user_name);
 			mav.addObject("id", id);
 			mav.addObject("email", email);
@@ -523,4 +519,19 @@ public class MemberController {
 	 * service.getMemberId(Integer.parseInt(id)); mav.addObject("m", m); return mav;
 	 * }
 	 */
+	
+	@RequestMapping(value = "member/logincheck.do")
+	public boolean logincheck(HttpServletRequest req, Member m) {
+		boolean logincheck = false;
+		Member m2 = service.getMemberByEmail(m.getEmail());
+		if (m2 == null || !m2.getPwd().equals(m.getPwd())) {
+			logincheck = false;
+		} else {
+			HttpSession session = req.getSession();
+			session.setAttribute("id", m2.getId());
+			session.setAttribute("email", m2.getEmail());
+			logincheck = true;
+		}
+		return logincheck;
+	}
 }

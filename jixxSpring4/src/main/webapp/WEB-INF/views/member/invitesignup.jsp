@@ -98,7 +98,11 @@
 			<p class="login-box-msg">Sign in to start your session</p>
 			<c:set var="rep_name" value="${rep_name}" />
 			<c:set var="rep_id" value="${rep_id}" />
-			<form action="<%=request.getContextPath()%>/inviteinsert.do" method="post" name="f" id="insertform">
+			<input type="button" id="login" value="로그인하기" class="btn btn-primary btn-block btn-flat"
+							onclick="loginrep()" />
+			<input type="button" id="signup" value="가입하기" class="btn btn-primary btn-block btn-flat"
+							onclick="insertform()" />
+			<form action="<%=request.getContextPath()%>/inviteinsert.do" method="post" name="f" id="insertform" style="display: none;">
 				<div class="form-group has-feedback">
 				<label>저장소 이름</label>
 					<input type="text" class="form-control" readonly name="rep_name" required="required"
@@ -133,10 +137,29 @@
 					<div class="col-xs-4">
 						<button style="display: inline;" type="button" class="btn btn-primary btn-block btn-flat" id="join">JOIN</button>
 						<input type="button" id="cancel" value="취소" class="btn btn-primary btn-block btn-flat"
-							onclick="location.href='${pageContext.request.contextPath }/member/loginForm.do'" />
+							onclick="censleinsert()" />
 					</div>
 					<!-- /.col -->
 				</div>
+			</form>
+			<form action="${pageContext.request.contextPath }/loginrep.do" method="post" id="loginrep" style="display: none;">
+				<div class="form-group has-feedback">
+				<label>저장소 이름</label>
+					<input type="text" class="form-control" readonly name="rep_name" required="required"
+						value="${rep_name}"> <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
+					<input type="hidden" name="rep_id" value="${rep_id}"> 
+				</div>
+				<div class="form-group has-feedback">
+					<input type="email" class="form-control" placeholder="Email" name="email" required="required"
+						id="emailinput"> <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
+				</div>
+				<div class="form-group has-feedback">
+					<input type="password" class="form-control" placeholder="Password" name="pwd" id="pwd"
+						required="required"> <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+				</div>
+				<button style="display: inline;" type="submit" class="btn btn-primary btn-block btn-flat" id="join" onclick="logincheck()">LOGIN</button>
+				<input type="button" id="cancel" value="취소" class="btn btn-primary btn-block btn-flat"
+							onclick="censlelogin()" />
 			</form>
 
 
@@ -155,6 +178,40 @@
 				increaseArea : '20%' /* optional */
 			});
 		});
+		
+		function loginrep(){
+			$('#loginrep').show();
+			$('#login').hide();
+			$('#signup').hide();
+		}
+		function insertform(){
+			$('#insertform').show()
+			$('#login').hide();
+			$('#signup').hide();
+		}
+		function censlelogin(){
+			$('#loginrep').hide();
+			$('#login').show();
+			$('#signup').show();
+		}
+		function censleinsert(){
+			$('#insertform').hide();
+			$('#login').show();
+			$('#signup').show();
+		}
+		function logincheck(){
+			var email = null;
+			var pwd = null;
+			 $.ajax({
+		           type : "post",
+		           url : "<%=request.getContextPath()%>/member/logincheck.do",
+		           data : { page: page, search: searchitem },
+		           success : function(data){
+		        	  console.log(data);
+		        	  return false;
+		        	  }
+		           });
+		}
 	</script>
 
 

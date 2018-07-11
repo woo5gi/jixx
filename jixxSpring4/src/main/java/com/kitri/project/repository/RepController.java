@@ -14,6 +14,7 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
@@ -164,10 +165,52 @@ public class RepController {
 	@RequestMapping(value = "invitesignup.do")
 	public ModelAndView inviteSignup(HttpServletRequest req, @RequestParam(value = "rep_name") String rep_name,
 			@RequestParam(value = "rep_id") int rep_id) {
-		ModelAndView mav = new ModelAndView("member/invitesignup");
+		ModelAndView mav = new ModelAndView();
+		HttpSession session = req.getSession(false);
+		if (session.getAttribute("id") == null) {
+			mav.setViewName("member/invitesignup");
+		} else {
+			mav.setViewName("member/nickname");
+		}
 		mav.addObject("rep_name", rep_name);
 		mav.addObject("rep_id", rep_id);
 		return mav;
+	}
+	
+	@RequestMapping(value = "loginrep.do")
+	public ModelAndView loginrep(HttpServletRequest req, @RequestParam(value = "rep_name") String rep_name,
+			@RequestParam(value = "rep_id")int rep_id){
+		ModelAndView mav = new ModelAndView("member/nickname");
+//		HttpSession session = req.getSession();
+		mav.addObject("rep_name", rep_name);
+		mav.addObject("rep_id", rep_id);
+		return mav;
+	}
+	
+	@RequestMapping(value = "sessionokinviterep")
+	public String sessionOkInviteRep(HttpServletRequest req, RedirectAttributes rda, @RequestParam(value="rep_id") int rep_id,
+				@RequestParam(value="nickname")String nickname) {
+		HttpSession session = req.getSession(false);
+		int id = (int)session.getAttribute("id");
+		session.setAttribute("rep_id", rep_id);
+		ArrayList<Integer> chlist = service.getChIdList(rep_id);
+		for (int i = 0; i < chlist.size(); i++) {
+			int ch_id = chlist.get(i);
+			try {
+				service.createUserMetaInvite(id, rep_id, ch_id);
+				service.addBoard(nickname, id, ch_id);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		service.setUserMeta2Invite(id, rep_id, nickname);
+		Channel ch = service.getChannel(rep_id);
+		int cn = 0;
+		if (ch != null) {
+			cn = ch.getCh_id();
+		}
+		rda.addAttribute("cn", cn);
+		return "redirect:/post/list.do?page=1";
 	}
 
 	// 초대받은 사람이 회원가입하고, 기존의 session지우고 바로 로그인하고 저장소로이동
