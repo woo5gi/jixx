@@ -136,7 +136,6 @@ public class PostController implements ApplicationContextAware {
 		int id = (int) session.getAttribute("id");
 		int rep_id = (int) session.getAttribute("rep_id");
 		ArrayList<String> nicknamelist = service.getNicknameList(rep_id);
-		ArrayList<Channel> chlist = service.getChList(rep_id);
 		ArrayList<Post> list = service.show(page, cn);
 		ArrayList<Post> repost = null;
 		if (!list.isEmpty()) {
@@ -148,16 +147,17 @@ public class PostController implements ApplicationContextAware {
 		String user_name = m2.getName();
 		Repository r = service.getRepository(rep_id);
 		ModelAndView mav = new ModelAndView("/template/main");
+		ArrayList<Channel> chlist = null;
+		ArrayList<Integer> alarmtypelist = null;
 		Channel ch = service.getChannel(cn);
-		int a = chlist.size();
-		int[] chidlist = new int[a];
-		for (int i = 0; i < chlist.size(); i++) {
-			chidlist[i] = chlist.get(i).getCh_id();
-			System.out.println("chidlist:" + chidlist[i]);
-		}		
-		ArrayList<Integer> alarmtypelist = service.getAlarmType(id, rep_id, chidlist);
-		for (int i = 0; i < alarmtypelist.size(); i++) {
-			System.out.println("alarmtypelist:"+alarmtypelist);			
+		if (cn != 0) {
+			chlist = service.getChList(rep_id);
+			int a = chlist.size();
+			int[] chidlist = new int[a];
+			for (int i = 0; i < chlist.size(); i++) {
+				chidlist[i] = chlist.get(i).getCh_id();
+			}			
+			alarmtypelist = service.getAlarmType(id, rep_id, chidlist);
 		}
 		mav.addObject("alarmtypelist",alarmtypelist);
 		mav.addObject("repost", repost);

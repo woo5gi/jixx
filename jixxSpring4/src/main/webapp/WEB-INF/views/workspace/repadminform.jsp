@@ -436,9 +436,15 @@
 											<c:forEach var="aa" items="${chlist}" varStatus="status">
 												<tr>
 													<td>${aa.ch_name}</td>
-													<td><input type="hidden" name="ch_id" value="${aa.ch_id}"
+													<td><c:choose>
+													<c:when test="${aa.ch_name eq 'general' }">
+													</c:when>
+													<c:otherwise>
+													<input type="hidden" name="ch_id" value="${aa.ch_id}"
 														class="ch_id ${status.count}"> <input type="button" value="삭제"
-														class="deletech ${status.count}"></td>
+														class="deletech ${status.count}">
+													</c:otherwise>
+													</c:choose></td>
 												</tr>
 											</c:forEach>
 										</tbody>
@@ -468,9 +474,15 @@
 											<c:forEach var="aa" items="${chlist}" varStatus="status">
 												<tr>
 													<td>${aa.ch_name}</td>
-													<td><input type="hidden" name="ch_id" value="${aa.ch_id}"
+													<td><c:choose>
+													<c:when test="${aa.ch_name eq 'general' }">
+													</c:when>
+													<c:otherwise>
+													<input type="hidden" name="ch_id" value="${aa.ch_id}"
 														class="ch_id ${status.count}"> <input type="button" value="삭제"
-														class="deletech ${status.count}"></td>
+														class="deletech ${status.count}">
+													</c:otherwise>
+													</c:choose></td>
 												</tr>
 											</c:forEach>
 										</tbody>

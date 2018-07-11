@@ -88,7 +88,10 @@ public class RepController {
 		String nickname = service.getNickname(id, rep_id);
 		session.setAttribute("nickname", nickname);
 		Channel ch = service.getChannel(rep_id);
-		int cn = ch.getCh_id();
+		int cn = 0;
+		if (ch != null) {
+			cn = ch.getCh_id();
+		}
 		rda.addAttribute("cn", cn);
 		service.getUserAdminLevel(id, rep_id);
 		return "redirect:/post/list.do?page=1";
@@ -96,12 +99,11 @@ public class RepController {
 
 	// 저장소에 회원초대하는기능
 	@RequestMapping(value = "sendinvite.do")
-	public ModelAndView emailAuth(HttpServletRequest req, String[] address, HttpServletResponse res,
+	public String emailAuth(RedirectAttributes rda, HttpServletRequest req, String[] address,
 			@RequestParam(value = "rep_name") String rep_name, @RequestParam(value = "invitest") String invitest)
 			throws MessagingException, UnsupportedEncodingException, Exception {
 		HttpSession session = req.getSession(false);
 		int id = (int) session.getAttribute("id");
-		ModelAndView mav = new ModelAndView("template/main");
 		Member user = service.getMember(id);
 		String user_name = user.getName();
 		int rep_id = 0;
@@ -125,44 +127,18 @@ public class RepController {
 			.append("<div text='#c6d4df' style='font-family:Helvetica,Arial,sans-serif;font-size:14px;color:#c6d4df;text-align:center;'><table style='width:538px;background-color:#393836' align='center' cellspacing='0' cellpadding='0'><tbody><tr><td style='height:65px;background-color:#171a21;border-bottom:1px solid #4d4b48;padding:0px'><h2 style='text-align: center;color: #fff;' height='65' >FILE CETACEA</h2></td></tr><tr><td bgcolor='#17212e'><table width='500' border='0' align='center' cellpadding='0' cellspacing='0' style='padding-left:5px;padding-right:5px;padding-bottom:10px'><tbody><tr bgcolor='#17212e'><td style='padding-top:32px;padding-bottom:16px'>")
 			.append("<span style='font-size:24px;color:#66c0f4;font-family:Arial,Helvetica,sans-serif;font-weight:bold'>"+user_name+"님의 CETACEA저장소 초대</span></td></tr>")
 			.append("<tr bgcolor='#121a25'><td style='padding:20px;font-size:12px;line-height:17px;color:#c6d4df;font-family:Arial,Helvetica,sans-serif'><p>"
-					+ "<a style='color:#c6d4df' href='localhost:8080/project/invitesignup.do?rep_name=" + rep_name + "&rep_id=" + rep_id+" target='_blank'>초대 수락</a></p></td></tr></tbody></table></td></tr></tbody></table></div>").toString());
+					+ "<a style='color:#c6d4df' href='localhost:8080/project/invitesignup.do?rep_name=" + rep_name + "&rep_id=" + rep_id+"' target='_blank'>초대 수락</a></p></td></tr></tbody></table></td></tr></tbody></table></div>").toString());
 			sendMail.setFrom("gusdn4973@gmail.com", "CETACEA");
 			sendMail.setTo(str);
 			sendMail.send();
 		}
-		res.setContentType("text/html; charset=UTF-8");
-		PrintWriter out = res.getWriter();
-		out.println("<script>alert('친구초대완료'); </script>");
-		out.flush();
-		// 채널리스트
-		ArrayList<Channel> chlist = service.getChList(rep_id);
-		int a = chlist.size();
-		int[] chidlist = new int[a];
-		for (int i = 0; i < chlist.size(); i++) {
-			chidlist[i] = chlist.get(i).getCh_id();
-			System.out.println("chidlist:" + chidlist[i]);
-		}
-		// 저장소에참여한사람리스트
-		ArrayList<Integer> userlist = service.getUserList(rep_id);
-		ArrayList<String> usernamelist = service.getUserNameList(userlist);
-		ArrayList<String> nicknamelist = service.getNicknameList(rep_id);
-		ArrayList<String> repnamelist = service.getRepNameListById(id);
-		Repository r = service.getRepository(rep_id);
 		Channel ch = service.getChannel(rep_id);
-		ArrayList<Integer> alarmtypelist = service.getAlarmType(id, rep_id, chidlist);
-		int adminlevel = service.getUserAdminLevel(id, rep_id);
-		mav.addObject("alarmtypelist", alarmtypelist);
-		mav.addObject("adminlevel", adminlevel);
-		mav.addObject("ch", ch);
-		mav.addObject("rep_name", r.getRep_name());
-		mav.addObject("user_name", user_name);
-		mav.addObject("id", id);
-		mav.addObject("rep_id", rep_id);
-		mav.addObject("ch_list", chlist);
-		mav.addObject("user_list", usernamelist);
-		mav.addObject("nicknamelist", nicknamelist);
-		mav.addObject("rep_list", repnamelist);
-		return mav;
+		int cn = 0;
+		if (ch != null) {
+			cn = ch.getCh_id();
+		}
+		rda.addAttribute("cn", cn);
+		return "redirect:/post/list.do?page=1";
 	}
 
 	// 저장소생성상황이아닌상황에서 회원초대기능
@@ -196,11 +172,10 @@ public class RepController {
 
 	// 초대받은 사람이 회원가입하고, 기존의 session지우고 바로 로그인하고 저장소로이동
 	@RequestMapping(value = "inviteinsert.do")
-	public ModelAndView add(HttpServletResponse res, @RequestParam(value = "rep_name") String rep_name,
+	public String add(RedirectAttributes rda, @RequestParam(value = "rep_name") String rep_name,
 			@RequestParam(value = "rep_id") int rep_id, @RequestParam(value = "email") String email,
 			@RequestParam(value = "pwd") String pwd, @RequestParam(value = "name") String name, HttpServletRequest req,
 			@RequestParam(value = "nickname") String nickname, Member m) throws Exception {
-		ModelAndView mav = new ModelAndView("template/main");
 		HttpSession session = req.getSession(false);
 		session.setAttribute("nickname", nickname);
 		service.addMember(email, pwd, name);
@@ -209,12 +184,10 @@ public class RepController {
 		session = req.getSession();
 		session.setAttribute("id", m2.getId());
 		session.setAttribute("email", m2.getEmail());
-		System.out.println("email:" + m2.getEmail());
 		int id = m2.getId();
 		ArrayList<Integer> chlist = service.getChIdList(rep_id);
 		for (int i = 0; i < chlist.size(); i++) {
 			int ch_id = chlist.get(i);
-			System.out.println(ch_id);
 			try {
 				service.createUserMetaInvite(id, rep_id, ch_id);
 				service.addBoard(nickname, id, ch_id);
@@ -224,34 +197,13 @@ public class RepController {
 		}
 		service.setUserMeta2Invite(id, rep_id, nickname);
 		session.setAttribute("rep_id", rep_id);
-		res.setContentType("text/html; charset=UTF-8");
-		PrintWriter out = res.getWriter();
-		out.println("<script>alert('회원가입을 축하합니다'); </script>");
-		out.flush();
-		int rep_id2 = (int) session.getAttribute("rep_id");
-
-		// 채널리스트
-		ArrayList<Channel> chlist1 = service.getChList(rep_id2);
-		// 저장소에참여한사람리스트
-		ArrayList<Integer> userlist = service.getUserList(rep_id);
-		ArrayList<String> usernamelist = service.getUserNameList(userlist);
-		ArrayList<String> nicknamelist = service.getNicknameList(rep_id);
-		ArrayList<String> repnamelist = service.getRepNameListById(id);
-		String user_name = m2.getName();
-		Repository r = service.getRepository(rep_id);
 		Channel ch = service.getChannel(rep_id);
-		int adminlevel = service.getUserAdminLevel(id, rep_id);
-		mav.addObject("adminlevel", adminlevel);
-		mav.addObject("rep_name", r.getRep_name());
-		mav.addObject("user_name", user_name);
-		mav.addObject("id", id);
-		mav.addObject("rep_id", rep_id);
-		mav.addObject("ch_list", chlist1);
-		mav.addObject("user_list", usernamelist);
-		mav.addObject("nicknamelist", nicknamelist);
-		mav.addObject("rep_list", repnamelist);
-		mav.addObject("ch", ch);
-		return mav;
+		int cn = 0;
+		if (ch != null) {
+			cn = ch.getCh_id();
+		}
+		rda.addAttribute("cn", cn);
+		return "redirect:/post/list.do?page=1";
 	}
 
 	@RequestMapping(value = "addchannelform.do")
@@ -266,21 +218,10 @@ public class RepController {
 	}
 
 	@RequestMapping(value = "addchannel.do")
-	public ModelAndView createChannel(HttpServletRequest req, Repository r,
+	public String createChannel(RedirectAttributes rda, HttpServletRequest req, Repository r,
 			@RequestParam(value = "chtitle") String chtitle, String[] nickname) throws Exception {
-		ModelAndView mav = new ModelAndView("template/main");
 		HttpSession session = req.getSession(false);
-		int id = (int) session.getAttribute("id");
 		int rep_id = (int) session.getAttribute("rep_id");
-		String email = (String) session.getAttribute("email");
-		ArrayList<Integer> userlist = service.getUserList(rep_id);
-		ArrayList<String> usernamelist = service.getUserNameList(userlist);
-		ArrayList<Channel> chnamelist = service.getChList(rep_id);
-		ArrayList<String> repnamelist = service.getRepNameListById(id);
-		Member m2 = service.getMember(email);
-		String user_name = m2.getName();
-		ArrayList<Integer> chlist = service.getChIdList(rep_id);
-		Repository r2 = service.getRepository(rep_id);
 		service.createCh(chtitle, rep_id);
 		Channel ch = service.getMaxChannel(rep_id);
 		int chid = ch.getCh_id();
@@ -290,22 +231,11 @@ public class RepController {
 		} else {
 			useridlist = service.getUserIdList(rep_id, nickname);
 		}
-		ArrayList<String> nicknamelist = service.getNicknameList(rep_id);
 		for (int i = 0; i < useridlist.size(); i++) {
 			int user_id = useridlist.get(i);
-			System.out.println("user_id=" + user_id);
 			service.createUserMetaCreateChannel1(user_id, rep_id, chid);
 		}
-		mav.addObject("nicknamelist", nicknamelist);
-		mav.addObject("rep_list", repnamelist);
-		mav.addObject("ch", ch);
-		mav.addObject("rep_name", r2.getRep_name());
-		mav.addObject("user_name", user_name);
-		mav.addObject("id", id);
-		mav.addObject("rep_id", rep_id);
-		mav.addObject("ch_list", chnamelist);
-		mav.addObject("user_list", usernamelist);
-		return mav;
+		return "redirect:/post/list.do?page=1&cn="+chid;
 	}
 
 	@RequestMapping(value = "findworkspaceform.do")
@@ -380,11 +310,13 @@ public class RepController {
 	public String deleteCh(RedirectAttributes rda, HttpServletRequest req, @RequestParam(value = "ch_id") int ch_id) {
 		HttpSession session = req.getSession(false);
 		int rep_id = (int) session.getAttribute("rep_id");
-		System.out.println("ch_id:" + ch_id);
 		service.deleteChannel(ch_id);
 		Channel ch = service.getChannel(rep_id);
-		int cn = ch.getCh_id();
-		rda.addAttribute("cn", cn);
+		int cn = 0;
+		if (ch != null) {
+			 ch.getCh_id();
+		}
+		rda.addAttribute("cn", cn);			
 		return "redirect:/post/list.do?page=1";
 	}
 
