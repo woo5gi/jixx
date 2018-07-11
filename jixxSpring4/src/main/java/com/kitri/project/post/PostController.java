@@ -121,7 +121,7 @@ public class PostController implements ApplicationContextAware {
 			int id = (int) session.getAttribute("id");
 		} catch (Exception e) {
 			e.printStackTrace();
-			return "redirect:/member/login";
+			return "member/login";
 		}
 		session.setAttribute("rep_id", rep_id);
 		rda.addAttribute("cn", cn);
