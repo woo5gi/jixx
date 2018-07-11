@@ -95,9 +95,21 @@ public class PostController implements ApplicationContextAware {
 				Repository r = service.getRepository(rep_id);
 				for (String str : emaillist) {
 					sendMail.setSubject(r.getRep_name() + "저장소의 새 글 알림");
-					sendMail.setText(new StringBuffer().append("<h1>" + r.getRep_name() + "저장소의 새 글 알림</h1>")
+					sendMail.setText(
+							new StringBuffer()
+							
+/*							.append("<h1>" + r.getRep_name() + "저장소의 새 글 알림</h1>")
 							.append("<a href='localhost:8080/project/postalarm.do?cn=" + cn + "&rep_id=" + rep_id)
 							.append("'target='_blenk'>글 확인</a>").toString());
+*/					
+							.append("<div text='#c6d4df' style='font-family:Helvetica,Arial,sans-serif;font-size:14px;color:#c6d4df;text-align:center;'><table style='width:538px;background-color:#393836' align='center' cellspacing='0' cellpadding='0'><tbody><tr><td style='height:65px;background-color:#171a21;border-bottom:1px solid #4d4b48;padding:0px'><h2 style='text-align: center;color: #fff;' height='65' >FILE CETACEA</h2></td></tr><tr><td bgcolor='#17212e'><table width='500' border='0' align='center' cellpadding='0' cellspacing='0' style='padding-left:5px;padding-right:5px;padding-bottom:10px'><tbody><tr bgcolor='#17212e'><td style='padding-top:32px;padding-bottom:16px'>")
+							.append("<span style='font-size:24px;color:#66c0f4;font-family:Arial,Helvetica,sans-serif;font-weight:bold'>" + r.getRep_name() +"저장소의 새 글 알림</span></td></tr>")
+							.append("<tr bgcolor='#121a25'><td style='padding:20px;font-size:12px;line-height:17px;color:#c6d4df;font-family:Arial,Helvetica,sans-serif'>")
+							.append("<p><a href='localhost:8080/project/postalarm.do?cn=" + cn + "&rep_id=" + rep_id)
+							.append("'target='_blenk'>글 확인</a></p></td></tr></tbody></table></td></tr></tbody></table></div>").toString());
+					
+					
+					
 					sendMail.setFrom("gusdn4973@gmail.com", "CETACEA");
 					sendMail.setTo(str);
 					sendMail.send();
