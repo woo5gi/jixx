@@ -18,7 +18,7 @@
 			<div class="box-header with-border">
 				<h3 class="box-title">Edit Your Frofile</h3>
 			</div>
-			<form role="form" action="${pageContext.request.contextPath}/member/edit.do">
+			<form role="form" action="${pageContext.request.contextPath}/edit.do">
 				<input type="hidden" name="id" value="${m.id}">
 				<div class="box-body">
 					<div class="form-group">

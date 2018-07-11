@@ -130,6 +130,33 @@
 .i1 {
 	padding-right: 10px
 }
+
+.liscroll{
+   overflow-y: auto; 
+   min-height:58px; 
+   max-height: 180px;
+}
+.listyle{
+padding: 15px;
+border-bottom: 1px solid #f4f4f4;
+border-top: 1px solid #dddddd;
+}
+.listyle1{
+padding: 15px;
+}
+
+.dropdown-menu>div>li>a{
+    display: block;
+    padding: 3px 20px;
+    clear: both;
+    font-weight: 400;
+    line-height: 1.42857143;
+    color: #333;
+    white-space: nowrap;
+}
+.dropdown-menu{
+overflow: hidden;}
+
 </style>
 <script type="text/javascript">
 	$(function() {
@@ -322,11 +349,13 @@
 										<li class="user-body" id="user-body1"><a
 											href="${pageContext.request.contextPath}/crw1.do" class="hidden-xs text-center">Create
 												new Workspace</a></li>
+												<div  class="liscroll">
 										<c:forEach var="aa" items="${rep_list}">
-											<li class="user-body"><a
+											<li class="user-body listyle"><a
 												href="${pageContext.request.contextPath}/gomain.do?rep_id=${aa.rep_id}"
 												class="hidden-xs text-center">${aa.rep_name}</a></li>
 										</c:forEach>
+										</div>
 										<!-- Menu Body -->
 										<li class="user-body" id="user-body1"><a
 											href="${pageContext.request.contextPath}/findworkspaceform.do"
@@ -407,7 +436,7 @@
 			</a></li>
 			<div class="liscroll">
 				<c:forEach var="aa" items="${ch_list}" varStatus="status">
-					<li class="listyle"><a
+					<li class="listyle1"><a
 						href="<%=request.getContextPath()%>/post/list.do?page=1&cn=${aa.ch_id}" class="chname"> <i
 							class="fa fa-asterisk i1"></i>${aa.ch_name}
 
@@ -426,7 +455,7 @@
 			</a></li>
 			<div class="liscroll">
 				<c:forEach var="aa" items="${nicknamelist}" varStatus="status">
-					<li class="listyle"><a
+					<li class="listyle1"><a
 						href="<%=request.getContextPath()%>/post/list.do?page=1&cn=${status.count}&ch_list=${ch_list}&nicknamelist=${nicknamelist}">
 							<i class="fa fa fa-user i1"></i>${aa}</a></li>
 				</c:forEach>

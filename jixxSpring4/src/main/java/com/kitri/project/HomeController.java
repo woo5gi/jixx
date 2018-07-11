@@ -46,7 +46,8 @@ public class HomeController {
 		model.addAttribute("serverTime", formattedDate);		
 		
 		HttpSession session = req.getSession(false);
-		ModelAndView mav = new ModelAndView("template/index");
+		ModelAndView mav = new ModelAndView();
+		mav.setViewName("template/index");
 		try {
 		int id = (int) session.getAttribute("id");
 		String email = (String) session.getAttribute("email");
@@ -57,14 +58,9 @@ public class HomeController {
 		ArrayList<String> repnamelist = service.getRepNameListById(id);	
 		mav.addObject("rep_list", repnamelist);
 		mav.addObject("user_name",user_name);
-		System.out.println(repnamelist);
 		} catch (NullPointerException e) {
 			e.printStackTrace();
 		}		
 		return mav;
-	}
-	@RequestMapping(value = "main.do")
-	public String index() {
-		return "template/main";
 	}
 }

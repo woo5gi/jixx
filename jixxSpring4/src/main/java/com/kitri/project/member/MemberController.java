@@ -333,15 +333,12 @@ public class MemberController {
 	// 메일로보낸 인증키와 입력받은값 비교하여 메일인증
 	@RequestMapping(value = "verify.do")
 	public ModelAndView verify(HttpServletRequest req, @RequestParam(value = "verify") int tempKey,
-			HttpServletResponse res, @RequestParam(value = "requestfrom") String requestfrom) throws Exception {
+			@RequestParam(value = "requestfrom") String requestfrom) throws Exception {
 		ModelAndView mav = new ModelAndView();
 		HttpSession session = req.getSession(false);
-		res.setContentType("text/html; charset=UTF-8");
-		PrintWriter out = res.getWriter();
 		String email = (String) session.getAttribute("email");
 		Member m = new Member();
 		m.setEmail(email);
-
 		int tempKeydb = service.selectTempKey(email);
 		if (tempKey == tempKeydb) {
 			service.verifyMember(m);
@@ -350,7 +347,6 @@ public class MemberController {
 			} else if (requestfrom.equals("deleterepauth")) {
 				int rep_id = (int) session.getAttribute("rep_id");
 				service.delRepository(rep_id);
-
 				int id = (int) session.getAttribute("id");
 				Member m2 = service.getMemberByEmail(email);
 				System.out.println("1111111" + m2.getName());
@@ -360,35 +356,16 @@ public class MemberController {
 				mav.addObject("email", email);
 				ArrayList<String> repnamelist = service.getRepNameListById(id);
 				mav.addObject("rep_list", repnamelist);
-				out.println("<script>alert('저장소 삭제가 완료되었습니다.'); </script>");
-				out.flush();
 			} else if (requestfrom.equals("memberout")) {
 				int id = (int) session.getAttribute("id");
-				System.out.println("id:" + id);
 				mav = new ModelAndView("template/index");
 				service.delMember(id);
-				/*
-				 * session.removeAttribute("id"); session.removeAttribute("email");
-				 * session.removeAttribute("rep_id");
-				 */
-				/* session.invalidate(); */
-				out.println("<script>alert('+회원탈퇴완료+'); </script>");
-				out.flush();
-
-				/*
-				 * Member m2 = service.getMemberByEmail(email); System.out.println("1111111" +
-				 * m2.getName());
-				 */
-
-				/*
-				 * mav.addObject("user_name", m2.getName()); mav.addObject("id", id);
-				 * mav.addObject("email", email); ArrayList<String> repnamelist =
-				 * service.getRepNameListById(id); mav.addObject("rep_list", repnamelist);
-				 */
+				session.removeAttribute("id");
+				session.removeAttribute("email");
+				session.removeAttribute("rep_id");
+				session.invalidate(); 
 			}
 		} else {
-			out.println("<script>alert('인증번호가 일치하지 않습니다'); </script>");
-			out.flush();
 			if (requestfrom.equals("createwsauth")) {
 				mav.setViewName("member/verify");
 			} else if (requestfrom.equals("deleterepauth")) {
@@ -452,34 +429,13 @@ public class MemberController {
 	}
 
 	// 회원정보수정기능
-	@RequestMapping(value = "/member/edit.do")
-	public ModelAndView edit(Member m, HttpServletRequest req, HttpServletResponse res) throws Exception {
+	@RequestMapping(value = "/edit.do")
+	public String edit(Member m, HttpServletRequest req) {
 		HttpSession session = req.getSession(false);
-		res.setContentType("text/html;charset=utf-8");
-		PrintWriter out = res.getWriter();
-		ModelAndView mav = new ModelAndView("template/index");
-		System.out.println("id:" + m.getId() + ";;email:" + m.getEmail() + ";;password:" + m.getPwd());
 		service.editMember(m);
-		out.println("<script>alert('정보수정이 완료되었습니다');</script>");
-		out.flush();
-		try {
-			int id = (int) session.getAttribute("id");
-			String email = (String) session.getAttribute("email");
-			Member m2 = service.getMemberByEmail(email);
-			System.out.println("1111111" + m2.getName());
-			mav.addObject("user_name", m2.getName());
-			mav.addObject("id", id);
-			mav.addObject("email", email);
-			ArrayList<String> repnamelist = service.getRepNameListById(id);
-			mav.addObject("rep_list", repnamelist);
-			System.out.println(repnamelist);
-		} catch (NullPointerException e) {
-			e.printStackTrace();
-			out.println("<script>alert('session값이 없습니다'); </script>");
-			out.flush();
-			mav = new ModelAndView("template/index");
-		}
-		return mav;
+		session.setAttribute("email", m.getEmail());
+		session.setAttribute("id", m.getId());
+		return "redirect:index.do";
 	}
 
 	@RequestMapping(value = "editprofile.do")

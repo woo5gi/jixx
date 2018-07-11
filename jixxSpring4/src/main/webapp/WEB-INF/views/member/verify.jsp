@@ -11,13 +11,13 @@
 			<form role="form" action="${pageContext.request.contextPath }/verify.do" method="post">
 				<div class="box-body">
 					<div class="form-group">
-						<label>Your confirmaiton code</label> <input type="text" name="verify"
+						<label>Your confirmaiton code</label> <input type="number" name="verify"
 							placeholder="받은 인증번호를 입력해주세요" class="form-control"> <input type="hidden"
 							name="requestfrom" value="createwsauth">
 					</div>
 				</div>
 				<div class="box-footer">
-					<button type="submit" class="btn btn-primary btn-block">Submittt</button>
+					<button type="submit" class="btn btn-primary btn-block">Submit</button>
 				</div>
 			</form>
 		</div>
