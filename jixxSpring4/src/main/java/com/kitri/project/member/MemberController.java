@@ -210,12 +210,17 @@ public class MemberController {
 
 	// createworkspace할때 인증번호 메일로 보내는기능
 	@RequestMapping(value = "emailauth.do")
-	public String emailAuth(HttpServletRequest req, @RequestParam(value = "email") String email,
+	public ModelAndView emailAuth(HttpServletRequest req, @RequestParam(value = "email") String email,
 			@RequestParam(value = "requestfrom") String requestfrom)
 			throws MessagingException, UnsupportedEncodingException {
 		HttpSession session = req.getSession(false);
 		MailHandler sendMail = new MailHandler(mailSender);
 		System.out.println("email:" + email);
+		Member m = service.getMemberByEmail(email);
+		ModelAndView mav = new ModelAndView();
+		mav.addObject("user_name", m.getName());
+		mav.addObject("email", email);
+		mav.addObject("m", m);
 		Random ran = new Random();
 		int ran2 = 0;
 		while (ran2 <= 100000) {
@@ -223,94 +228,106 @@ public class MemberController {
 		}
 		if (requestfrom.equals("createws")) {
 			int id = (int) session.getAttribute("id");
+			ArrayList<String> repnamelist = service.getRepNameListById(id);
+			mav.addObject("id", id);
+			mav.addObject("rep_list", repnamelist);
 			sendMail.setSubject("FILE CETACEA 이메일인증");
 			sendMail.setText(
-/*					new StringBuffer().append("<h1>이메일인증</h1>").append("<a href='localhost:8080/project/verifyForm.do")
-							.append("'target='_blenk'>이메일 인증 확인</a>").append(ran2).toString());
-			*/
+					/*
+					 * new StringBuffer().append("<h1>이메일인증</h1>").
+					 * append("<a href='localhost:8080/project/verifyForm.do")
+					 * .append("'target='_blenk'>이메일 인증 확인</a>").append(ran2).toString());
+					 */
 
-			new StringBuffer().append("	<div text='#c6d4df' style='font-family:Helvetica,Arial,sans-serif;font-size:14px;color:#c6d4df;text-align:center;'><table style='width:538px;background-color:#393836' align='center' cellspacing='0' cellpadding='0'>\r\n" + 
-							" <tbody><tr><td style='height:65px;background-color:#171a21;border-bottom:1px solid #4d4b48;padding:0px'><h2 style='text-align: center;color: #fff;' height='65' >FILE CETACEA</h2></td></tr><tr><td bgcolor='#17212e'><table width='500' border='0' align='center' cellpadding='0' cellspacing='0' style='padding-left:5px;padding-right:5px;padding-bottom:10px'><tbody><tr bgcolor='#17212e'><td style='padding-top:32px;padding-bottom:16px'>")
-					.append("<span style='font-size:24px;color:#66c0f4;font-family:Arial,Helvetica,sans-serif;font-weight:bold'>이메일 인증</span></td></tr>")
-					.append("<tr bgcolor='#121a25'><td style='padding:20px;font-size:12px;line-height:17px;color:#c6d4df;font-family:Arial,Helvetica,sans-serif'><p style='font-weight:bold;font-size: 20px;color: #f00;'>")
-					.append(ran2)
-					.append("</p><br><p><a style='color:#c6d4df' href='localhost:8080/project/verifyForm.do' target='_blank'>이메일 인증 확인</a></p></td></tr></tbody></table></td></tr></tbody></table></div>")
-					.toString());
+					new StringBuffer().append(
+							"	<div text='#c6d4df' style='font-family:Helvetica,Arial,sans-serif;font-size:14px;color:#c6d4df;text-align:center;'><table style='width:538px;background-color:#393836' align='center' cellspacing='0' cellpadding='0'>\r\n"
+									+ " <tbody><tr><td style='height:65px;background-color:#171a21;border-bottom:1px solid #4d4b48;padding:0px'><h2 style='text-align: center;color: #fff;' height='65' >FILE CETACEA</h2></td></tr><tr><td bgcolor='#17212e'><table width='500' border='0' align='center' cellpadding='0' cellspacing='0' style='padding-left:5px;padding-right:5px;padding-bottom:10px'><tbody><tr bgcolor='#17212e'><td style='padding-top:32px;padding-bottom:16px'>")
+							.append("<span style='font-size:24px;color:#66c0f4;font-family:Arial,Helvetica,sans-serif;font-weight:bold'>이메일 인증</span></td></tr>")
+							.append("<tr bgcolor='#121a25'><td style='padding:20px;font-size:12px;line-height:17px;color:#c6d4df;font-family:Arial,Helvetica,sans-serif'><p style='font-weight:bold;font-size: 20px;color: #f00;'>")
+							.append(ran2)
+							.append("</p><br><p><a style='color:#c6d4df' href='localhost:8080/project/verifyForm.do' target='_blank'>이메일 인증 확인</a></p></td></tr></tbody></table></td></tr></tbody></table></div>")
+							.toString());
 			sendMail.setFrom("gusdn4973@gmail.com", "CETACEA");
 			sendMail.setTo(email);
 			sendMail.send();
 			service.setTempkey(ran2, id);
-			return "member/verify";
-			
+			mav.setViewName("member/verify");
 		} else if (requestfrom.equals("findpass")) {
 			sendMail.setSubject("FILE CETACEA 비밀번호 찾기 이메일인증");
-			
+
 			sendMail.setText(
-/*					new StringBuffer().append("<h1>이메일인증</h1>")
-					.append("<a href='localhost:8080/project/verifypass.do?email=" + email + "&tempkey=" + ran2)
-					.append("'target='_blenk'>새 비밀번호 설정</a>").toString());
-*/			
-			new StringBuffer().append("	<div text='#c6d4df' style='font-family:Helvetica,Arial,sans-serif;font-size:14px;color:#c6d4df;text-align:center;'><table style='width:538px;background-color:#393836' align='center' cellspacing='0' cellpadding='0'>\r\n" + 
-					" <tbody><tr><td style='height:65px;background-color:#171a21;border-bottom:1px solid #4d4b48;padding:0px'><h2 style='text-align: center;color: #fff;' height='65' >FILE CETACEA</h2></td></tr><tr><td bgcolor='#17212e' style='height:170px'><table width='500' border='0' align='center' cellpadding='0' cellspacing='0' style='padding-left:5px;padding-right:5px;padding-bottom:10px'><tbody><tr bgcolor='#17212e'><td style='padding-top:32px;padding-bottom:16px'>")
-			.append("<span style='font-size:24px;color:#66c0f4;font-family:Arial,Helvetica,sans-serif;font-weight:bold'>비밀번호 찾기 메일 인증</span></td></tr></tbody></table>")
-			.append("<a style='color:#c6d4df' 'target='_blenk' href='localhost:8080/project/verifypass.do?email=" + email + "&tempkey=" + ran2+"'>새 비밀번호 설정</a>")
-			.append("</td></tr></tbody></table></div>")
-			.toString());
+					/*
+					 * new StringBuffer().append("<h1>이메일인증</h1>")
+					 * .append("<a href='localhost:8080/project/verifypass.do?email=" + email +
+					 * "&tempkey=" + ran2) .append("'target='_blenk'>새 비밀번호 설정</a>").toString());
+					 */
+					new StringBuffer().append(
+							"	<div text='#c6d4df' style='font-family:Helvetica,Arial,sans-serif;font-size:14px;color:#c6d4df;text-align:center;'><table style='width:538px;background-color:#393836' align='center' cellspacing='0' cellpadding='0'>\r\n"
+									+ " <tbody><tr><td style='height:65px;background-color:#171a21;border-bottom:1px solid #4d4b48;padding:0px'><h2 style='text-align: center;color: #fff;' height='65' >FILE CETACEA</h2></td></tr><tr><td bgcolor='#17212e' style='height:170px'><table width='500' border='0' align='center' cellpadding='0' cellspacing='0' style='padding-left:5px;padding-right:5px;padding-bottom:10px'><tbody><tr bgcolor='#17212e'><td style='padding-top:32px;padding-bottom:16px'>")
+							.append("<span style='font-size:24px;color:#66c0f4;font-family:Arial,Helvetica,sans-serif;font-weight:bold'>비밀번호 찾기 메일 인증</span></td></tr></tbody></table>")
+							.append("<a style='color:#c6d4df' 'target='_blenk' href='localhost:8080/project/verifypass.do?email="
+									+ email + "&tempkey=" + ran2 + "'>새 비밀번호 설정</a>")
+							.append("</td></tr></tbody></table></div>").toString());
 			sendMail.setFrom("gusdn4973@gmail.com", "CETACEA");
 			sendMail.setTo(email);
 			sendMail.send();
 			service.setTempkey(ran2, email);
-			return "member/verifypass";
+			mav.setViewName("member/verifypass");
 		} else if (requestfrom.equals("deleterep")) {
+			int id = (int) session.getAttribute("id");
+			ArrayList<String> repnamelist = service.getRepNameListById(id);
+			mav.addObject("id", id);
+			mav.addObject("rep_list", repnamelist);
 			sendMail.setSubject("FILE CETACEA 저장소삭제 이메일인증");
 			sendMail.setText(
-			
-/*					new StringBuffer().append("<h1>이메일인증</h1>")
-					.append("<a href='localhost:8080/project/repdlverifyform.do")
-					.append("'target='_blenk'>이메일 인증 확인</a>").append(ran2).toString());
-			
-*/			
-			 new StringBuffer().append("<div text='#c6d4df' style='font-family:Helvetica,Arial,sans-serif;font-size:14px;color:#c6d4df;text-align:center;'><table style='width:538px;background-color:#393836' align='center' cellspacing='0' cellpadding='0'>\r\n" + 
-						" <tbody><tr><td style='height:65px;background-color:#171a21;border-bottom:1px solid #4d4b48;padding:0px'><h2 style='text-align: center;color: #fff;' height='65' >FILE CETACEA</h2></td></tr><tr><td bgcolor='#17212e'><table width='500' border='0' align='center' cellpadding='0' cellspacing='0' style='padding-left:5px;padding-right:5px;padding-bottom:10px'><tbody><tr bgcolor='#17212e'><td style='padding-top:32px;padding-bottom:16px'>")
-				.append("<span style='font-size:24px;color:#66c0f4;font-family:Arial,Helvetica,sans-serif;font-weight:bold'>저장소삭제 이메일인증</span></td></tr>")
-				.append("<tr bgcolor='#121a25'><td style='padding:20px;font-size:12px;line-height:17px;color:#c6d4df;font-family:Arial,Helvetica,sans-serif'><p style='font-weight:bold;font-size: 20px;color: #f00;'>")
-				.append(ran2)
-				.append("</p><br><p><a style='color:#c6d4df' href='localhost:8080/project/repdlverifyform.do' target='_blank'>이메일 인증 확인</a></p></td></tr></tbody></table></td></tr></tbody></table></div>")
-				.toString());
-			
-			
+
+					/*
+					 * new StringBuffer().append("<h1>이메일인증</h1>")
+					 * .append("<a href='localhost:8080/project/repdlverifyform.do")
+					 * .append("'target='_blenk'>이메일 인증 확인</a>").append(ran2).toString());
+					 * 
+					 */
+					new StringBuffer().append(
+							"<div text='#c6d4df' style='font-family:Helvetica,Arial,sans-serif;font-size:14px;color:#c6d4df;text-align:center;'><table style='width:538px;background-color:#393836' align='center' cellspacing='0' cellpadding='0'>\r\n"
+									+ " <tbody><tr><td style='height:65px;background-color:#171a21;border-bottom:1px solid #4d4b48;padding:0px'><h2 style='text-align: center;color: #fff;' height='65' >FILE CETACEA</h2></td></tr><tr><td bgcolor='#17212e'><table width='500' border='0' align='center' cellpadding='0' cellspacing='0' style='padding-left:5px;padding-right:5px;padding-bottom:10px'><tbody><tr bgcolor='#17212e'><td style='padding-top:32px;padding-bottom:16px'>")
+							.append("<span style='font-size:24px;color:#66c0f4;font-family:Arial,Helvetica,sans-serif;font-weight:bold'>저장소삭제 이메일인증</span></td></tr>")
+							.append("<tr bgcolor='#121a25'><td style='padding:20px;font-size:12px;line-height:17px;color:#c6d4df;font-family:Arial,Helvetica,sans-serif'><p style='font-weight:bold;font-size: 20px;color: #f00;'>")
+							.append(ran2)
+							.append("</p><br><p><a style='color:#c6d4df' href='localhost:8080/project/repdlverifyform.do' target='_blank'>이메일 인증 확인</a></p></td></tr></tbody></table></td></tr></tbody></table></div>")
+							.toString());
+
 			sendMail.setFrom("gusdn4973@gmail.com", "CETACEA");
 			sendMail.setTo(email);
 			sendMail.send();
 			service.setTempkey(ran2, email);
-			return "member/verifydelrep";
-			
+			mav.setViewName("member/verifydelrep");
+
 		} else if (requestfrom.equals("memberout")) {
 			sendMail.setSubject("FILE CETACEA 회원탈퇴 이메일인증");
 			sendMail.setText(new StringBuffer()
 					/*
-					.append("<h1>이메일인증</h1>")
-					.append("<a href='localhost:8080/project/memberoutverifyform.do")
-					.append("'target='_blenk'>이메일 인증 확인</a>").append(ran2).toString());*/
-			
-			.append("<div text='#c6d4df' style='font-family:Helvetica,Arial,sans-serif;font-size:14px;color:#c6d4df;text-align:center;'><table style='width:538px;background-color:#393836' align='center' cellspacing='0' cellpadding='0'>\r\n" + 
-					" <tbody><tr><td style='height:65px;background-color:#171a21;border-bottom:1px solid #4d4b48;padding:0px'><h2 style='text-align: center;color: #fff;' height='65' >FILE CETACEA</h2></td></tr><tr><td bgcolor='#17212e'><table width='500' border='0' align='center' cellpadding='0' cellspacing='0' style='padding-left:5px;padding-right:5px;padding-bottom:10px'><tbody><tr bgcolor='#17212e'><td style='padding-top:32px;padding-bottom:16px'>")
-			.append("<span style='font-size:24px;color:#66c0f4;font-family:Arial,Helvetica,sans-serif;font-weight:bold'>회원 탈퇴 이메일 인증</span></td></tr>")
-			.append("<tr bgcolor='#121a25'><td style='padding:20px;font-size:12px;line-height:17px;color:#c6d4df;font-family:Arial,Helvetica,sans-serif'><p style='font-weight:bold;font-size: 20px;color: #f00;'>")
-			.append(ran2)
-			.append("</p><br><p><a style='color:#c6d4df' href='localhost:8080/project/memberoutverifyform.do' target='_blank'>이메일 인증 확인</a></p></td></tr></tbody></table></td></tr></tbody></table></div>")
-			.toString());
-			
-			
+					 * .append("<h1>이메일인증</h1>")
+					 * .append("<a href='localhost:8080/project/memberoutverifyform.do")
+					 * .append("'target='_blenk'>이메일 인증 확인</a>").append(ran2).toString());
+					 */
+
+					.append("<div text='#c6d4df' style='font-family:Helvetica,Arial,sans-serif;font-size:14px;color:#c6d4df;text-align:center;'><table style='width:538px;background-color:#393836' align='center' cellspacing='0' cellpadding='0'>\r\n"
+							+ " <tbody><tr><td style='height:65px;background-color:#171a21;border-bottom:1px solid #4d4b48;padding:0px'><h2 style='text-align: center;color: #fff;' height='65' >FILE CETACEA</h2></td></tr><tr><td bgcolor='#17212e'><table width='500' border='0' align='center' cellpadding='0' cellspacing='0' style='padding-left:5px;padding-right:5px;padding-bottom:10px'><tbody><tr bgcolor='#17212e'><td style='padding-top:32px;padding-bottom:16px'>")
+					.append("<span style='font-size:24px;color:#66c0f4;font-family:Arial,Helvetica,sans-serif;font-weight:bold'>회원 탈퇴 이메일 인증</span></td></tr>")
+					.append("<tr bgcolor='#121a25'><td style='padding:20px;font-size:12px;line-height:17px;color:#c6d4df;font-family:Arial,Helvetica,sans-serif'><p style='font-weight:bold;font-size: 20px;color: #f00;'>")
+					.append(ran2)
+					.append("</p><br><p><a style='color:#c6d4df' href='localhost:8080/project/memberoutverifyform.do' target='_blank'>이메일 인증 확인</a></p></td></tr></tbody></table></td></tr></tbody></table></div>")
+					.toString());
+
 			sendMail.setFrom("gusdn4973@gmail.com", "CETACEA");
 			sendMail.setTo(email);
 			sendMail.send();
 			service.setTempkey(ran2, email);
-			return "member/memberoutverifyform";
-			
-			/*랜덤ㅇ*/
+			mav.setViewName("member/memberoutverifyform");
+
+			/* 랜덤ㅇ */
 		}
-		return null;
+		return mav;
 	}
 
 	// 메일로보낸 인증키와 입력받은값 비교하여 메일인증
@@ -370,12 +387,14 @@ public class MemberController {
 				 */
 			}
 		} else {
-			if (isNumber(String.valueOf(tempKey))) {
-				out.println("<script>alert('인증번호가 일치하지 않습니다'); </script>");
-				out.flush();
-			} else {
-				out.println("<script>alert('숫자를 입력하세요'); </script>");
-				out.flush();
+			out.println("<script>alert('인증번호가 일치하지 않습니다'); </script>");
+			out.flush();
+			if (requestfrom.equals("createwsauth")) {
+				mav.setViewName("member/verify");
+			} else if (requestfrom.equals("deleterepauth")) {
+				mav.setViewName("member/verifydelrep");
+			} else if (requestfrom.equals("memberout")) {
+				mav.setViewName("member/memberoutverifyform");
 			}
 		}
 		return mav;
