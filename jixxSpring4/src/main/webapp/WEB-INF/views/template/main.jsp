@@ -15,6 +15,9 @@ margin: 0 4;
 	min-height: 100px;
     background-color: #f7f7f7;
     padding: 20px;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    
 }
 
 @media (max-width: 767px) {
@@ -26,7 +29,35 @@ margin: 0 4;
 .repostdata{
 margin: 15px;
 }
-
+.span11{
+    display: inline;
+    margin: 0px;
+    padding: 7.5px 12px;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1;
+    color: #555;
+    text-align: center;
+    background-color: #fff;
+    border: 1px solid #dddddd;
+}
+    
+    .formcon{
+    display: inline;
+    width: 80%;
+    height: 33px;
+    padding: 6px 12px;
+    font-size: 14px;
+    line-height: 1.42857143;
+    color: #555;
+    background-color: #fff;
+    background-image: none;
+    border: 1px solid #ccc;
+    }
+    
+    span{
+    margin : 5px;
+    }
 </style>
 <jsp:include page="mainHeader.jsp" flush="false" />
 <div class="bg">
@@ -55,7 +86,7 @@ margin: 15px;
 										<li><i class="fa fa-user bg-aqua"></i>
 
 											<div class="timeline-item">
-												<span class="time"><i class="fa fa-clock-o"></i>${post.logdate}</span>
+												<span class="time pull-right"><i class="fa fa-clock-o"></i>${post.logdate}</span>
 
 												<h3 class="timeline-header no-border">
 													<a href="#">${post.nickname}님</a> ${rep_name} ${post.content }
@@ -68,7 +99,7 @@ margin: 15px;
 											</c:if>
 
 											<div class="timeline-item">
-												<span class="time"><i class="fa fa-clock-o"></i>${post.logdate}</span>
+												<span class="time pull-right"><i class="fa fa-clock-o"></i>${post.logdate}</span>
 
 												<h3 class="timeline-header">
 													<a href="#">${post.nickname}</a>
@@ -107,7 +138,7 @@ margin: 15px;
 													</c:when>
 													<c:otherwise>
 														<div class="timeline-body">
-															<span class="time"><i class="fa fa-clock-o"></i>${repost.logdate}</span>
+															<span class="time pull-right"><i class="fa fa-clock-o"></i>${repost.logdate}</span>
 																<a href="#">${repost.nickname}</a>
 															<span class="timeline-body" id="${repost.post_id}">${repost.content}</span>
 															<a class="btn btn-danger btn-xs"
@@ -187,8 +218,8 @@ margin: 15px;
 						}
 						str +='<li>'+
 						'<li><i class="fa fa-user bg-aqua"></i>'+
-						'<div class="timeline-body">'+
-						'<span class="time"><i class="fa fa-clock-o"></i> '+list[i].logdate+'</span>'+
+						'<div class="timeline-item">'+
+						'<span class="time pull-right"><i class="fa fa-clock-o"></i> '+list[i].logdate+'</span>'+
 						'<h3 class="timeline-header no-border">'+
 						'<a href="#">'+list[i].nickname+'님</a> ${rep_name}'+ list[i].content+
 						'</h3>'+
@@ -200,21 +231,21 @@ margin: 15px;
 						} else{
 							str += '<li><i class="fa fa-envelope bg-blue"></i>';
 						}
-						str += '<div class="timeline-body">'+
-						'<span class="time"><i class="fa fa-clock-o"></i>'+ list[i].logdate+'</span>'+
+						str += '<div class="timeline-item ">'+
+						'<span class="time pull-right"><i class="fa fa-clock-o"></i>'+ list[i].logdate+'</span>'+
 						'<h3 class="timeline-header">'+
 						'<a href="#">'+ list[i].nickname+'</a>'+
 						'<div class="timelinebtn">';
 						if (list[i].post_status != 0) {
-							str += '<a class="repost'+page+'">댓글달기</a>';						
+							str += '<a class="repost'+page+' btn btn-primary btn-xs">댓글달기</a>';						
 						}
 						if ('${sessionScope.nickname}' == list[i].nickname) {
-							str += '<a class="change"> 수정</a>'+
+							str += '<a class="change btn btn-primary btn-xs btn-warning"> 수정</a>'+
 							'<a class="btn btn-danger btn-xs" href="${pageContext.request.contextPath}/post/delete.do?post_id='+list[i].post_id+'&cn=${ch.ch_id}">Delete</a>';
 						}
 						str +='</div>'+
 						'</h3>'+
-						'<div class="timeline-body">'+list[i].content+'</div>';
+						'<div class="timeline-body timeline-content">'+list[i].content+'</div>';
 						if (list[i].file_thumbnail != 'x') {
 							str += '<img src="${pageContext.request.contextPath}/resources/img/'+list[i].file_thumbnail + '" class="margin"> <br>';
 						}
@@ -227,7 +258,7 @@ margin: 15px;
 									str += '<div class="timeline-body"> 삭제된 댓글입니다. </div>';
 								} else {
 									str += '<div class="timeline-body">'+
-								    '<span class="time"><i class="fa fa-clock-o"></i>'+ (new Date).yyyymmdd() +'</span>'+
+								    '<span class="time pull-right"><i class="fa fa-clock-o"></i>'+ (new Date).yyyymmdd() +'</span>'+
 								    '<a href="#">'+repost[j].nickname+'</a>'+
 								    '<span class="timeline-body" >'+repost[j].centent+'</span>'+
 								    '<a class="btn btn-danger btn-xs"'+
@@ -287,8 +318,8 @@ margin: 15px;
 						}
 						str +='<li>'+
 						'<li><i class="fa fa-user bg-aqua"></i>'+
-						'<div class="timeline-body">'+
-						'<span class="time"><i class="fa fa-clock-o"></i> '+list[i].logdate+'</span>'+
+						'<div class="timeline-item">'+
+						'<span class="time pull-right"><i class="fa fa-clock-o"></i> '+list[i].logdate+'</span>'+
 						'<h3 class="timeline-header no-border">'+
 						'<a href="#">'+list[i].nickname+'님</a> ${rep_name}'+ list[i].content+
 						'</h3>'+
@@ -300,8 +331,8 @@ margin: 15px;
 						} else{
 							str += '<li><i class="fa fa-envelope bg-blue"></i>';
 						}
-						str += '<div class="timeline-body">'+
-						'<span class="time"><i class="fa fa-clock-o"></i>'+ list[i].logdate+'</span>'+
+						str += '<div class="timeline-body timeline-content ">'+
+						'<span class="time pull-right"><i class="fa fa-clock-o"></i>'+ list[i].logdate+'</span>'+
 						'<h3 class="timeline-header">'+
 						'<a href="#">'+ list[i].nickname+'</a>'+
 						'<div class="timelinebtn">';
@@ -327,7 +358,7 @@ margin: 15px;
 									str += '<div class="timeline-body"> 삭제된 댓글입니다. </div>';
 								} else {
 									str += '<div class="timeline-body">'+
-								    '<span class="time"><i class="fa fa-clock-o"></i>'+ (new Date).yyyymmdd() +'</span>'+
+								    '<span class="time pull-right"><i class="fa fa-clock-o"></i>'+ (new Date).yyyymmdd() +'</span>'+
 								    '<a href="#">'+repost[j].nickname+'</a>'+
 								    '<span class="timeline-body" >'+repost[j].centent+'</span>'+
 								    '<a class="btn btn-danger btn-xs"'+
@@ -394,52 +425,49 @@ margin: 15px;
  });
 </script>
 <script>
-	$(function(){
- 		$('.repost1').on('click',function(){
- 			var repostA = $(this);
-
- 			
- 			var str = "<div class='repostdata'>";
- 			str += "<div class='input-group'>" +
- 			"<span class='input-group-addon'>댓글</span>"+
- 			'<input type="text" class="form-control" style="width: 75%;" value="" />' +
- 			'<button class="repostCencel btn btn-default">취소</button>' +
- 			'<button class="repostOk btn btn-default">완료</button>' +
- 			'</div></div>';
- 			$(this).parent().parent().next('div.timeline-body').after(str);
- 			repostA.hide();
- 		$('.repostCencel').on('click',function(){	
-			repostA.show();
-			 $(this).parent('.input-group').remove();
-		});
-		$('.repostOk').on('click',function(){
-			var repostOk = $(this);
-			var repostContent = $(this).prev().prev().val();
-			var postID = $(this).parent().prev(".timeline-body").attr("id");
-			var repostAppend = $(this).parent().parent();
-			 $.ajax({
-				type : "post",
-		        url : "<%=request.getContextPath()%>/post/repost.do",
-		        data : { content: repostContent, repost_id: postID, channel_id:'${ch.ch_id}'},
-		        dataType : "json",
-		           error : function(){
-		           },
-		        success : function(data){
-		        var str = '<div class="timeline-body">';
-		        str += '<span class="time"><i class="fa fa-clock-o"></i>'+ (new Date).yyyymmdd() +'</span>'+
-		        '<a href="#">'+data.nickName+'</a>'+
-		        '<span class="timeline-body" >'+repostContent+'</span>'+
-		        '<a class="btn btn-danger btn-xs"'+
-		        'href="${pageContext.request.contextPath}/post/delete.do?post_id='+data.post_id+'&cn=${ch.ch_id}" id="delete">Delete</a>'+
-		        '</div>';
-		        repostAppend.append(str);
-		        }
-			});
-			 $(this).parent('.input-group').remove();
-			 repostA.show();
-			});
- 		});
- 	}); 
+$(function(){
+    $('.repost1').on('click',function(){
+       var repostA = $(this);
+       var str = "<div class='repostdata'>";
+       str += "<span class='span11'>댓글</span>" +
+       '<input class="formcon" type="text" value=""/>' +
+       '<button class="repostCencel btn btn-default margin">취소</button>' +
+       '<button class="repostOk btn btn-default">완료</button>' +
+       '</div>';
+       $(this).parent().parent().next('div.timeline-body').after(str);
+       repostA.hide();
+    $('.repostCencel').on('click',function(){   
+      repostA.show();
+      $(this).parent('.repostdata').remove();
+   });
+   $('.repostOk').on('click',function(){
+      var repostOk = $(this);
+      var repostContent = $(this).prev().prev().val();
+      var postID = $(this).parent().prev(".timeline-body").attr("id");
+      var repostAppend = $(this).parent().parent();
+       $.ajax({
+         type : "post",
+           url : "<%=request.getContextPath()%>/post/repost.do",
+           data : { content: repostContent, repost_id: postID, channel_id:'${ch.ch_id}'},
+           dataType : "json",
+              error : function(){
+              },
+           success : function(data){
+           var str = '<div class="repostdata">';
+           str += '<span class="time pull-right"><i class="fa fa-clock-o"></i>'+ (new Date).yyyymmdd() +'</span>'+
+           '<a href="#">'+data.nickName+'</a>'+
+           '<span class="timeline-body" >'+repostContent+'</span>'+
+           '<a class="btn btn-danger btn-xs"'+
+           'href="${pageContext.request.contextPath}/post/delete.do?post_id='+data.post_id+'&cn=${ch.ch_id}" id="delete">Delete</a>'+
+           '</div>';
+           repostAppend.append(str);
+           }
+      });
+       $(this).parent('.repostdata').remove();
+       repostA.show();
+      });
+    });
+ }); 
  Date.prototype.yyyymmdd = function(){
     var yyyy = this.getFullYear().toString();
     var mm = (this.getMonth() + 1).toString();
@@ -479,11 +507,18 @@ function loadNewPage() {
 	$('.repost'+''+(page-1)).on('click',function(){
 			var repostA = $(this);
 			var str = "<div class='repostdata'>";
+ 			str += "<div class='input-group'>" +
+ 			"<span class='input-group-addon'>댓글</span>"+
+ 			'<input type="text" class="form-control" style="width: 75%;" value="" />' +
+ 			'<button class="repostCencel btn btn-default">취소</button>' +
+ 			'<button class="repostOk btn btn-default">완료</button>' +
+ 			'</div></div>';
+/* 			var str = "<div class='repostdata'>";
 			str += "<hr><p>댓글</p>" +
 			'<input type="text" value=""/>' +
 			'<button class="repostCencel btn btn-default" >취소</button>' +
 			'<button class="repostOk btn btn-default">완료</button>' +
-			'</div>';
+			'</div>'; */
 			$(this).parent().parent().next('div.timeline-body').after(str);
 			repostA.hide();
 		$('.repostCencel').on('click',function(){	
@@ -505,7 +540,7 @@ function loadNewPage() {
 	           },
 	        success : function(data){
 	        var str = '<div class="timeline-body">';
-	        str += '<span class="time"><i class="fa fa-clock-o"></i>'+ (new Date).yyyymmdd() +'</span>'+
+	        str += '<span class="time pull-right"><i class="fa fa-clock-o"></i>'+ (new Date).yyyymmdd() +'</span>'+
 	        '<a href="#">'+data.nickName+'</a>'+
 	        '<span class="timeline-body" >'+repostContent+'</span>'+
 	        '<a class="btn btn-danger btn-xs"'+
