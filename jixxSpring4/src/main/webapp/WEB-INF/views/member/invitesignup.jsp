@@ -142,7 +142,7 @@
 					<!-- /.col -->
 				</div>
 			</form>
-			<form action="${pageContext.request.contextPath }/loginrep.do" method="post" id="loginrep" style="display: none;">
+			<form action="${pageContext.request.contextPath }/loginrep.do" method="post" id="loginrep" style="display: none;" onsubmit="return false;">
 				<div class="form-group has-feedback">
 				<label>저장소 이름</label>
 					<input type="text" class="form-control" readonly name="rep_name" required="required"
@@ -151,10 +151,10 @@
 				</div>
 				<div class="form-group has-feedback">
 					<input type="email" class="form-control" placeholder="Email" name="email" required="required"
-						id="emailinput"> <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
+						id="loginemail"> <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
 				</div>
 				<div class="form-group has-feedback">
-					<input type="password" class="form-control" placeholder="Password" name="pwd" id="pwd"
+					<input type="password" class="form-control" placeholder="Password" name="pwd" id="loginpwd"
 						required="required"> <span class="glyphicon glyphicon-lock form-control-feedback"></span>
 				</div>
 				<button style="display: inline;" type="submit" class="btn btn-primary btn-block btn-flat" id="join" onclick="logincheck()">LOGIN</button>
@@ -199,18 +199,27 @@
 			$('#login').show();
 			$('#signup').show();
 		}
+		function submitlogin(){
+			
+		}
 		function logincheck(){
-			var email = null;
-			var pwd = null;
+			var email = $('#loginemail').val();
+			var pwd = $('#loginpwd').val();
+			var submit = $("#loginrep").attr("id");
+			console.log(submit);
 			 $.ajax({
 		           type : "post",
 		           url : "<%=request.getContextPath()%>/member/logincheck.do",
-		           data : { page: page, search: searchitem },
+		           data : { email: email, pwd: pwd },
+		           dataType : "text",
 		           success : function(data){
-		        	  console.log(data);
-		        	  return false;
+		        	  if (data == "성공") {
+						$("#loginrep").removeAttr("onsubmit");
+						$('#loginrep').submit();
+					}
 		        	  }
 		           });
+			 return false;
 		}
 	</script>
 

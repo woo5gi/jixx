@@ -14,10 +14,13 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -520,18 +523,27 @@ public class MemberController {
 	 * }
 	 */
 	
-	@RequestMapping(value = "member/logincheck.do")
-	public boolean logincheck(HttpServletRequest req, Member m) {
-		boolean logincheck = false;
+	@RequestMapping(value = "member/logincheck.do", produces = "application/text; charset=utf8")
+	public @ResponseBody String logincheck(HttpServletRequest req, Member m) {
+		System.out.println(m);
+		String logincheck = "실패";
 		Member m2 = service.getMemberByEmail(m.getEmail());
 		if (m2 == null || !m2.getPwd().equals(m.getPwd())) {
-			logincheck = false;
+			logincheck = "실패";
 		} else {
 			HttpSession session = req.getSession();
 			session.setAttribute("id", m2.getId());
 			session.setAttribute("email", m2.getEmail());
-			logincheck = true;
+			logincheck = "성공";
 		}
 		return logincheck;
+	}
+	
+	@RequestMapping(value = "member/alarmlogin.do")
+	public ModelAndView alarmLogin(@RequestParam(value="cn") int cn, @RequestParam(value="rep_id")int rep_id) {
+		ModelAndView mav = new ModelAndView("member/alarmlogin");
+		mav.addObject("rep_id", rep_id);
+		mav.addObject("cn", cn);
+		return mav;
 	}
 }

@@ -72,6 +72,7 @@ public class RepController {
 		session.setAttribute("rep_id", rep_id1);
 		Channel ch = service.getChId(r2);
 		int chid1 = ch.getCh_id();
+		System.out.println(id +":" + chid1 + ":" + rep_id1);
 		service.createUserMeta(id, rep_id1, chid1);
 		service.addBoard(nickname, id, chid1);
 		service.setUserMeta2Create(id, rep_id1, nickname);
@@ -94,7 +95,6 @@ public class RepController {
 			cn = ch.getCh_id();
 		}
 		rda.addAttribute("cn", cn);
-		service.getUserAdminLevel(id, rep_id);
 		return "redirect:/post/list.do?page=1";
 	}
 
@@ -181,7 +181,6 @@ public class RepController {
 	public ModelAndView loginrep(HttpServletRequest req, @RequestParam(value = "rep_name") String rep_name,
 			@RequestParam(value = "rep_id")int rep_id){
 		ModelAndView mav = new ModelAndView("member/nickname");
-//		HttpSession session = req.getSession();
 		mav.addObject("rep_name", rep_name);
 		mav.addObject("rep_id", rep_id);
 		return mav;
@@ -421,6 +420,18 @@ public class RepController {
 	@RequestMapping(value = "wrokspaceurl.do")
 	public String workspaceUrl() {
 		return "workspace/workspaceurl";
+	}
+	
+	@RequestMapping(value = "alarmgomain.do")
+	public String alarmGoMain(RedirectAttributes rda, HttpServletRequest req, @RequestParam(value = "rep_id") int rep_id,
+			@RequestParam(value="cn") int cn) {
+		HttpSession session = req.getSession(false);
+		int id = (int) session.getAttribute("id");
+		session.setAttribute("rep_id", rep_id);
+		String nickname = service.getNickname(id, rep_id);
+		session.setAttribute("nickname", nickname);
+		rda.addAttribute("cn", cn);
+		return "redirect:/post/list.do?page=1";
 	}
 
 }
