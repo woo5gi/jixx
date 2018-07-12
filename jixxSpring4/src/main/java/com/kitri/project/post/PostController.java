@@ -167,7 +167,6 @@ public class PostController implements ApplicationContextAware {
 		}
 		mav.addObject("alarmtypelist",alarmtypelist);
 		mav.addObject("repost", repost);
-		System.out.println(repost);
 		int adminlevel = service.getUserAdminLevel(id, rep_id);
 		mav.addObject("adminlevel", adminlevel);
 		mav.addObject("rep_list", repnamelist);
@@ -179,7 +178,6 @@ public class PostController implements ApplicationContextAware {
 		mav.addObject("ch_list", chlist);
 		mav.addObject("nicknamelist", nicknamelist);
 		mav.addObject("list", list);
-		System.out.println(list);
 		return mav;
 	}
 
@@ -229,7 +227,6 @@ public class PostController implements ApplicationContextAware {
 		String user_name = m2.getName();
 		Repository r = service.getRepository(rep_id);
 		Channel ch = service.getChannel(cn);
-		System.out.println("chid:" + ch.getCh_id());
 		mav.addObject("repost", repost);
 		mav.addObject("rep_name", r.getRep_name());
 		mav.addObject("user_name", user_name);
@@ -254,7 +251,6 @@ public class PostController implements ApplicationContextAware {
         ObjectMapper mapper = new ObjectMapper();
         try {
             str = mapper.writeValueAsString(map);
-            System.out.println(str);
         } catch (Exception e) {
         	e.printStackTrace();
         }
@@ -274,7 +270,6 @@ public class PostController implements ApplicationContextAware {
 	        ObjectMapper mapper = new ObjectMapper();
 	        try {
 	            str = mapper.writeValueAsString(map);
-	            System.out.println(str);
 	        } catch (Exception e) {
 	        	e.printStackTrace();
 	        }

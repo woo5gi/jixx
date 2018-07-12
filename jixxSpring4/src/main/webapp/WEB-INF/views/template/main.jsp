@@ -245,7 +245,7 @@ margin: 15px;
 						}
 						str +='</div>'+
 						'</h3>'+
-						'<div class="timeline-body timeline-content">'+list[i].content+'</div>';
+						'<div class="timeline-body timeline-content" id="'+list[i].post_id+'">'+list[i].content+'</div>';
 						if (list[i].file_thumbnail != 'x') {
 							str += '<img src="${pageContext.request.contextPath}/resources/img/'+list[i].file_thumbnail + '" class="margin"> <br>';
 						}
@@ -260,7 +260,7 @@ margin: 15px;
 									str += '<div class="timeline-body">'+
 								    '<span class="time pull-right"><i class="fa fa-clock-o"></i>'+ (new Date).yyyymmdd() +'</span>'+
 								    '<a href="#">'+repost[j].nickname+'</a>'+
-								    '<span class="timeline-body" >'+repost[j].centent+'</span>'+
+								    '<span class="timeline-body" >'+repost[j].content+'</span>'+
 								    '<a class="btn btn-danger btn-xs"'+
 								    'href="${pageContext.request.contextPath}/post/delete.do?post_id='+repost[j].post_id+'&cn=${ch.ch_id}" id="delete">Delete</a>'+
 								    '</div>';
@@ -331,21 +331,21 @@ margin: 15px;
 						} else{
 							str += '<li><i class="fa fa-envelope bg-blue"></i>';
 						}
-						str += '<div class="timeline-body timeline-content ">'+
+						str += '<div class="timeline-item ">'+
 						'<span class="time pull-right"><i class="fa fa-clock-o"></i>'+ list[i].logdate+'</span>'+
 						'<h3 class="timeline-header">'+
 						'<a href="#">'+ list[i].nickname+'</a>'+
 						'<div class="timelinebtn">';
 						if (list[i].post_status != 0) {
-							str += '<a class="repost'+page+'">댓글달기</a>';						
+							str += '<a class="repost'+page+' btn btn-primary btn-xs">댓글달기</a>';						
 						}
 						if ('${sessionScope.nickname}' == list[i].nickname) {
-							str += '<a class="change"> 수정</a>'+
+							str += '<a class="change btn btn-primary btn-xs btn-warning"> 수정</a>'+
 							'<a class="btn btn-danger btn-xs" href="${pageContext.request.contextPath}/post/delete.do?post_id='+list[i].post_id+'&cn=${ch.ch_id}">Delete</a>';
 						}
 						str +='</div>'+
 						'</h3>'+
-						'<div class="timeline-body">'+list[i].content+'</div>';
+						'<div class="timeline-body timeline-content" id="'+list[i].post_id+'">'+list[i].content+'</div>';
 						if (list[i].file_thumbnail != 'x') {
 							str += '<img src="${pageContext.request.contextPath}/resources/img/'+list[i].file_thumbnail + '" class="margin"> <br>';
 						}
@@ -360,14 +360,13 @@ margin: 15px;
 									str += '<div class="timeline-body">'+
 								    '<span class="time pull-right"><i class="fa fa-clock-o"></i>'+ (new Date).yyyymmdd() +'</span>'+
 								    '<a href="#">'+repost[j].nickname+'</a>'+
-								    '<span class="timeline-body" >'+repost[j].centent+'</span>'+
+								    '<span class="timeline-body" >'+repost[j].content+'</span>'+
 								    '<a class="btn btn-danger btn-xs"'+
 								    'href="${pageContext.request.contextPath}/post/delete.do?post_id='+repost[j].post_id+'&cn=${ch.ch_id}" id="delete">Delete</a>'+
 								    '</div>';
 								}
 							}
 						}
-						str += '<a href="${pageContext.request.contextPath}/post/list.do?page=1&cn='+list[i].channel_id+'"> <iclass="fa fa-asterisk">채널</i></a>';
 						str += '</div></li>';
 						var logdate = $('#'+list[i-1].logdate).val();
 							if (logdate == undefined) {
@@ -413,6 +412,8 @@ margin: 15px;
 		$('.ok').on('click',function(){
 			var updatecontent = $(this).prev().prev().val();
 			var postID = $(this).parent().attr("id");
+			console.log(updatecontent);
+			console.log(postID);
 			 $.ajax({
 				type : "GET",
 		        url : "<%=request.getContextPath()%>/post/update.do",
@@ -445,6 +446,7 @@ $(function(){
       var repostContent = $(this).prev().prev().val();
       var postID = $(this).parent().prev(".timeline-body").attr("id");
       var repostAppend = $(this).parent().parent();
+      console.log('postid:'+postID + "repostcontent:" + repostContent);
        $.ajax({
          type : "post",
            url : "<%=request.getContextPath()%>/post/repost.do",
@@ -484,7 +486,7 @@ function loadNewPage() {
 		var content = $(this).parent().parent().next('div.timeline-body').text().trim();
 		var thisA = $(this);
 		$(this).parent().parent().next('div.timeline-body').empty();
-		$(this).parent().parent().next('div.timeline-body').append('<input type="text" value="'+content+'"/>');
+		$(this).parent().parent().next('div.timeline-body').append("<textarea class='form-control' rows='3'>"+content+"</textarea>");
 		$(this).parent().parent().next('div.timeline-body').append('<button class="cencel btn btn-default margin">취소</button>');
 		$(this).parent().parent().next('div.timeline-body').append('<button class="ok btn btn-default">완료</button>');
 		$(this).hide();
@@ -505,53 +507,46 @@ function loadNewPage() {
 		});
 	});
 	$('.repost'+''+(page-1)).on('click',function(){
-			var repostA = $(this);
-			var str = "<div class='repostdata'>";
- 			str += "<div class='input-group'>" +
- 			"<span class='input-group-addon'>댓글</span>"+
- 			'<input type="text" class="form-control" style="width: 75%;" value="" />' +
- 			'<button class="repostCencel btn btn-default">취소</button>' +
- 			'<button class="repostOk btn btn-default">완료</button>' +
- 			'</div></div>';
-/* 			var str = "<div class='repostdata'>";
-			str += "<hr><p>댓글</p>" +
-			'<input type="text" value=""/>' +
-			'<button class="repostCencel btn btn-default" >취소</button>' +
-			'<button class="repostOk btn btn-default">완료</button>' +
-			'</div>'; */
-			$(this).parent().parent().next('div.timeline-body').after(str);
-			repostA.hide();
-		$('.repostCencel').on('click',function(){	
-		repostA.show();
-		$(this).parent('.repostdata').remove();
-		});
-	$('.repostOk').on('click',function(){
-		var repostOk = $(this);
-		var repostContent = $(this).prev().prev().val();
-		var postID = $(this).parent().prev(".timeline-body").attr("id");
-		var repostAppend = $(this).parent().parent();
-		 $.ajax({
-			type : "post",
-	        url : "<%=request.getContextPath()%>/post/repost.do",
-	        data : { content: repostContent, repost_id: postID, channel_id:'${ch.ch_id}'},
-	        dataType : "json",
-	           error : function(){
-	               alert('실패 ㅠ');
-	           },
-	        success : function(data){
-	        var str = '<div class="timeline-body">';
-	        str += '<span class="time pull-right"><i class="fa fa-clock-o"></i>'+ (new Date).yyyymmdd() +'</span>'+
-	        '<a href="#">'+data.nickName+'</a>'+
-	        '<span class="timeline-body" >'+repostContent+'</span>'+
-	        '<a class="btn btn-danger btn-xs"'+
-	        'href="${pageContext.request.contextPath}/post/delete.do?post_id='+data.post_id+'&cn=${ch.ch_id}" id="delete">Delete</a>'+
-	        '</div>';
-	        repostAppend.append(str);
-	        }
-		});
-		 $(this).parent('.repostdata').remove();
-		 repostA.show();
-		});
+		 var repostA = $(this);
+	       var str = "<div class='repostdata'>";
+	       str += "<span class='span11'>댓글</span>" +
+	       '<input class="formcon" type="text" value=""/>' +
+	       '<button class="repostCencel btn btn-default margin">취소</button>' +
+	       '<button class="repostOk btn btn-default">완료</button>' +
+	       '</div>';
+	       $(this).parent().parent().next('div.timeline-body').after(str);
+	       repostA.hide();
+	    $('.repostCencel').on('click',function(){   
+	      repostA.show();
+	      $(this).parent('.repostdata').remove();
+	   });
+	   $('.repostOk').on('click',function(){
+	      var repostOk = $(this);
+	      var repostContent = $(this).prev().prev().val();
+	      var postID = $(this).parent().prev(".timeline-body").attr("id");
+	      var repostAppend = $(this).parent().parent();
+	      console.log('postid:'+postID + "repostcontent:" + repostContent);
+	       $.ajax({
+	         type : "post",
+	           url : "<%=request.getContextPath()%>/post/repost.do",
+	           data : { content: repostContent, repost_id: postID, channel_id:'${ch.ch_id}'},
+	           dataType : "json",
+	              error : function(){
+	              },
+	           success : function(data){
+	           var str = '<div class="repostdata">';
+	           str += '<span class="time pull-right"><i class="fa fa-clock-o"></i>'+ (new Date).yyyymmdd() +'</span>'+
+	           '<a href="#">'+data.nickName+'</a>'+
+	           '<span class="timeline-body" >'+repostContent+'</span>'+
+	           '<a class="btn btn-danger btn-xs"'+
+	           'href="${pageContext.request.contextPath}/post/delete.do?post_id='+data.post_id+'&cn=${ch.ch_id}" id="delete">Delete</a>'+
+	           '</div>';
+	           repostAppend.append(str);
+	           }
+	      });
+	       $(this).parent('.repostdata').remove();
+	       repostA.show();
+	      });
 	});
 }
 </script>
