@@ -62,7 +62,7 @@
 	margin-left: auto;
 	margin-right: auto;
 	width: 450px;
-	padding-top: 13%;
+	padding-top: 8%;
 }
 
 .bg {
@@ -116,7 +116,7 @@ border-top: 1px solid #dddddd;
 					<a href="${pageContext.request.contextPath }/index.do" class="logo"><img
 						src="resources/images/logo.png" alt="Logo"> </a>
 				</div>
-				<div class="collapse navbar-collapse pull-left" id="navbar-collapse"></div>
+				<div class="collapse pull-left" id="navbar-collapse"></div>
 				<div class="navbar-custom-menu">
 					<ul class="nav navbar-nav">
 						<c:choose>

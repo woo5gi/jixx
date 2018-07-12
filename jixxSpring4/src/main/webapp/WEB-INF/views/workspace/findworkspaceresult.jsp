@@ -37,7 +37,7 @@
                 <td><c:forEach var="aa" items="${usernamelist}">${aa}&nbsp;&nbsp;</c:forEach></td>
                 <c:forEach var="aa" items="${repnamelist}">
                 <td> ${aa}</td>
-                <td><input type="button" value="가입신청"></td>
+                <td><input type="button" value="가입신청" class="btn btn-default"></td>
                 </c:forEach>
                 </tr>
                 

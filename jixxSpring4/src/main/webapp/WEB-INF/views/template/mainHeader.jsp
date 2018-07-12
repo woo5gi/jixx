@@ -156,7 +156,13 @@ padding: 15px;
 }
 .dropdown-menu{
 overflow: hidden;}
-
+.navbar-nav>.user-menu>.dropdown-menu>.user-footer {
+    background-color: #222d32;
+    padding: 10px;
+}
+.amemu{
+    color: #ffffff;
+    margin: 19px;}
 </style>
 <script type="text/javascript">
 	$(function() {
@@ -246,11 +252,11 @@ overflow: hidden;}
 										<!-- Menu Footer-->
 										<li class="user-footer">
 											<div class="pull-left">
-												<a href="#" class="btn btn-default btn-flat">Profile</a>
+												<a href="#" class="amemu">Profile</a>
 											</div>
 											<div class="pull-right">
 												<a href="${pageContext.request.contextPath}/member/logout.do"
-													class="btn btn-default btn-flat">Sign out</a>
+													class="amemu">Sign out</a>
 											</div>
 										</li>
 									</ul></li>
@@ -283,30 +289,30 @@ overflow: hidden;}
 								<!-- Menu Footer-->
 								<li class="user-footer">
 									<div class="pull-left">
-										<a href="${pageContext.request.contextPath}/profileform.do" class="btn btn-default ">Profile</a>
+										<a href="${pageContext.request.contextPath}/profileform.do" class="amemu">Profile</a>
 									</div> <c:choose>
 										<c:when test="${adminlevel eq 1 }">
 											<div class="pull-left">
 												<a href="${pageContext.request.contextPath}/repadminform.do?adminlevel=1"
-													class="btn btn-default btn-flat">저장소관리</a>
+													class="amemu">저장소관리</a>
 											</div>
 										</c:when>
 										<c:when test="${adminlevel eq 2 }">
 											<div class="pull-left">
 												<a href="${pageContext.request.contextPath}/repadminform.do?adminlevel=2"
-													class="btn btn-default btn-flat">저장소관리</a>
+													class="amemu">저장소관리</a>
 											</div>
 										</c:when>
 										<c:otherwise>
 											<div class="pull-left">
 												<a href="${pageContext.request.contextPath}/repadminform.do?adminlevel=3"
-													class="btn btn-default btn-flat">저장소관리</a>
+													class="amemu">저장소관리</a>
 											</div>
 										</c:otherwise>
 									</c:choose>
 									<div class="pull-left">
 										<a href="${pageContext.request.contextPath}/member/logout.do"
-											class="btn btn-default btn-flat">Sign out</a>
+											class="amemu">Sign out</a>
 									</div>
 								</li>
 							</c:otherwise>
