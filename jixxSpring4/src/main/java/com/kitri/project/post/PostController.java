@@ -10,6 +10,7 @@ import java.util.UUID;
 
 import javax.annotation.Resource;
 import javax.inject.Inject;
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -25,6 +26,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.context.ServletContextAware;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
@@ -40,12 +42,13 @@ import vo.Repository;
 import vo.UserMeta;
 
 @Controller
-public class PostController implements ApplicationContextAware {
+public class PostController implements ApplicationContextAware, ServletContextAware {
 	@Resource(name = "postService")
 	private Service service;
 	@Inject
 	private JavaMailSender mailSender;
 	private WebApplicationContext context = null;
+	private ServletContext servletContext;
 
 	@RequestMapping(value = "/post/write.do")
 	public String write(Post post, HttpServletRequest req, @RequestParam(value = "cn") int cn, RedirectAttributes rda) {
@@ -59,7 +62,7 @@ public class PostController implements ApplicationContextAware {
 			String ext = file.getOriginalFilename().substring(pos);
 			String name = file.getOriginalFilename().substring(0, pos);
 			String path = "D:\\files\\" + name + UUID.randomUUID().toString() + ext;
-			String thumbnailPath = "D:\\git\\jixxSpring4\\src\\main\\webapp\\resources\\img\\" + name
+			String thumbnailPath = servletContext.getRealPath("/resources/img/") + name
 					+ UUID.randomUUID().toString();
 			File f = new File(path);
 			try {
@@ -314,5 +317,11 @@ public class PostController implements ApplicationContextAware {
 				list.get(i).setFile_original(uuidName);
 			}
 		}
+	}
+
+	@Override
+	public void setServletContext(ServletContext servletContext) {
+		this.servletContext = servletContext;
+		
 	}
 }
