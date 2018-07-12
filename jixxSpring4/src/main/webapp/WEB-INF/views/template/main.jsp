@@ -141,8 +141,10 @@ margin: 15px;
 															<span class="time pull-right"><i class="fa fa-clock-o"></i>${repost.logdate}</span>
 																<a href="#">${repost.nickname}</a>
 															<span class="timeline-body" id="${repost.post_id}">${repost.content}</span>
+															<c:if test="${repost.user_id eq sessionScope.id }">
 															<a class="btn btn-danger btn-xs"
-																href="<%= request.getContextPath() %>/post/delete.do?post_id=${repost.post_id}&cn=${ch.ch_id}" id="delete">Delete</a>
+																href="<%= request.getContextPath() %>/post/delete.do?post_id=${repost.post_id}&cn=${ch.ch_id}" id="delete">delete</a>
+															</c:if>
 														</div>
 													</c:otherwise>
 													</c:choose>
@@ -255,15 +257,19 @@ margin: 15px;
 						for (var j = 0; j < repost.length; j++) {
 							if (list[i].post_id == repost[j].repost_id) {
 								if (repost[j].post_status == 0) {
-									str += '<div class="timeline-body"> 삭제된 댓글입니다. </div>';
+									str += '<div class="repostdata"><div class="timeline-body"> 삭제된 댓글입니다. </div></div>';
 								} else {
-									str += '<div class="timeline-body">'+
+									str += '<div class="repostdata"><div class="timeline-body">'+
 								    '<span class="time pull-right"><i class="fa fa-clock-o"></i>'+ (new Date).yyyymmdd() +'</span>'+
 								    '<a href="#">'+repost[j].nickname+'</a>'+
-								    '<span class="timeline-body" >'+repost[j].content+'</span>'+
-								    '<a class="btn btn-danger btn-xs"'+
-								    'href="${pageContext.request.contextPath}/post/delete.do?post_id='+repost[j].post_id+'&cn=${ch.ch_id}" id="delete">Delete</a>'+
-								    '</div>';
+								    '<span class="timeline-body" >'+repost[j].content+'</span>';
+								    if (repost[j].user_id == ${sessionScope.id}) {
+								    	console.log('${sessionScope.id}');
+								    	console.log(repost[j].user_id);
+									    str += '<a class="btn btn-danger btn-xs"'+
+									    'href="${pageContext.request.contextPath}/post/delete.do?post_id='+repost[j].post_id+'&cn=${ch.ch_id}" id="delete">Delete</a>';										
+									}
+								    str += '</div></div>';
 								}
 							}
 						}
