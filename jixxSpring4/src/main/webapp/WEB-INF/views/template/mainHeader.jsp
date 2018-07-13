@@ -372,15 +372,16 @@ overflow: hidden;}
 			<li class="header"><a href="index.html"> Direct Messages &nbsp; <i
 					class="fa fa-plus-circle i1"></i>
 			</a></li>
-			<div class="liscroll">
+			<div class="listcroll">
 				<c:forEach var="aa" items="${nicknamelist}" varStatus="status">
 					<li class="listyle1"><a
 						href="<%=request.getContextPath()%>/post/list.do?page=1&cn=${status.count}&ch_list=${ch_list}&nicknamelist=${nicknamelist}">
 							<i class="fa fa fa-user i1"></i>${aa}</a></li>
 				</c:forEach>
 			</div>
-
-			<li class="header i1"><a href="${pageContext.request.contextPath }/moreteam.do?"> Invate
+      <li class="header i1"><a href="<%=request.getContextPath()%>/groupchat" method="post"> Chat Room <i class="fa fa-plus-circle"></i></a>
+      </li>
+			<li class="header i1"><a href="${pageContext.request.contextPath }/moreteam.do?"> Invite
 					People &nbsp; <i class="fa fa-plus-circle"></i>
 			</a></li>
 		</ul>

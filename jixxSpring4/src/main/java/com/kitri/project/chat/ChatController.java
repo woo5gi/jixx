@@ -5,31 +5,33 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.handler.annotation.SendTo;
-import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.servlet.ModelAndView;
 import com.kitri.project.post.Service;
 import vo.Channel;
-import vo.ChatMessage;
 import vo.Member;
-import vo.Post;
 import vo.Repository;
 
 @Controller
 public class ChatController {
-//  @Resource(name = "chatService")
-//  private Service chservice;
-//  private WebApplicationContext context = null;
-// 
+  
+
+  @MessageMapping("/message")
+  @SendTo("/chat/messages")
+  public Message getMessages(Message message) {
+      System.out.println(message);
+      return message;
+  }
+  
   @Resource(name = "postService")
   private Service service;
 
-  @RequestMapping(value = "/privatechat.do")
-  public ModelAndView list(HttpServletRequest req) {
+  @RequestMapping(value = "groupchat")
+//  @MessageMapping("/message")
+//  @SendTo("/chat/messages")
+  public ModelAndView list(HttpServletRequest req, Message message) {
     HttpSession session = req.getSession(false);
     int id = (int) session.getAttribute("id");
     int rep_id = (int) session.getAttribute("rep_id");
@@ -39,7 +41,7 @@ public class ChatController {
     ArrayList<String> repnamelist = service.getRepNameListById(id);
     String user_name = m2.getName();
     Repository r = service.getRepository(rep_id);
-    ModelAndView mav = new ModelAndView("/workspace/privatechat2");
+    ModelAndView mav = new ModelAndView("/workspace/chat2");
     int adminlevel = service.getUserAdminLevel(id, rep_id);
     mav.addObject("adminlevel", adminlevel);
     mav.addObject("rep_list", repnamelist);
@@ -49,22 +51,10 @@ public class ChatController {
     mav.addObject("rep_id", rep_id);
     mav.addObject("ch_list", chlist);
     mav.addObject("nicknamelist", nicknamelist);
+    System.out.println(message);
     return mav;
   }
+  
+  
 
-
-  @MessageMapping("/chat.sendMessage")
-  @SendTo("/topic/public")
-  public ChatMessage sendMessage(@Payload ChatMessage chatMessage) {
-    return chatMessage;
-  }
-
-  @MessageMapping("/chat.addUser")
-  @SendTo("/topic/public")
-  public ChatMessage addUser(@Payload ChatMessage chatMessage,
-      SimpMessageHeaderAccessor headerAccessor) {
-    // Add username in web socket session
-    headerAccessor.getSessionAttributes().put("username", chatMessage.getSender());
-    return chatMessage;
-  }
 }
