@@ -40,7 +40,6 @@ public class RepController {
 	// create workspace할때 url중복검사
 	@RequestMapping(value = "repository/urlCheck.do")
 	public ModelAndView urlCheck(HttpServletRequest req, @RequestParam(value = "url") String url) {
-		System.out.println(url);
 		HttpSession session = req.getSession(false);
 		ModelAndView mav = new ModelAndView("workspace/urlcheck");
 		String result = "";
@@ -52,7 +51,6 @@ public class RepController {
 			result = "사용불가";
 			session.setAttribute("urlCheck", false);
 		}
-		System.out.println(session.getAttribute("urlCheck"));
 		mav.addObject("result", result);
 		return mav;
 	}
@@ -94,7 +92,6 @@ public class RepController {
 			cn = ch.getCh_id();
 		}
 		rda.addAttribute("cn", cn);
-		service.getUserAdminLevel(id, rep_id);
 		return "redirect:/post/list.do?page=1";
 	}
 
@@ -108,10 +105,8 @@ public class RepController {
 		Member user = service.getMember(id);
 		String user_name = user.getName();
 		int rep_id = 0;
-		System.out.println("rep_name:" + rep_name);
 		if (invitest.equals("0")) {
 			rep_id = service.getRepIdByRepNameUserMeta(rep_name);
-			System.out.println("rep_name:" + rep_name);
 		} else {
 			rep_id = (int) session.getAttribute("rep_id");
 		}
@@ -121,14 +116,11 @@ public class RepController {
 			sendMail.setText(
 			
 			new StringBuffer()
-		/*	.append("<h1>" + user_name + "님의 CETACEA저장소 초대</h1>")
-			.append("<a href='localhost:8080/project/invitesignup.do?rep_name=" + rep_name + "&rep_id=" + rep_id)
-			.append("'target='_blenk'>초대 수락</a>").toString());*/
 			
 			.append("<div text='#c6d4df' style='font-family:Helvetica,Arial,sans-serif;font-size:14px;color:#c6d4df;text-align:center;'><table style='width:538px;background-color:#393836' align='center' cellspacing='0' cellpadding='0'><tbody><tr><td style='height:65px;background-color:#171a21;border-bottom:1px solid #4d4b48;padding:0px'><h2 style='text-align: center;color: #fff;' height='65' >FILE CETACEA</h2></td></tr><tr><td bgcolor='#17212e'><table width='500' border='0' align='center' cellpadding='0' cellspacing='0' style='padding-left:5px;padding-right:5px;padding-bottom:10px'><tbody><tr bgcolor='#17212e'><td style='padding-top:32px;padding-bottom:16px'>")
 			.append("<span style='font-size:24px;color:#66c0f4;font-family:Arial,Helvetica,sans-serif;font-weight:bold'>"+user_name+"님의 CETACEA저장소 초대</span></td></tr>")
 			.append("<tr bgcolor='#121a25'><td style='padding:20px;font-size:12px;line-height:17px;color:#c6d4df;font-family:Arial,Helvetica,sans-serif'><p>"
-					+ "<a style='color:#c6d4df' href='localhost:8080/project/invitesignup.do?rep_name=" + rep_name + "&rep_id=" + rep_id+"' target='_blank'>초대 수락</a></p></td></tr></tbody></table></td></tr></tbody></table></div>").toString());
+					+ "<a style='color:#c6d4df' href='192.168.12.33:8080/project/invitesignup.do?rep_name=" + rep_name + "&rep_id=" + rep_id+"' target='_blank'>초대 수락</a></p></td></tr></tbody></table></td></tr></tbody></table></div>").toString());
 			sendMail.setFrom("gusdn4973@gmail.com", "CETACEA");
 			sendMail.setTo(str);
 			sendMail.send();
@@ -150,7 +142,6 @@ public class RepController {
 		int rep_id = (int) session.getAttribute("rep_id");
 		Member user = service.getMember(id);
 		String user_name = user.getName();
-		/* String rep_name = service.getRepNameById(id); */
 		ModelAndView mav = new ModelAndView("workspace/moreteammate");
 		mav.addObject("id", id);
 		mav.addObject("user_name", user_name);
@@ -181,7 +172,6 @@ public class RepController {
 	public ModelAndView loginrep(HttpServletRequest req, @RequestParam(value = "rep_name") String rep_name,
 			@RequestParam(value = "rep_id")int rep_id){
 		ModelAndView mav = new ModelAndView("member/nickname");
-//		HttpSession session = req.getSession();
 		mav.addObject("rep_name", rep_name);
 		mav.addObject("rep_id", rep_id);
 		return mav;
@@ -335,7 +325,6 @@ public class RepController {
 		Member m = service.getMemberAll(id);
 		Member m2 = service.getMember(id);
 		ArrayList<String> repnamelist = service.getRepNameListById(id);
-		System.out.println("email" + m.getEmail());
 		mav.addObject("id", id);
 		mav.addObject("rep_id", rep_id);
 		mav.addObject("rep_name", r.getRep_name());
@@ -392,10 +381,8 @@ public class RepController {
 	public String alarmCheck(HttpServletRequest req, @RequestParam(value = "alarm_type") int alarm_type,
 			@RequestParam(value = "chid") int chid) {
 		HttpSession session = req.getSession(false);
-		System.out.println("chid:chid:" + chid);
 		int id = (int) session.getAttribute("id");
 		int rep_id = (int) session.getAttribute("rep_id");
-		System.out.println("alarmtype:" + alarm_type + ";;chid:" + chid + ";;id,repid:" + id + rep_id);
 		service.alarmCheck(id, chid, rep_id, alarm_type);
 
 		return null;
@@ -421,6 +408,18 @@ public class RepController {
 	@RequestMapping(value = "wrokspaceurl.do")
 	public String workspaceUrl() {
 		return "workspace/workspaceurl";
+	}
+	
+	@RequestMapping(value = "alarmgomain.do")
+	public String alarmGoMain(RedirectAttributes rda, HttpServletRequest req, @RequestParam(value = "rep_id") int rep_id,
+			@RequestParam(value="cn") int cn) {
+		HttpSession session = req.getSession(false);
+		int id = (int) session.getAttribute("id");
+		session.setAttribute("rep_id", rep_id);
+		String nickname = service.getNickname(id, rep_id);
+		session.setAttribute("nickname", nickname);
+		rda.addAttribute("cn", cn);
+		return "redirect:/post/list.do?page=1";
 	}
 
 }

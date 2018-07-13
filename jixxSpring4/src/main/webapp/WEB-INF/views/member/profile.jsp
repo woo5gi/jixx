@@ -11,7 +11,7 @@
 	<div class="centered">
 		<div class="box box-primary">
 			<!-- 		<h3 class="box-title">Frofile</h3> -->
-			<img class="profile-user-img img-responsive img-circle" src="resources/images/logo.png"
+			<img class="profile-user-img img-responsive img-circle" src="resources/images/user2-160x160.jpg"
 				alt="User profile picture" style="width: 100px;height: 100px">
 			<form action="${pageContext.request.contextPath}/editprofile.do?">
 				<h3 class="profile-username text-center">${m.email}</h3>

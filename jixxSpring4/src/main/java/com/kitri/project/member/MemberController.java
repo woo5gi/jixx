@@ -14,10 +14,13 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -79,14 +82,12 @@ public class MemberController {
 			int id = (int) session.getAttribute("id");
 			String email = (String) session.getAttribute("email");
 			Member m2 = service.getMemberByEmail(email);
-			System.out.println("1111111" + m2.getName());
 			mav = new ModelAndView("template/index");
 			mav.addObject("user_name", m2.getName());
 			mav.addObject("id", id);
 			mav.addObject("email", email);
 			ArrayList<String> repnamelist = service.getRepNameListById(id);
 			mav.addObject("rep_list", repnamelist);
-			System.out.println(repnamelist);
 		} catch (NullPointerException e) {
 			e.printStackTrace();
 			out.println("<script>alert('session값이 없습니다'); </script>");
@@ -154,7 +155,6 @@ public class MemberController {
 		ModelAndView mav = new ModelAndView();
 		Member m2 = service.getMemberByEmail(m.getEmail());
 		if (m2 == null || !m2.getPwd().equals(m.getPwd())) {
-			System.out.println("로그인 실패");
 			res.setContentType("text/html; charset=UTF-8");
 			PrintWriter out = res.getWriter();
 			out.println("<script>alert('로그인 실패'); </script>");
@@ -211,7 +211,6 @@ public class MemberController {
 			throws MessagingException, UnsupportedEncodingException {
 		HttpSession session = req.getSession(false);
 		MailHandler sendMail = new MailHandler(mailSender);
-		System.out.println("email:" + email);
 		Member m = service.getMemberByEmail(email);
 		ModelAndView mav = new ModelAndView();
 		mav.addObject("user_name", m.getName());
@@ -229,19 +228,13 @@ public class MemberController {
 			mav.addObject("rep_list", repnamelist);
 			sendMail.setSubject("FILE CETACEA 이메일인증");
 			sendMail.setText(
-					/*
-					 * new StringBuffer().append("<h1>이메일인증</h1>").
-					 * append("<a href='localhost:8080/project/verifyForm.do")
-					 * .append("'target='_blenk'>이메일 인증 확인</a>").append(ran2).toString());
-					 */
-
 					new StringBuffer().append(
 							"	<div text='#c6d4df' style='font-family:Helvetica,Arial,sans-serif;font-size:14px;color:#c6d4df;text-align:center;'><table style='width:538px;background-color:#393836' align='center' cellspacing='0' cellpadding='0'>\r\n"
 									+ " <tbody><tr><td style='height:65px;background-color:#171a21;border-bottom:1px solid #4d4b48;padding:0px'><h2 style='text-align: center;color: #fff;' height='65' >FILE CETACEA</h2></td></tr><tr><td bgcolor='#17212e'><table width='500' border='0' align='center' cellpadding='0' cellspacing='0' style='padding-left:5px;padding-right:5px;padding-bottom:10px'><tbody><tr bgcolor='#17212e'><td style='padding-top:32px;padding-bottom:16px'>")
 							.append("<span style='font-size:24px;color:#66c0f4;font-family:Arial,Helvetica,sans-serif;font-weight:bold'>이메일 인증</span></td></tr>")
 							.append("<tr bgcolor='#121a25'><td style='padding:20px;font-size:12px;line-height:17px;color:#c6d4df;font-family:Arial,Helvetica,sans-serif'><p style='font-weight:bold;font-size: 20px;color: #f00;'>")
 							.append(ran2)
-							.append("</p><br><p><a style='color:#c6d4df' href='localhost:8080/project/verifyForm.do' target='_blank'>이메일 인증 확인</a></p></td></tr></tbody></table></td></tr></tbody></table></div>")
+							.append("</p><br><p><a style='color:#c6d4df' href='192.168.12.33:8080/project/verifyForm.do' target='_blank'>이메일 인증 확인</a></p></td></tr></tbody></table></td></tr></tbody></table></div>")
 							.toString());
 			sendMail.setFrom("gusdn4973@gmail.com", "CETACEA");
 			sendMail.setTo(email);
@@ -252,16 +245,11 @@ public class MemberController {
 			sendMail.setSubject("FILE CETACEA 비밀번호 찾기 이메일인증");
 
 			sendMail.setText(
-					/*
-					 * new StringBuffer().append("<h1>이메일인증</h1>")
-					 * .append("<a href='localhost:8080/project/verifypass.do?email=" + email +
-					 * "&tempkey=" + ran2) .append("'target='_blenk'>새 비밀번호 설정</a>").toString());
-					 */
 					new StringBuffer().append(
 							"	<div text='#c6d4df' style='font-family:Helvetica,Arial,sans-serif;font-size:14px;color:#c6d4df;text-align:center;'><table style='width:538px;background-color:#393836' align='center' cellspacing='0' cellpadding='0'>\r\n"
 									+ " <tbody><tr><td style='height:65px;background-color:#171a21;border-bottom:1px solid #4d4b48;padding:0px'><h2 style='text-align: center;color: #fff;' height='65' >FILE CETACEA</h2></td></tr><tr><td bgcolor='#17212e' style='height:170px'><table width='500' border='0' align='center' cellpadding='0' cellspacing='0' style='padding-left:5px;padding-right:5px;padding-bottom:10px'><tbody><tr bgcolor='#17212e'><td style='padding-top:32px;padding-bottom:16px'>")
 							.append("<span style='font-size:24px;color:#66c0f4;font-family:Arial,Helvetica,sans-serif;font-weight:bold'>비밀번호 찾기 메일 인증</span></td></tr></tbody></table>")
-							.append("<a style='color:#c6d4df' 'target='_blenk' href='localhost:8080/project/verifypass.do?email="
+							.append("<a style='color:#c6d4df' 'target='_blenk' href='192.168.12.33:8080/project/verifypass.do?email="
 									+ email + "&tempkey=" + ran2 + "'>새 비밀번호 설정</a>")
 							.append("</td></tr></tbody></table></div>").toString());
 			sendMail.setFrom("gusdn4973@gmail.com", "CETACEA");
@@ -276,20 +264,13 @@ public class MemberController {
 			mav.addObject("rep_list", repnamelist);
 			sendMail.setSubject("FILE CETACEA 저장소삭제 이메일인증");
 			sendMail.setText(
-
-					/*
-					 * new StringBuffer().append("<h1>이메일인증</h1>")
-					 * .append("<a href='localhost:8080/project/repdlverifyform.do")
-					 * .append("'target='_blenk'>이메일 인증 확인</a>").append(ran2).toString());
-					 * 
-					 */
 					new StringBuffer().append(
 							"<div text='#c6d4df' style='font-family:Helvetica,Arial,sans-serif;font-size:14px;color:#c6d4df;text-align:center;'><table style='width:538px;background-color:#393836' align='center' cellspacing='0' cellpadding='0'>\r\n"
 									+ " <tbody><tr><td style='height:65px;background-color:#171a21;border-bottom:1px solid #4d4b48;padding:0px'><h2 style='text-align: center;color: #fff;' height='65' >FILE CETACEA</h2></td></tr><tr><td bgcolor='#17212e'><table width='500' border='0' align='center' cellpadding='0' cellspacing='0' style='padding-left:5px;padding-right:5px;padding-bottom:10px'><tbody><tr bgcolor='#17212e'><td style='padding-top:32px;padding-bottom:16px'>")
 							.append("<span style='font-size:24px;color:#66c0f4;font-family:Arial,Helvetica,sans-serif;font-weight:bold'>저장소삭제 이메일인증</span></td></tr>")
 							.append("<tr bgcolor='#121a25'><td style='padding:20px;font-size:12px;line-height:17px;color:#c6d4df;font-family:Arial,Helvetica,sans-serif'><p style='font-weight:bold;font-size: 20px;color: #f00;'>")
 							.append(ran2)
-							.append("</p><br><p><a style='color:#c6d4df' href='localhost:8080/project/repdlverifyform.do' target='_blank'>이메일 인증 확인</a></p></td></tr></tbody></table></td></tr></tbody></table></div>")
+							.append("</p><br><p><a style='color:#c6d4df' href='192.168.12.33:8080/project/repdlverifyform.do' target='_blank'>이메일 인증 확인</a></p></td></tr></tbody></table></td></tr></tbody></table></div>")
 							.toString());
 
 			sendMail.setFrom("gusdn4973@gmail.com", "CETACEA");
@@ -301,18 +282,12 @@ public class MemberController {
 		} else if (requestfrom.equals("memberout")) {
 			sendMail.setSubject("FILE CETACEA 회원탈퇴 이메일인증");
 			sendMail.setText(new StringBuffer()
-					/*
-					 * .append("<h1>이메일인증</h1>")
-					 * .append("<a href='localhost:8080/project/memberoutverifyform.do")
-					 * .append("'target='_blenk'>이메일 인증 확인</a>").append(ran2).toString());
-					 */
-
 					.append("<div text='#c6d4df' style='font-family:Helvetica,Arial,sans-serif;font-size:14px;color:#c6d4df;text-align:center;'><table style='width:538px;background-color:#393836' align='center' cellspacing='0' cellpadding='0'>\r\n"
 							+ " <tbody><tr><td style='height:65px;background-color:#171a21;border-bottom:1px solid #4d4b48;padding:0px'><h2 style='text-align: center;color: #fff;' height='65' >FILE CETACEA</h2></td></tr><tr><td bgcolor='#17212e'><table width='500' border='0' align='center' cellpadding='0' cellspacing='0' style='padding-left:5px;padding-right:5px;padding-bottom:10px'><tbody><tr bgcolor='#17212e'><td style='padding-top:32px;padding-bottom:16px'>")
 					.append("<span style='font-size:24px;color:#66c0f4;font-family:Arial,Helvetica,sans-serif;font-weight:bold'>회원 탈퇴 이메일 인증</span></td></tr>")
 					.append("<tr bgcolor='#121a25'><td style='padding:20px;font-size:12px;line-height:17px;color:#c6d4df;font-family:Arial,Helvetica,sans-serif'><p style='font-weight:bold;font-size: 20px;color: #f00;'>")
 					.append(ran2)
-					.append("</p><br><p><a style='color:#c6d4df' href='localhost:8080/project/memberoutverifyform.do' target='_blank'>이메일 인증 확인</a></p></td></tr></tbody></table></td></tr></tbody></table></div>")
+					.append("</p><br><p><a style='color:#c6d4df' href='192.168.12.33:8080/project/memberoutverifyform.do' target='_blank'>이메일 인증 확인</a></p></td></tr></tbody></table></td></tr></tbody></table></div>")
 					.toString());
 
 			sendMail.setFrom("gusdn4973@gmail.com", "CETACEA");
@@ -321,7 +296,6 @@ public class MemberController {
 			service.setTempkey(ran2, email);
 			mav.setViewName("member/memberoutverifyform");
 
-			/* 랜덤ㅇ */
 		}
 		return mav;
 	}
@@ -345,7 +319,6 @@ public class MemberController {
 				service.delRepository(rep_id);
 				int id = (int) session.getAttribute("id");
 				Member m2 = service.getMemberByEmail(email);
-				System.out.println("1111111" + m2.getName());
 				mav = new ModelAndView("template/index");
 				mav.addObject("user_name", m2.getName());
 				mav.addObject("id", id);
@@ -382,13 +355,11 @@ public class MemberController {
 			int id = (int) session.getAttribute("id");
 			String email = (String) session.getAttribute("email");
 			Member m2 = service.getMemberByEmail(email);
-			System.out.println("1111111" + m2.getName());
 			mav.addObject("user_name", m2.getName());
 			mav.addObject("id", id);
 			mav.addObject("email", email);
 			ArrayList<String> repnamelist = service.getRepNameListById(id);
 			mav.addObject("rep_list", repnamelist);
-			System.out.println(repnamelist);
 		} catch (NullPointerException e) {
 			e.printStackTrace();
 		}
@@ -492,7 +463,6 @@ public class MemberController {
 		HttpSession session = req.getSession(false);
 		int id = (int) session.getAttribute("id");
 		int rep_id = (int) session.getAttribute("rep_id");
-		System.out.println("email:" + m.getEmail() + "nickname:" + um2.getNickname());
 		service.editMember(m);
 		service.editUM2(um2);
 		UserMeta2 um22 = service.getUserMeta2(id, rep_id);
@@ -504,34 +474,27 @@ public class MemberController {
 		return "redirect:/post/list.do?page=1";
 	}
 
-	/*
-	 * @RequestMapping(value = "editprofileform.do") public ModelAndView
-	 * profileForm(HttpServletRequest req) { ModelAndView mav = new
-	 * ModelAndView("member/profileform"); HttpSession session =
-	 * req.getSession(false); String return mav; }
-	 * 
-	 * // 회원정보수정Form으로 이동
-	 * 
-	 * @RequestMapping(value = "/member/editForm.do") public ModelAndView
-	 * editForm(HttpServletRequest req) { ModelAndView mav = new
-	 * ModelAndView("member/editForm"); HttpSession session = req.getSession(false);
-	 * String id = (String) session.getAttribute("id"); Member m =
-	 * service.getMemberId(Integer.parseInt(id)); mav.addObject("m", m); return mav;
-	 * }
-	 */
 	
-	@RequestMapping(value = "member/logincheck.do")
-	public boolean logincheck(HttpServletRequest req, Member m) {
-		boolean logincheck = false;
+	@RequestMapping(value = "member/logincheck.do", produces = "application/text; charset=utf8")
+	public @ResponseBody String logincheck(HttpServletRequest req, Member m) {
+		String logincheck = "실패";
 		Member m2 = service.getMemberByEmail(m.getEmail());
 		if (m2 == null || !m2.getPwd().equals(m.getPwd())) {
-			logincheck = false;
+			logincheck = "실패";
 		} else {
 			HttpSession session = req.getSession();
 			session.setAttribute("id", m2.getId());
 			session.setAttribute("email", m2.getEmail());
-			logincheck = true;
+			logincheck = "성공";
 		}
 		return logincheck;
+	}
+	
+	@RequestMapping(value = "member/alarmlogin.do")
+	public ModelAndView alarmLogin(@RequestParam(value="cn") int cn, @RequestParam(value="rep_id")int rep_id) {
+		ModelAndView mav = new ModelAndView("member/alarmlogin");
+		mav.addObject("rep_id", rep_id);
+		mav.addObject("cn", cn);
+		return mav;
 	}
 }

@@ -10,6 +10,7 @@ import java.util.UUID;
 
 import javax.annotation.Resource;
 import javax.inject.Inject;
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -25,6 +26,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.context.ServletContextAware;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
@@ -40,12 +42,13 @@ import vo.Repository;
 import vo.UserMeta;
 
 @Controller
-public class PostController implements ApplicationContextAware {
+public class PostController implements ApplicationContextAware, ServletContextAware {
 	@Resource(name = "postService")
 	private Service service;
 	@Inject
 	private JavaMailSender mailSender;
 	private WebApplicationContext context = null;
+	private ServletContext servletContext;
 
 	@RequestMapping(value = "/post/write.do")
 	public String write(Post post, HttpServletRequest req, @RequestParam(value = "cn") int cn, RedirectAttributes rda) {
@@ -59,7 +62,7 @@ public class PostController implements ApplicationContextAware {
 			String ext = file.getOriginalFilename().substring(pos);
 			String name = file.getOriginalFilename().substring(0, pos);
 			String path = "D:\\files\\" + name + UUID.randomUUID().toString() + ext;
-			String thumbnailPath = "D:\\git\\jixxSpring4\\src\\main\\webapp\\resources\\img\\" + name
+			String thumbnailPath = servletContext.getRealPath("/resources/img/") + name
 					+ UUID.randomUUID().toString();
 			File f = new File(path);
 			try {
@@ -97,19 +100,11 @@ public class PostController implements ApplicationContextAware {
 					sendMail.setSubject(r.getRep_name() + "저장소의 새 글 알림");
 					sendMail.setText(
 							new StringBuffer()
-							
-/*							.append("<h1>" + r.getRep_name() + "저장소의 새 글 알림</h1>")
-							.append("<a href='localhost:8080/project/postalarm.do?cn=" + cn + "&rep_id=" + rep_id)
-							.append("'target='_blenk'>글 확인</a>").toString());
-*/					
 							.append("<div text='#c6d4df' style='font-family:Helvetica,Arial,sans-serif;font-size:14px;color:#c6d4df;text-align:center;'><table style='width:538px;background-color:#393836' align='center' cellspacing='0' cellpadding='0'><tbody><tr><td style='height:65px;background-color:#171a21;border-bottom:1px solid #4d4b48;padding:0px'><h2 style='text-align: center;color: #fff;' height='65' >FILE CETACEA</h2></td></tr><tr><td bgcolor='#17212e'><table width='500' border='0' align='center' cellpadding='0' cellspacing='0' style='padding-left:5px;padding-right:5px;padding-bottom:10px'><tbody><tr bgcolor='#17212e'><td style='padding-top:32px;padding-bottom:16px'>")
 							.append("<span style='font-size:24px;color:#66c0f4;font-family:Arial,Helvetica,sans-serif;font-weight:bold'>" + r.getRep_name() +"저장소의 새 글 알림</span></td></tr>")
 							.append("<tr bgcolor='#121a25'><td style='padding:20px;font-size:12px;line-height:17px;color:#c6d4df;font-family:Arial,Helvetica,sans-serif'>")
-							.append("<p><a href='localhost:8080/project/postalarm.do?cn=" + cn + "&rep_id=" + rep_id)
+							.append("<p><a href='192.168.12.33:8080/project/postalarm.do?cn=" + cn + "&rep_id=" + rep_id)
 							.append("'target='_blenk'>글 확인</a></p></td></tr></tbody></table></td></tr></tbody></table></div>").toString());
-					
-					
-					
 					sendMail.setFrom("gusdn4973@gmail.com", "CETACEA");
 					sendMail.setTo(str);
 					sendMail.send();
@@ -133,7 +128,9 @@ public class PostController implements ApplicationContextAware {
 			int id = (int) session.getAttribute("id");
 		} catch (Exception e) {
 			e.printStackTrace();
-			return "member/login";
+			rda.addAttribute("cn", cn);
+			rda.addAttribute("rep_id", rep_id);
+			return "redirect:/member/alarmlogin.do";
 		}
 		session.setAttribute("rep_id", rep_id);
 		rda.addAttribute("cn", cn);
@@ -184,7 +181,6 @@ public class PostController implements ApplicationContextAware {
 		mav.addObject("ch_list", chlist);
 		mav.addObject("nicknamelist", nicknamelist);
 		mav.addObject("list", list);
-		System.out.println(list);
 		return mav;
 	}
 
@@ -234,7 +230,6 @@ public class PostController implements ApplicationContextAware {
 		String user_name = m2.getName();
 		Repository r = service.getRepository(rep_id);
 		Channel ch = service.getChannel(cn);
-		System.out.println("chid:" + ch.getCh_id());
 		mav.addObject("repost", repost);
 		mav.addObject("rep_name", r.getRep_name());
 		mav.addObject("user_name", user_name);
@@ -259,7 +254,6 @@ public class PostController implements ApplicationContextAware {
         ObjectMapper mapper = new ObjectMapper();
         try {
             str = mapper.writeValueAsString(map);
-            System.out.println(str);
         } catch (Exception e) {
         	e.printStackTrace();
         }
@@ -279,7 +273,6 @@ public class PostController implements ApplicationContextAware {
 	        ObjectMapper mapper = new ObjectMapper();
 	        try {
 	            str = mapper.writeValueAsString(map);
-	            System.out.println(str);
 	        } catch (Exception e) {
 	        	e.printStackTrace();
 	        }
@@ -324,5 +317,11 @@ public class PostController implements ApplicationContextAware {
 				list.get(i).setFile_original(uuidName);
 			}
 		}
+	}
+
+	@Override
+	public void setServletContext(ServletContext servletContext) {
+		this.servletContext = servletContext;
+		
 	}
 }
