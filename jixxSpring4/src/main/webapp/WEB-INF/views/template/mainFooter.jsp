@@ -30,11 +30,8 @@
 							</button>
 							<div tabindex="-1" aria-hidden="true" role="menu" class="dropdown-menu"
 								x-placement="bottom-start"
-								style="position: absolute; transform: translate3d(0px, -12px, 0px); top: -134px; left: 0px; will-change: transform;">
-								<li class="header btnlist">Code or text snippet</li>
-								<li class="header btnlist">Post</li>
+								style="position: absolute; transform: translate3d(0px, -12px, 0px); top: -61px; left: 0px; will-change: transform;">
 								<li class="header btnlist">Your computer<input type="file" name="file"></li>
-
 							</div>
 							<br>
 						</div>

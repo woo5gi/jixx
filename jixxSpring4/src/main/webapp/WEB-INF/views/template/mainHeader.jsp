@@ -338,7 +338,7 @@ overflow: hidden;}
 		</div>
 
 		<ul class="sidebar-menu" data-widget="tree">
-			<li class="header"><a href="index.html"> <i class="fa fa-sun-o"></i>All Threads
+			<li class="header"><a href="#"> <i class="fa fa-sun-o"></i>All Threads
 			</a></li>
 		</ul>
 

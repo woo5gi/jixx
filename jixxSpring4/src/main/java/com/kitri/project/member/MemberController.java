@@ -234,7 +234,7 @@ public class MemberController {
 							.append("<span style='font-size:24px;color:#66c0f4;font-family:Arial,Helvetica,sans-serif;font-weight:bold'>이메일 인증</span></td></tr>")
 							.append("<tr bgcolor='#121a25'><td style='padding:20px;font-size:12px;line-height:17px;color:#c6d4df;font-family:Arial,Helvetica,sans-serif'><p style='font-weight:bold;font-size: 20px;color: #f00;'>")
 							.append(ran2)
-							.append("</p><br><p><a style='color:#c6d4df' href='192.168.12.33:8080/project/verifyForm.do' target='_blank'>이메일 인증 확인</a></p></td></tr></tbody></table></td></tr></tbody></table></div>")
+							.append("</p><br><p><a style='color:#c6d4df' href='localhost:8080/project/verifyForm.do' target='_blank'>이메일 인증 확인</a></p></td></tr></tbody></table></td></tr></tbody></table></div>")
 							.toString());
 			sendMail.setFrom("gusdn4973@gmail.com", "CETACEA");
 			sendMail.setTo(email);
@@ -249,7 +249,7 @@ public class MemberController {
 							"	<div text='#c6d4df' style='font-family:Helvetica,Arial,sans-serif;font-size:14px;color:#c6d4df;text-align:center;'><table style='width:538px;background-color:#393836' align='center' cellspacing='0' cellpadding='0'>\r\n"
 									+ " <tbody><tr><td style='height:65px;background-color:#171a21;border-bottom:1px solid #4d4b48;padding:0px'><h2 style='text-align: center;color: #fff;' height='65' >FILE CETACEA</h2></td></tr><tr><td bgcolor='#17212e' style='height:170px'><table width='500' border='0' align='center' cellpadding='0' cellspacing='0' style='padding-left:5px;padding-right:5px;padding-bottom:10px'><tbody><tr bgcolor='#17212e'><td style='padding-top:32px;padding-bottom:16px'>")
 							.append("<span style='font-size:24px;color:#66c0f4;font-family:Arial,Helvetica,sans-serif;font-weight:bold'>비밀번호 찾기 메일 인증</span></td></tr></tbody></table>")
-							.append("<a style='color:#c6d4df' 'target='_blenk' href='192.168.12.33:8080/project/verifypass.do?email="
+							.append("<a style='color:#c6d4df' 'target='_blenk' href='localhost:8080/project/verifypass.do?email="
 									+ email + "&tempkey=" + ran2 + "'>새 비밀번호 설정</a>")
 							.append("</td></tr></tbody></table></div>").toString());
 			sendMail.setFrom("gusdn4973@gmail.com", "CETACEA");
@@ -270,7 +270,7 @@ public class MemberController {
 							.append("<span style='font-size:24px;color:#66c0f4;font-family:Arial,Helvetica,sans-serif;font-weight:bold'>저장소삭제 이메일인증</span></td></tr>")
 							.append("<tr bgcolor='#121a25'><td style='padding:20px;font-size:12px;line-height:17px;color:#c6d4df;font-family:Arial,Helvetica,sans-serif'><p style='font-weight:bold;font-size: 20px;color: #f00;'>")
 							.append(ran2)
-							.append("</p><br><p><a style='color:#c6d4df' href='192.168.12.33:8080/project/repdlverifyform.do' target='_blank'>이메일 인증 확인</a></p></td></tr></tbody></table></td></tr></tbody></table></div>")
+							.append("</p><br><p><a style='color:#c6d4df' href='localhost:8080/project/repdlverifyform.do' target='_blank'>이메일 인증 확인</a></p></td></tr></tbody></table></td></tr></tbody></table></div>")
 							.toString());
 
 			sendMail.setFrom("gusdn4973@gmail.com", "CETACEA");
@@ -287,7 +287,7 @@ public class MemberController {
 					.append("<span style='font-size:24px;color:#66c0f4;font-family:Arial,Helvetica,sans-serif;font-weight:bold'>회원 탈퇴 이메일 인증</span></td></tr>")
 					.append("<tr bgcolor='#121a25'><td style='padding:20px;font-size:12px;line-height:17px;color:#c6d4df;font-family:Arial,Helvetica,sans-serif'><p style='font-weight:bold;font-size: 20px;color: #f00;'>")
 					.append(ran2)
-					.append("</p><br><p><a style='color:#c6d4df' href='192.168.12.33:8080/project/memberoutverifyform.do' target='_blank'>이메일 인증 확인</a></p></td></tr></tbody></table></td></tr></tbody></table></div>")
+					.append("</p><br><p><a style='color:#c6d4df' href='localhost:8080/project/memberoutverifyform.do' target='_blank'>이메일 인증 확인</a></p></td></tr></tbody></table></td></tr></tbody></table></div>")
 					.toString());
 
 			sendMail.setFrom("gusdn4973@gmail.com", "CETACEA");
