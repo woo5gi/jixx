@@ -78,7 +78,7 @@ public class MemberController {
 		res.setContentType("text/html;charset=utf-8");
 		PrintWriter out = res.getWriter();
 		ModelAndView mav = new ModelAndView();
-		try {
+		if (session.getAttribute("id") != null) {
 			int id = (int) session.getAttribute("id");
 			String email = (String) session.getAttribute("email");
 			Member m2 = service.getMemberByEmail(email);
@@ -88,12 +88,11 @@ public class MemberController {
 			mav.addObject("email", email);
 			ArrayList<String> repnamelist = service.getRepNameListById(id);
 			mav.addObject("rep_list", repnamelist);
-		} catch (NullPointerException e) {
-			e.printStackTrace();
+		} else {
 			out.println("<script>alert('session값이 없습니다'); </script>");
 			out.flush();
-			mav = new ModelAndView("template/index");
 		}
+		mav = new ModelAndView("template/index");
 		return mav;
 	}
 

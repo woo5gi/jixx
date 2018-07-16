@@ -48,19 +48,17 @@ public class HomeController {
 		HttpSession session = req.getSession(false);
 		ModelAndView mav = new ModelAndView();
 		mav.setViewName("template/index");
-		try {
-		int id = (int) session.getAttribute("id");
-		String email = (String) session.getAttribute("email");
-		Member m2 = service.getMemberByEmail(email);	
-		String user_name = m2.getName();
-		mav.addObject("id",id);
-		mav.addObject("email",email);
-		ArrayList<String> repnamelist = service.getRepNameListById(id);	
-		mav.addObject("rep_list", repnamelist);
-		mav.addObject("user_name",user_name);
-		} catch (NullPointerException e) {
-			e.printStackTrace();
-		}		
+		if (session.getAttribute("id") != null) {
+				int id = (int) session.getAttribute("id");
+				String email = (String) session.getAttribute("email");
+				Member m2 = service.getMemberByEmail(email);	
+				String user_name = m2.getName();
+				mav.addObject("id",id);
+				mav.addObject("email",email);
+				ArrayList<String> repnamelist = service.getRepNameListById(id);	
+				mav.addObject("rep_list", repnamelist);
+				mav.addObject("user_name",user_name);
+		}
 		return mav;
 	}
 }
