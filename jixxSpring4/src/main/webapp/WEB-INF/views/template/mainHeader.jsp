@@ -331,7 +331,7 @@ overflow: hidden;}
 				<img src="<%=request.getContextPath()%>/resources/images/user2-160x160.jpg" class="img-circle" alt="User Image">
 			</div>
 			<div class="pull-left info">
-				<p>${sessionScope.nickname}</p>
+				<p id="nicknamechat" value =${sessionScope.nickname}>${sessionScope.nickname}</p>
 				<!-- Status -->
 				<a href="#"><i class="fa fa-circle text-success"></i> Online</a>
 			</div>

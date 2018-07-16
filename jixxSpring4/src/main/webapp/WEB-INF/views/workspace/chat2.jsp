@@ -39,7 +39,7 @@
     </div>
   </div>
   <div id="message_template" class="message_template">
-    <li class="message"><div class="avatar">${sessionScope.nickname}</div>
+    <li class="message"><div class="avatar"></div>
       <div class="text_wrapper">
         <div class="text"></div>
       </div></li>
